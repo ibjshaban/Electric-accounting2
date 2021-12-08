@@ -215,3 +215,31 @@ with font-awesome or any other icon font library -->
 
 
 
+
+<!--revenue_start_route-->
+@if(admin()->user()->role("revenue_show"))
+<li class="nav-item {{active_link('revenue','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('revenue','active')}}">
+    <i class="nav-icon fa fa-layer-group"></i>
+    <p>
+      {{trans('admin.revenue')}}
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('revenue')}}" class="nav-link  {{active_link('revenue','active')}}">
+        <i class="fa fa-layer-group nav-icon"></i>
+        <p>{{trans('admin.revenue')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('revenue/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--revenue_end_route-->
