@@ -6,6 +6,7 @@
 * [it v 1.6.36]
 */
 return [
+	"revenue"=>["create","read","update","delete"],
 	"employee"=>["create","read","update","delete"],
 	"employeetype"=>["create","read","update","delete"],
 	"supplier"=>["create","read","update","delete"],

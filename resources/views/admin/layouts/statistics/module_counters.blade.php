@@ -90,3 +90,18 @@
     </div>
 </div>
 <!--employeetype_end-->
+<!--revenue_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\revenue::count()) }}</h3>
+        <p>{{ trans("admin.revenue") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-layer-group"></i>
+      </div>
+      <a href="{{ aurl("revenue") }}" class="small-box-footer">{{ trans("admin.revenue") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--revenue_end-->

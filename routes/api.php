@@ -40,6 +40,8 @@ Route::group(['middleware' => ['ApiLang', 'cors'], 'prefix' => 'v1', 'namespace'
 			Route::post("supplier/multi_delete","SupplierControllerApi@multi_delete"); 
 			Route::apiResource("employeetype","EmployeeTypeControllerApi", ["as" => "api.employeetype"]); 
 			Route::post("employeetype/multi_delete","EmployeeTypeControllerApi@multi_delete"); 
+			Route::apiResource("revenue","RevenueControllerApi", ["as" => "api.revenue"]); 
+			Route::post("revenue/multi_delete","RevenueControllerApi@multi_delete"); 
 			//Auth-Api-End//
 	});
 	// Insert your Api Here End //
