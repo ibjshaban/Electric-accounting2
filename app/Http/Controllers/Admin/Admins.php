@@ -11,6 +11,7 @@ use App\Models\Admin;
 class Admins extends Controller {
 
 	public function __construct() {
+	    //hi ibrahim
 
 		$this->middleware('AdminRole:admins_show', [
 			'only' => ['index', 'show'],
