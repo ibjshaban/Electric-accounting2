@@ -105,3 +105,65 @@
     </div>
 </div>
 <!--revenue_end-->
+
+<!--debt_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\Debt::count()) }}</h3>
+        <p>{{ trans("admin.debt") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-money-check-alt"></i>
+      </div>
+      <a href="{{ aurl("debt") }}" class="small-box-footer">{{ trans("admin.debt") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--debt_end-->
+<!--salary_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\Salary::count()) }}</h3>
+        <p>{{ trans("admin.salary") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-money-bill-wave"></i>
+      </div>
+      <a href="{{ aurl("salary") }}" class="small-box-footer">{{ trans("admin.salary") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--salary_end-->
+
+<!--expenses_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\Expenses::count()) }}</h3>
+        <p>{{ trans("admin.expenses") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-money-bill-alt"></i>
+      </div>
+      <a href="{{ aurl("expenses") }}" class="small-box-footer">{{ trans("admin.expenses") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--expenses_end-->
+<!--otheroperation_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\OtherOperation::count()) }}</h3>
+        <p>{{ trans("admin.otheroperation") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-money-bill-alt"></i>
+      </div>
+      <a href="{{ aurl("otheroperation") }}" class="small-box-footer">{{ trans("admin.otheroperation") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--otheroperation_end-->

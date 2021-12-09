@@ -6,6 +6,10 @@
 * [it v 1.6.36]
 */
 return [
+	"otheroperation"=>["create","read","update","delete"],
+	"expenses"=>["create","read","update","delete"],
+	"salary"=>["create","read","update","delete"],
+	"debt"=>["create","read","update","delete"],
 	"revenue"=>["create","read","update","delete"],
 	"employee"=>["create","read","update","delete"],
 	"employeetype"=>["create","read","update","delete"],
