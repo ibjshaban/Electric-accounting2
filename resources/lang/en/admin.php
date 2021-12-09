@@ -1,5 +1,6 @@
 <?php
 		return [
+		"expenses"	=>		"مصاريف تشغيلية",
 		"supplier"	=>		"الموردين",
 		"city"	=>		"المناطق",
 		"the_password_is_old"	=>		"You do not have to enter the same old password",
@@ -136,10 +137,21 @@
 		"id_number"	=>		"رقم الهوية",
 		"employee"	=>		"الموظفين",
 		"city_id"	=>		"المدينة",
-		"total_amount"	=>		"البلغ الاجمالي",
 		"close_date"	=>		"تاريخ النهاية",
 		"open_date"	=>		"تاريخ البداية",
-		"name"	=>		"الاسم",
 		"revenue"	=>		"الايرادات",
+		"amount"	=>		"المبلغ",
+		"debt"	=>		"الديون",
+		"employee_id"	=>		"الموظف",
+		"payment_date"	=>		"تاريخ الدفع",
+		"discount"	=>		"الخصم",
+		"total_amount"	=>		"الراتب الأساسي",
+		"salary"	=>		"الرواتب",
+		"revenue_id"	=>		"الإرادة",
+		"note"	=>		"الملاحظات",
+		"date"	=>		"التاريخ",
+		"price"	=>		"السعر",
+		"name"	=>		"الاسم",
+		"otheroperation"	=>		"مصاريف اخرى",
 
 ];

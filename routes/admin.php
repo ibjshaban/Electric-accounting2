@@ -49,8 +49,16 @@ Route::group(['prefix'=>app('admin'),'middleware'=>'Lang'],function(){
 		Route::post('employeetype/multi_delete','Admin\EmployeeTypeController@multi_delete');
 		Route::resource('employee','Admin\EmployeeController');
 		Route::post('employee/multi_delete','Admin\EmployeeController@multi_delete');
-		Route::resource('revenue','Admin\RevenueController'); 
-		Route::post('revenue/multi_delete','Admin\RevenueController@multi_delete'); 
+		Route::resource('revenue','Admin\RevenueController');
+		Route::post('revenue/multi_delete','Admin\RevenueController@multi_delete');
+		Route::resource('debt','Admin\DebtController');
+		Route::post('debt/multi_delete','Admin\DebtController@multi_delete');
+		Route::resource('salary','Admin\SalaryController');
+		Route::post('salary/multi_delete','Admin\SalaryController@multi_delete');
+		Route::resource('expenses','Admin\ExpensesController'); 
+		Route::post('expenses/multi_delete','Admin\ExpensesController@multi_delete'); 
+		Route::resource('otheroperation','Admin\OtherOperationController'); 
+		Route::post('otheroperation/multi_delete','Admin\OtherOperationController@multi_delete'); 
 		////////AdminRoutes/*End*///////////////
 	});
 
