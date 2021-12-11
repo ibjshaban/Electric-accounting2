@@ -21,6 +21,8 @@ protected $fillable = [
         'payment_date',
         'employee_id',
 
+        'revenue_id',
+
 		'created_at',
 		'updated_at',
 		'deleted_at',
@@ -46,6 +48,15 @@ protected $fillable = [
       return $this->hasOne(\App\Models\Employee::class,'id','employee_id');
    }
 
+	/**
+    * revenue_id relation method
+    * @param void
+    * @return object data
+    */
+   public function revenue_id(){
+      return $this->hasOne(\App\Models\revenue::class,'id','revenue_id');
+   }
+
  	/**
     * Static Boot method to delete or update or sort Data
     * @param void
@@ -55,6 +66,7 @@ protected $fillable = [
       parent::boot();
       // if you disable constraints should by run this static method to Delete children data
          static::deleting(function($salary) {
+			//$salary->employee_id()->delete();
 			//$salary->employee_id()->delete();
          });
    }

@@ -63,8 +63,8 @@
         <div class="card-body">
 
             {!! Form::open(['url'=>aurl('/salary/'.$salary->id),'method'=>'put','id'=>'salary','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
-{{--
-            <div class="row">
+            {{--<div class="row">
+
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         {!! Form::label('total_amount',trans('admin.total_amount'),['class'=>' control-label']) !!}
@@ -112,9 +112,15 @@
                         {!! Form::select('employee_id',App\Models\Employee::pluck('name','id'), $salary->employee_id ,['class'=>'form-control select2','placeholder'=>trans('admin.employee_id')]) !!}
                     </div>
                 </div>
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        {!! Form::label('revenue_id',trans('admin.revenue_id'),['class'=>'control-label']) !!}
+                        {!! Form::select('revenue_id',App\Models\revenue::pluck('name','id'), $salary->revenue_id ,['class'=>'form-control select2','placeholder'=>trans('admin.revenue_id')]) !!}
+                    </div>
+                </div>
 
-            </div>
---}}
+            </div>--}}
+
             <div class="row">
                 <table class="table table-bordered">
                     <thead>
@@ -145,14 +151,14 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- /.row -->
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
             <button type="submit" name="save" class="btn btn-primary btn-flat"><i
                     class="fa fa-save"></i> {{ trans('admin.save') }}</button>
-
+            <button type="submit" name="save_back" class="btn btn-success btn-flat"><i
+                    class="fa fa-save"></i> {{ trans('admin.save_back') }}</button>
             {!! Form::close() !!}
         </div>
     </div>

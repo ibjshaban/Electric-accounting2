@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\DataTables\RevenueSalaryDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\SalaryDataTable;
 use Carbon\Carbon;
@@ -38,6 +39,10 @@ class SalaryController extends Controller
             public function index(SalaryDataTable $salary)
             {
                return $salary->render('admin.salary.index',['title'=>trans('admin.salary')]);
+            }
+            public function revenueSalary (RevenueSalaryDataTable $salary, $id)
+            {
+               return $salary->with('id', $id)->render('admin.salary.index',['title'=>trans('admin.salary')]);
             }
 
 

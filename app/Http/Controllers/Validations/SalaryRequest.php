@@ -31,6 +31,7 @@ class SalaryRequest extends FormRequest {
              'note'=>'nullable|string',
              'payment_date'=>'required',
              'employee_id'=>'required|integer',
+             'revenue_id'=>'required|integer',
 		];
 	}
 
@@ -42,6 +43,7 @@ class SalaryRequest extends FormRequest {
              'note'=>'nullable|string',
              'payment_date'=>'required',
              'employee_id'=>'required|integer',
+             'revenue_id'=>'required|integer',
 		];
 	}
 
@@ -65,6 +67,7 @@ class SalaryRequest extends FormRequest {
              'note'=>trans('admin.note'),
              'payment_date'=>trans('admin.payment_date'),
              'employee_id'=>trans('admin.employee_id'),
+             'revenue_id'=>trans('admin.revenue_id'),
 		];
 	}
 

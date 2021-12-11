@@ -29,9 +29,9 @@
         <!-- /.card-header -->
         <div class="card-body">
 
-            {!! Form::open(['url'=>aurl('/'),'id'=>'salary','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
-
+            {!! Form::open(['url'=>aurl('/salary'),'id'=>'salary','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             <div class="row">
+
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         {!! Form::label('total_amount',trans('admin.total_amount'),['class'=>' control-label']) !!}
@@ -78,35 +78,14 @@
                         {!! Form::select('employee_id',App\Models\Employee::pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
                     </div>
                 </div>
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        {!! Form::label('revenue_id',trans('admin.revenue_id')) !!}
+                        {!! Form::select('revenue_id',App\Models\revenue::pluck('name','id'),old('revenue_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
+                    </div>
+                </div>
 
             </div>
-            {{--<div class="row">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th style="width: 10px">#</th>
-                        <th>اسم الموظف</th>
-                        <th>الراتب الاساسي</th>
-                        <th>مجموع الديون</th>
-                        <th>الخصم</th>
-                        <th style="width: 40px">صافي الراتب</th>
-                        <th>الملاحظات</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1.</td>
-                        <td>Update software</td>
-                        <td>Update software</td>
-                        <td>Update software</td>
-                        <td>
-                            <input type="number" name="discount" class="form-group" placeholder="الخصم">
-                        </td>
-                        <td><span class="badge bg-success" style="font-size: 20px";>55</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>--}}
             <!-- /.row -->
         </div>
         <!-- /.card-body -->
