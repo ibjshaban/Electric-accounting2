@@ -27,7 +27,7 @@ class SalaryControllerApi extends Controller{
              * @return array to assign with index & show methods
              */
             public function arrWith(){
-               return ['employee_id',];
+               return ['employee_id','revenue_id',];
             }
 
 

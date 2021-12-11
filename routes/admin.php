@@ -43,28 +43,45 @@ Route::group(['prefix'=>app('admin'),'middleware'=>'Lang'],function(){
 
 		Route::resource('stock','Admin\Stocks');
 		Route::post('stock/multi_delete','Admin\Stocks@multi_delete');
+
 		Route::resource('supplier','Admin\SupplierController');
 		Route::post('supplier/multi_delete','Admin\SupplierController@multi_delete');
+
 		Route::resource('employeetype','Admin\EmployeeTypeController');
 		Route::post('employeetype/multi_delete','Admin\EmployeeTypeController@multi_delete');
+
 		Route::resource('employee','Admin\EmployeeController');
 		Route::post('employee/multi_delete','Admin\EmployeeController@multi_delete');
+
 		Route::resource('revenue','Admin\RevenueController');
 		Route::post('revenue/multi_delete','Admin\RevenueController@multi_delete');
+
 		Route::resource('debt','Admin\DebtController');
 		Route::post('debt/multi_delete','Admin\DebtController@multi_delete');
+
 		Route::resource('salary','Admin\SalaryController');
 		Route::post('salary/multi_delete','Admin\SalaryController@multi_delete');
-		Route::resource('expenses','Admin\ExpensesController'); 
-		Route::post('expenses/multi_delete','Admin\ExpensesController@multi_delete'); 
-		Route::resource('otheroperation','Admin\OtherOperationController'); 
-		Route::post('otheroperation/multi_delete','Admin\OtherOperationController@multi_delete'); 
-		Route::resource('collection','Admin\CollectionController'); 
-		Route::post('collection/multi_delete','Admin\CollectionController@multi_delete'); 
-		Route::resource('filling','Admin\FillingController'); 
-		Route::post('filling/multi_delete','Admin\FillingController@multi_delete'); 
-		Route::resource('revenuefule','Admin\RevenueFuleController'); 
-		Route::post('revenuefule/multi_delete','Admin\RevenueFuleController@multi_delete'); 
+
+        Route::get('revenue-salary/{id}', 'Admin\SalaryController@revenueSalary');
+
+		Route::resource('expenses','Admin\ExpensesController');
+		Route::post('expenses/multi_delete','Admin\ExpensesController@multi_delete');
+
+        Route::get('revenue-expenses/{id}', 'Admin\ExpensesController@revenueExpenses');
+
+        Route::resource('otheroperation','Admin\OtherOperationController');
+		Route::post('otheroperation/multi_delete','Admin\OtherOperationController@multi_delete');
+
+        Route::get('revenue-otheroperation/{id}', 'Admin\OtherOperationController@revenueOtherOperation');
+
+		Route::resource('collection','Admin\CollectionController');
+		Route::post('collection/multi_delete','Admin\CollectionController@multi_delete');
+
+		Route::resource('filling','Admin\FillingController');
+		Route::post('filling/multi_delete','Admin\FillingController@multi_delete');
+
+		Route::resource('revenuefule','Admin\RevenueFuleController');
+		Route::post('revenuefule/multi_delete','Admin\RevenueFuleController@multi_delete');
 		////////AdminRoutes/*End*///////////////
 	});
 

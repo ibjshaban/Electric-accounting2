@@ -1,14 +1,14 @@
 <?php
 namespace App\DataTables;
-use App\Models\Salary;
+use App\Models\Expenses;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Services\DataTable;
 // Auto DataTable By Baboon Script
 // Baboon Maker has been Created And Developed By [it v 1.6.36]
 // Copyright Reserved [it v 1.6.36]
-class SalaryDataTable extends DataTable
+class RevenueExpensesDataTable extends DataTable
 {
-    	
+
 
      /**
      * dataTable to render Columns.
@@ -18,14 +18,15 @@ class SalaryDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
-            ->addColumn('actions', 'admin.salary.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+            ->addColumn('actions', 'admin.expenses.buttons.actions')
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -34,10 +35,10 @@ class SalaryDataTable extends DataTable
      */
 	public function query()
     {
-        return Salary::query()->with(['employee_id','revenue_id',])->select("salaries.*");
+        return Expenses::query()->with('revenue_id')->where('revenue_id', $this->id)->select("expenses.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -92,13 +93,10 @@ class SalaryDataTable extends DataTable
                 'initComplete' => "function () {
 
 
-            
-            ". filterElement('1,2,3,4,5,6', 'input') . "
 
-                        //employee_idtotal_amount,discount,salary,note,payment_date,employee_id,revenue_id7
-            ". filterElement('7', 'select', \App\Models\Employee::pluck("name","name")) . "
-            //revenue_idtotal_amount,discount,salary,note,payment_date,employee_id,revenue_id8
-            ". filterElement('8', 'select', \App\Models\revenue::pluck("name","name")) . "
+            ". filterElement('1,2,3,4', 'input') . "
+
+                        //revenue_idname,price,date,revenue_id5
 
 
 	            }",
@@ -134,7 +132,7 @@ class SalaryDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -145,7 +143,7 @@ class SalaryDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -168,34 +166,19 @@ class SalaryDataTable extends DataTable
                 'aaSorting'      => 'none'
             ],
 				[
-                 'name'=>'total_amount',
-                 'data'=>'total_amount',
-                 'title'=>trans('admin.total_amount'),
+                 'name'=>'name',
+                 'data'=>'name',
+                 'title'=>trans('admin.name'),
 		    ],
 				[
-                 'name'=>'discount',
-                 'data'=>'discount',
-                 'title'=>trans('admin.discount'),
+                 'name'=>'price',
+                 'data'=>'price',
+                 'title'=>trans('admin.price'),
 		    ],
 				[
-                 'name'=>'salary',
-                 'data'=>'salary',
-                 'title'=>trans('admin.salary'),
-		    ],
-				[
-                 'name'=>'note',
-                 'data'=>'note',
-                 'title'=>trans('admin.note'),
-		    ],
-				[
-                 'name'=>'payment_date',
-                 'data'=>'payment_date',
-                 'title'=>trans('admin.payment_date'),
-		    ],
-				[
-                 'name'=>'employee_id.name',
-                 'data'=>'employee_id.name',
-                 'title'=>trans('admin.employee_id'),
+                 'name'=>'date',
+                 'data'=>'date',
+                 'title'=>trans('admin.date'),
 		    ],
 				[
                  'name'=>'revenue_id.name',
@@ -239,7 +222,7 @@ class SalaryDataTable extends DataTable
 	     */
 	    protected function filename()
 	    {
-	        return 'salary_' . time();
+	        return 'expenses_' . time();
 	    }
-    	
+
 }
