@@ -1,12 +1,12 @@
 <?php
 namespace App\DataTables;
-use App\Models\Salary;
+use App\Models\RevenueFule;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Services\DataTable;
 // Auto DataTable By Baboon Script
 // Baboon Maker has been Created And Developed By [it v 1.6.36]
 // Copyright Reserved [it v 1.6.36]
-class RevenueSalaryDataTable extends DataTable
+class RevenueFuleRevenueDataTable extends DataTable
 {
 
 
@@ -18,7 +18,7 @@ class RevenueSalaryDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
-            ->addColumn('actions', 'admin.salary.buttons.actions')
+            ->addColumn('actions', 'admin.revenuefule.buttons.actions')
 
    		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
@@ -35,7 +35,7 @@ class RevenueSalaryDataTable extends DataTable
      */
 	public function query()
     {
-        return Salary::query()->with(['employee_id','revenue_id',])->where('revenue_id', $this->id)->select("salaries.*");
+        return RevenueFule::query()->with(['filling_id','stock_id','revenue_id','city_id',])->where('revenue_id', $this->id)->select("revenue_fules.*");
 
     }
 
@@ -86,7 +86,7 @@ class RevenueSalaryDataTable extends DataTable
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){
-                        	window.location.href =  "'.aurl('salary').'/create";
+                        	window.location.href =  "'.aurl('revenue-fule-revenue').'/create";
                         }',
                     ],
                 ],
@@ -94,10 +94,16 @@ class RevenueSalaryDataTable extends DataTable
 
 
 
-            ". filterElement('1,2,3,4,5,6', 'input') . "
+            ". filterElement('1,2,1,3,1,4,1,9', 'input') . "
 
-                        //employee_idtotal_amount,discount,salary,note,payment_date,employee_id7
-            ". filterElement('7', 'select', \App\Models\Employee::pluck("name","name")) . "
+                        //filling_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note5
+            ". filterElement('5', 'select', \App\Models\Filling::pluck("name","name")) . "
+            //stock_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note6
+            ". filterElement('6', 'select', \App\Models\Stock::pluck("name","name")) . "
+            //revenue_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note7
+            ". filterElement('7', 'select', \App\Models\Revenue::pluck("name","name")) . "
+            //city_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note8
+            ". filterElement('8', 'select', \App\Models\City::pluck("name","name")) . "
 
 
 	            }",
@@ -167,34 +173,44 @@ class RevenueSalaryDataTable extends DataTable
                 'aaSorting'      => 'none'
             ],
 				[
-                 'name'=>'total_amount',
-                 'data'=>'total_amount',
-                 'title'=>trans('admin.total_amount'),
+                 'name'=>'quantity',
+                 'data'=>'quantity',
+                 'title'=>trans('admin.quantity'),
 		    ],
 				[
-                 'name'=>'discount',
-                 'data'=>'discount',
-                 'title'=>trans('admin.discount'),
+                 'name'=>'price',
+                 'data'=>'price',
+                 'title'=>trans('admin.price'),
 		    ],
 				[
-                 'name'=>'salary',
-                 'data'=>'salary',
-                 'title'=>trans('admin.salary'),
+                 'name'=>'paid_amount',
+                 'data'=>'paid_amount',
+                 'title'=>trans('admin.paid_amount'),
+		    ],
+				[
+                 'name'=>'filling_id.name',
+                 'data'=>'filling_id.name',
+                 'title'=>trans('admin.filling_id'),
+		    ],
+				[
+                 'name'=>'stock_id.name',
+                 'data'=>'stock_id.name',
+                 'title'=>trans('admin.stock_id'),
+		    ],
+				[
+                 'name'=>'revenue_id.name',
+                 'data'=>'revenue_id.name',
+                 'title'=>trans('admin.revenue_id'),
+		    ],
+				[
+                 'name'=>'city_id.name',
+                 'data'=>'city_id.name',
+                 'title'=>trans('admin.city_id'),
 		    ],
 				[
                  'name'=>'note',
                  'data'=>'note',
                  'title'=>trans('admin.note'),
-		    ],
-				[
-                 'name'=>'payment_date',
-                 'data'=>'payment_date',
-                 'title'=>trans('admin.payment_date'),
-		    ],
-				[
-                 'name'=>'employee_id.name',
-                 'data'=>'employee_id.name',
-                 'title'=>trans('admin.employee_id'),
 		    ],
             [
 	                'name' => 'created_at',
@@ -233,7 +249,7 @@ class RevenueSalaryDataTable extends DataTable
 	     */
 	    protected function filename()
 	    {
-	        return 'salary_' . time();
+	        return 'revenuefule_' . time();
 	    }
 
 }

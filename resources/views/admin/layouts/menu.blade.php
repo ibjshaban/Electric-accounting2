@@ -289,12 +289,12 @@ with font-awesome or any other icon font library -->
         <p>{{trans('admin.salary')}} </p>
       </a>
     </li>
-    <li class="nav-item">
+   {{-- <li class="nav-item">
       <a href="{{ aurl('salary/create') }}" class="nav-link">
         <i class="fas fa-plus nav-icon"></i>
         <p>{{trans('admin.create')}} </p>
       </a>
-    </li>
+    </li>--}}
   </ul>
 </li>
 @endif
@@ -306,7 +306,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('expenses','active')}}">
     <i class="nav-icon fa fa-money-bill-alt"></i>
     <p>
-      {{trans('admin.expenses')}} 
+      {{trans('admin.expenses')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
@@ -334,7 +334,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('otheroperation','active')}}">
     <i class="nav-icon fa fa-money-bill-alt"></i>
     <p>
-      {{trans('admin.otheroperation')}} 
+      {{trans('admin.otheroperation')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
@@ -362,7 +362,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('collection','active')}}">
     <i class="nav-icon fa fa-columns"></i>
     <p>
-      {{trans('admin.collection')}} 
+      {{trans('admin.collection')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
@@ -390,7 +390,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('filling','active')}}">
     <i class="nav-icon fa fa-fill-drip"></i>
     <p>
-      {{trans('admin.filling')}} 
+      {{trans('admin.filling')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
@@ -418,7 +418,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('revenuefule','active')}}">
     <i class="nav-icon fa fa-hand-holding-water"></i>
     <p>
-      {{trans('admin.revenuefule')}} 
+      {{trans('admin.revenuefule')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
