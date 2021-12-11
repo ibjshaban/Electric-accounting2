@@ -8,7 +8,7 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class DebtDataTable extends DataTable
 {
-    	
+
 
      /**
      * dataTable to render Columns.
@@ -19,13 +19,14 @@ class DebtDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.debt.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -37,7 +38,7 @@ class DebtDataTable extends DataTable
         return Debt::query()->with(['employee_id',])->select("debts.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -92,11 +93,11 @@ class DebtDataTable extends DataTable
                 'initComplete' => "function () {
 
 
-            
-            ". filterElement('1,2,3', 'input') . "
+
+            ". filterElement('1,3,4', 'input') . "
 
                         //employee_idamount,note,employee_id4
-            ". filterElement('4', 'select', \App\Models\Employee::pluck("name","name")) . "
+            ". filterElement('2', 'select', \App\Models\Employee::pluck("name","name")) . "
 
 
 	            }",
@@ -132,7 +133,7 @@ class DebtDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -143,7 +144,7 @@ class DebtDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -165,6 +166,11 @@ class DebtDataTable extends DataTable
                 'width'          => '10px',
                 'aaSorting'      => 'none'
             ],
+                [
+                    'name'=>'employee_id.name',
+                    'data'=>'employee_id.name',
+                    'title'=>trans('admin.employee_id'),
+                ],
 				[
                  'name'=>'amount',
                  'data'=>'amount',
@@ -175,11 +181,7 @@ class DebtDataTable extends DataTable
                  'data'=>'note',
                  'title'=>trans('admin.note'),
 		    ],
-				[
-                 'name'=>'employee_id.name',
-                 'data'=>'employee_id.name',
-                 'title'=>trans('admin.employee_id'),
-		    ],
+
             [
 	                'name' => 'created_at',
 	                'data' => 'created_at',
@@ -219,5 +221,5 @@ class DebtDataTable extends DataTable
 	    {
 	        return 'debt_' . time();
 	    }
-    	
+
 }

@@ -28,9 +28,10 @@ class CollectionRequest extends FormRequest {
              'employee_id'=>'sometimes|nullable|integer',
              'revenue_id'=>'',
              'amount'=>'required|numeric',
-             'collection_date'=>'required|after:today',
+             'collection_date'=>'required|date',
              'source'=>'sometimes|nullable|string',
              'note'=>'sometimes|nullable|string',
+            'collect_type'=>'required',
 		];
 	}
 
@@ -39,9 +40,10 @@ class CollectionRequest extends FormRequest {
              'employee_id'=>'sometimes|nullable|integer',
              'revenue_id'=>'',
              'amount'=>'required|numeric',
-             'collection_date'=>'required|after:today',
+             'collection_date'=>'required|date',
              'source'=>'sometimes|nullable|string',
              'note'=>'sometimes|nullable|string',
+             'collect_type'=>'required',
 		];
 	}
 
@@ -65,6 +67,7 @@ class CollectionRequest extends FormRequest {
              'collection_date'=>trans('admin.collection_date'),
              'source'=>trans('admin.source'),
              'note'=>trans('admin.note'),
+            'collect_type'=>'نوع المحصل',
 		];
 	}
 

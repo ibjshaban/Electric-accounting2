@@ -62,27 +62,32 @@
 			</div>
 			<div class="clearfix"></div>
 			<hr />
-			@if(!empty($debt->admin_id()->first()))
+
+			@if(!empty($debt->admin_id()->first()))
 			<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 				<b>{{trans('admin.admin_id')}} :</b>
 				{{ $debt->admin_id()->first()->name }}
 			</div>
 			@endif
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <b>{{trans('admin.employee_id')}} :</b>
+                @if(!empty($debt->employee_id()->first()))
+                    {{ $debt->employee_id()->first()->name }}
+                @endif
+            </div>
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.amount')}} :</b>
 				{!! $debt->amount !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.note')}} :</b>
 				{!! $debt->note !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<b>{{trans('admin.employee_id')}} :</b>
-				@if(!empty($debt->employee_id()->first()))
-			{{ $debt->employee_id()->first()->name }}
-			@endif
-			</div>
-			<!-- /.row -->
+
+
+
+			<!-- /.row -->
 		</div>
 	</div>
 	<!-- /.card-body -->

@@ -29,13 +29,40 @@
 
 {!! Form::open(['url'=>aurl('/collection'),'id'=>'collection','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
 <div class="row">
-
-<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <div class="form-group clearfix">
+                <label for="radioPrimary3">
+                    نوع المحصل
+                </label>
+                <br>
+                <div class="icheck-primary d-inline">
+                    <input type="radio" id="radioPrimary1" value="0" onchange="change_collect()" name="collect_type" checked="">
+                    <label for="radioPrimary1">
+                        موظف
+                    </label>
+                </div>
+                <div class="icheck-primary d-inline">
+                    <input type="radio" id="radioPrimary2" value="1" onchange="change_collect()" name="collect_type">
+                    <label for="radioPrimary2">
+                        جهة أخرى
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="employeebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
 	<div class="form-group">
 		{!! Form::label('employee_id',trans('admin.employee_id')) !!}
 		{!! Form::select('employee_id',App\Models\Employee::where('type_id',1)->pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
 	</div>
 </div>
+    <div id="sourcebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12" style="display: none">
+        <div class="form-group">
+            {!! Form::label('source',trans('admin.source'),['class'=>' control-label']) !!}
+            {!! Form::text('source',old('source'),['class'=>'form-control','placeholder'=>trans('admin.source')]) !!}
+        </div>
+    </div>
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
         <div class="form-group">
             {!! Form::label('amount',trans('admin.amount'),['class'=>' control-label']) !!}
@@ -66,12 +93,6 @@
 </div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
-        {!! Form::label('source',trans('admin.source'),['class'=>' control-label']) !!}
-            {!! Form::text('source',old('source'),['class'=>'form-control','placeholder'=>trans('admin.source')]) !!}
-    </div>
-</div>
-<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-    <div class="form-group">
         {!! Form::label('note',trans('admin.note'),['class'=>'control-label']) !!}
             {!! Form::textarea('note',old('note'),['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
     </div>
@@ -86,3 +107,22 @@
 {!! Form::close() !!}	</div>
 </div>
 @endsection
+
+@push('js')
+    <script>
+        function change_collect(){
+            var value = $('input[name="collect_type"]:checked').val();
+            console.log(value)
+            if (value == '0'){
+                $('#sourcebox').css('display', 'none');
+                $('#employeebox').css('display', '');
+            }
+            else if(value == '1'){
+                $('#employeebox').css('display', 'none');
+                $('#sourcebox').css('display', '');
+            }
+        }
+    </script>
+@endpush
+
+

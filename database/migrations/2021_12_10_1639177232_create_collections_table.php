@@ -16,7 +16,7 @@ class CreateCollectionsTable extends Migration
     {
         Schema::create('collections', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId("employee_id")->constrained("employees")->references("id");
+            $table->foreignId("employee_id")->nullable()->constrained("employees")->references("id");
             $table->foreignId("revenue_id")->constrained("revenues")->references("id");
             $table->bigInteger('amount');
             $table->date('collection_date');
