@@ -5,7 +5,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class EmployeeRequest extends FormRequest {
+class RevenueFuleRequest extends FormRequest {
 
 	/**
 	 * Baboon Script By [it v 1.6.36]
@@ -25,23 +25,27 @@ class EmployeeRequest extends FormRequest {
 	 */
 	protected function onCreate() {
 		return [
-             'name'=>'required|string',
-             'id_number'=>'nullable|integer',
-             'address'=>'nullable|string',
-             'phone'=>'nullable|string',
-             'type_id'=>'required|integer',
+             'quantity'=>'required|numeric',
+             'price'=>'required|numeric',
+             'paid_amount'=>'required|numeric',
+             'filling_id'=>'required|integer',
+             'stock_id'=>'required|integer',
+             'revenue_id'=>'required|integer',
              'city_id'=>'required|integer',
+             'note'=>'nullable',
 		];
 	}
 
 	protected function onUpdate() {
 		return [
-             'name'=>'required|string',
-             'id_number'=>'nullable|integer',
-             'address'=>'nullable|string',
-             'phone'=>'nullable|string',
-             'type_id'=>'required|integer',
+             'quantity'=>'required|numeric',
+             'price'=>'required|numeric',
+             'paid_amount'=>'required|numeric',
+             'filling_id'=>'required|integer',
+             'stock_id'=>'required|integer',
+             'revenue_id'=>'required|integer',
              'city_id'=>'required|integer',
+             'note'=>'nullable',
 		];
 	}
 
@@ -59,12 +63,14 @@ class EmployeeRequest extends FormRequest {
 	 */
 	public function attributes() {
 		return [
-             'name'=>trans('admin.name'),
-             'id_number'=>trans('admin.id_number'),
-             'address'=>trans('admin.address'),
-             'phone'=>trans('admin.phone'),
-             'type_id'=>trans('admin.type_id'),
+             'quantity'=>trans('admin.quantity'),
+             'price'=>trans('admin.price'),
+             'paid_amount'=>trans('admin.paid_amount'),
+             'filling_id'=>trans('admin.filling_id'),
+             'stock_id'=>trans('admin.stock_id'),
+             'revenue_id'=>trans('admin.revenue_id'),
              'city_id'=>trans('admin.city_id'),
+             'note'=>trans('admin.note'),
 		];
 	}
 

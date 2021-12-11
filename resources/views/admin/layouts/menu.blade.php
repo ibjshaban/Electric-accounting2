@@ -355,3 +355,87 @@ with font-awesome or any other icon font library -->
 </li>
 @endif
 <!--otheroperation_end_route-->
+
+<!--collection_start_route-->
+@if(admin()->user()->role("collection_show"))
+<li class="nav-item {{active_link('collection','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('collection','active')}}">
+    <i class="nav-icon fa fa-columns"></i>
+    <p>
+      {{trans('admin.collection')}} 
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('collection')}}" class="nav-link  {{active_link('collection','active')}}">
+        <i class="fa fa-columns nav-icon"></i>
+        <p>{{trans('admin.collection')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('collection/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--collection_end_route-->
+
+<!--filling_start_route-->
+@if(admin()->user()->role("filling_show"))
+<li class="nav-item {{active_link('filling','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('filling','active')}}">
+    <i class="nav-icon fa fa-fill-drip"></i>
+    <p>
+      {{trans('admin.filling')}} 
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('filling')}}" class="nav-link  {{active_link('filling','active')}}">
+        <i class="fa fa-fill-drip nav-icon"></i>
+        <p>{{trans('admin.filling')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('filling/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--filling_end_route-->
+
+<!--revenuefule_start_route-->
+@if(admin()->user()->role("revenuefule_show"))
+<li class="nav-item {{active_link('revenuefule','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('revenuefule','active')}}">
+    <i class="nav-icon fa fa-hand-holding-water"></i>
+    <p>
+      {{trans('admin.revenuefule')}} 
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('revenuefule')}}" class="nav-link  {{active_link('revenuefule','active')}}">
+        <i class="fa fa-hand-holding-water nav-icon"></i>
+        <p>{{trans('admin.revenuefule')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('revenuefule/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--revenuefule_end_route-->
