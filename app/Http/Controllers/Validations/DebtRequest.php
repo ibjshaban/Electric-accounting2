@@ -26,7 +26,7 @@ class DebtRequest extends FormRequest {
 	protected function onCreate() {
 		return [
              'amount'=>'required|numeric',
-             'note'=>'string',
+             'note'=>'string|nullable',
              'employee_id'=>'integer',
 		];
 	}
@@ -34,7 +34,7 @@ class DebtRequest extends FormRequest {
 	protected function onUpdate() {
 		return [
              'amount'=>'required|numeric',
-             'note'=>'string',
+             'note'=>'string|nullable',
              'employee_id'=>'integer',
 		];
 	}

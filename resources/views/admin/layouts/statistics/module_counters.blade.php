@@ -167,3 +167,48 @@
     </div>
 </div>
 <!--otheroperation_end-->
+<!--collection_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\Collection::count()) }}</h3>
+        <p>{{ trans("admin.collection") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-columns"></i>
+      </div>
+      <a href="{{ aurl("collection") }}" class="small-box-footer">{{ trans("admin.collection") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--collection_end-->
+<!--filling_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\Filling::count()) }}</h3>
+        <p>{{ trans("admin.filling") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-fill-drip"></i>
+      </div>
+      <a href="{{ aurl("filling") }}" class="small-box-footer">{{ trans("admin.filling") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--filling_end-->
+<!--revenuefule_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\RevenueFule::count()) }}</h3>
+        <p>{{ trans("admin.revenuefule") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-hand-holding-water"></i>
+      </div>
+      <a href="{{ aurl("revenuefule") }}" class="small-box-footer">{{ trans("admin.revenuefule") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--revenuefule_end-->

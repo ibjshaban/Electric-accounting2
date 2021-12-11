@@ -1,11 +1,11 @@
 <?php
-namespace App\Http\Controllers\Validations;
+namespace App\Http\Controllers\ValidationsApi\V1;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class EmployeeRequest extends FormRequest {
+class CollectionRequest extends FormRequest {
 
 	/**
 	 * Baboon Script By [it v 1.6.36]
@@ -25,23 +25,24 @@ class EmployeeRequest extends FormRequest {
 	 */
 	protected function onCreate() {
 		return [
-             'name'=>'required|string',
-             'id_number'=>'nullable|integer',
-             'address'=>'nullable|string',
-             'phone'=>'nullable|string',
-             'type_id'=>'required|integer',
-             'city_id'=>'required|integer',
+             'employee_id'=>'sometimes|nullable|integer',
+             'revenue_id'=>'',
+             'amount'=>'required|numeric',
+             'collection_date'=>'required|after:today',
+             'source'=>'sometimes|nullable|string',
+             'note'=>'sometimes|nullable|string',
 		];
 	}
 
+
 	protected function onUpdate() {
 		return [
-             'name'=>'required|string',
-             'id_number'=>'nullable|integer',
-             'address'=>'nullable|string',
-             'phone'=>'nullable|string',
-             'type_id'=>'required|integer',
-             'city_id'=>'required|integer',
+             'employee_id'=>'sometimes|nullable|integer',
+             'revenue_id'=>'',
+             'amount'=>'required|numeric',
+             'collection_date'=>'required|after:today',
+             'source'=>'sometimes|nullable|string',
+             'note'=>'sometimes|nullable|string',
 		];
 	}
 
@@ -59,12 +60,12 @@ class EmployeeRequest extends FormRequest {
 	 */
 	public function attributes() {
 		return [
-             'name'=>trans('admin.name'),
-             'id_number'=>trans('admin.id_number'),
-             'address'=>trans('admin.address'),
-             'phone'=>trans('admin.phone'),
-             'type_id'=>trans('admin.type_id'),
-             'city_id'=>trans('admin.city_id'),
+             'employee_id'=>trans('admin.employee_id'),
+             'revenue_id'=>trans('admin.revenue_id'),
+             'amount'=>trans('admin.amount'),
+             'collection_date'=>trans('admin.collection_date'),
+             'source'=>trans('admin.source'),
+             'note'=>trans('admin.note'),
 		];
 	}
 

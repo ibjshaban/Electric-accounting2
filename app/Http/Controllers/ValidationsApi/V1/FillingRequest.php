@@ -1,11 +1,11 @@
 <?php
-namespace App\Http\Controllers\Validations;
+namespace App\Http\Controllers\ValidationsApi\V1;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class EmployeeRequest extends FormRequest {
+class FillingRequest extends FormRequest {
 
 	/**
 	 * Baboon Script By [it v 1.6.36]
@@ -25,23 +25,22 @@ class EmployeeRequest extends FormRequest {
 	 */
 	protected function onCreate() {
 		return [
-             'name'=>'required|string',
-             'id_number'=>'nullable|integer',
-             'address'=>'nullable|string',
-             'phone'=>'nullable|string',
-             'type_id'=>'required|integer',
-             'city_id'=>'required|integer',
+             'quantity'=>'required|numeric',
+             'price'=>'required|numeric',
+             'supplier_id'=>'required|integer',
+             'filling_date'=>'required',
+             'note'=>'nullable',
 		];
 	}
 
+
 	protected function onUpdate() {
 		return [
-             'name'=>'required|string',
-             'id_number'=>'nullable|integer',
-             'address'=>'nullable|string',
-             'phone'=>'nullable|string',
-             'type_id'=>'required|integer',
-             'city_id'=>'required|integer',
+             'quantity'=>'required|numeric',
+             'price'=>'required|numeric',
+             'supplier_id'=>'required|integer',
+             'filling_date'=>'required',
+             'note'=>'nullable',
 		];
 	}
 
@@ -59,12 +58,11 @@ class EmployeeRequest extends FormRequest {
 	 */
 	public function attributes() {
 		return [
-             'name'=>trans('admin.name'),
-             'id_number'=>trans('admin.id_number'),
-             'address'=>trans('admin.address'),
-             'phone'=>trans('admin.phone'),
-             'type_id'=>trans('admin.type_id'),
-             'city_id'=>trans('admin.city_id'),
+             'quantity'=>trans('admin.quantity'),
+             'price'=>trans('admin.price'),
+             'supplier_id'=>trans('admin.supplier_id'),
+             'filling_date'=>trans('admin.filling_date'),
+             'note'=>trans('admin.note'),
 		];
 	}
 

@@ -59,6 +59,12 @@ Route::group(['prefix'=>app('admin'),'middleware'=>'Lang'],function(){
 		Route::post('expenses/multi_delete','Admin\ExpensesController@multi_delete'); 
 		Route::resource('otheroperation','Admin\OtherOperationController'); 
 		Route::post('otheroperation/multi_delete','Admin\OtherOperationController@multi_delete'); 
+		Route::resource('collection','Admin\CollectionController'); 
+		Route::post('collection/multi_delete','Admin\CollectionController@multi_delete'); 
+		Route::resource('filling','Admin\FillingController'); 
+		Route::post('filling/multi_delete','Admin\FillingController@multi_delete'); 
+		Route::resource('revenuefule','Admin\RevenueFuleController'); 
+		Route::post('revenuefule/multi_delete','Admin\RevenueFuleController@multi_delete'); 
 		////////AdminRoutes/*End*///////////////
 	});
 
