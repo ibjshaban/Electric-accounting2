@@ -30,6 +30,7 @@
         <div class="card-body">
 
             {!! Form::open(['url'=>aurl('/salary'),'id'=>'salary','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+{{--
             <div class="row">
 
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -86,6 +87,46 @@
                 </div>
 
             </div>
+--}}
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>اسم الموظف</th>
+                        <th>المبلغ الكلي</th>
+                        <th>الديون</th>
+                        <th>الخصم</th>
+                        <th style="width: 40px">صافي الراتب</th>
+                        <th>الملاحظات</th>
+                        <th>تاريخ الدفع</th>
+                        <th>العملية</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1.</td>
+                        <td>Update software</td>
+                        <td>Update software</td>
+                        <td>Update software</td>
+                        <td>
+                            <input type="number" name="discount" class="form-group" placeholder="الخصم">
+                        </td>
+                        <td><span class="badge bg-success" style="font-size: 20px";>55</span></td>
+                        <td>
+                            <input name="note" type="text" class="form-group" placeholder="الملاحظات">
+                        </td>
+                        <td>
+                            <input type="date" name="date" class="form-group">
+                        </td>
+                        <td>
+                            <button type="submit" name="submit" class="btn btn-info">سحب</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <!-- /.row -->
         </div>
         <!-- /.card-body -->

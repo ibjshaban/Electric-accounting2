@@ -35,7 +35,7 @@ class RevenueOtherOperationDataTable extends DataTable
      */
 	public function query()
     {
-        return OtherOperation::query()->where('revenue_id', $this->id)->select("other_operations.*");
+        return OtherOperation::query()->with('revenue_id')->where('revenue_id', $this->id)->select("other_operations.*");
 
     }
 
@@ -209,15 +209,7 @@ class RevenueOtherOperationDataTable extends DataTable
 	                'searchable' => false,
 	                'orderable'  => false,
 	            ],
-	                    [
-	                'name' => 'actions',
-	                'data' => 'actions',
-	                'title' => trans('admin.actions'),
-	                'exportable' => false,
-	                'printable'  => false,
-	                'searchable' => false,
-	                'orderable'  => false,
-	            ],
+
     	 ];
 			}
 

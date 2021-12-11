@@ -203,15 +203,7 @@ class RevenueExpensesDataTable extends DataTable
 	                'searchable' => false,
 	                'orderable'  => false,
 	            ],
-	                    [
-	                'name' => 'actions',
-	                'data' => 'actions',
-	                'title' => trans('admin.actions'),
-	                'exportable' => false,
-	                'printable'  => false,
-	                'searchable' => false,
-	                'orderable'  => false,
-	            ],
+
     	 ];
 			}
 

@@ -99,73 +99,61 @@
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-fill-drip"></i></span>
 
+                            <a href="{{ aurl('revenue-fule-revenue/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">السولار</span>
                                 <span class="info-box-number">90,410</span>
-
-
                             </div>
+                            </a>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-money-bill-wave"></i></span>
-
+                            <a href="{{ aurl('revenue-salary/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">الرواتب</span>
                                 <span class="info-box-number">90,410</span>
-
                             </div>
+                            </a>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
-                        <!-- small box -->
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <h3>1</h3>
-                                <p>الرواتب</p>
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-money-bill-alt"></i></span>
+                            <a href="{{ aurl('revenue-expenses/'.$revenue->id) }}">
+                            <div class="info-box-content">
+                                <span class="info-box-text">مصاريف تشغيلية</span>
+                                <span class="info-box-number">90,410</span>
                             </div>
-                            <div class="icon">
-                                <i class="fa fa-money-bill-wave"></i>
-                            </div>
-                            <a href="{{ aurl('revenue-salary/'.$revenue->id) }}" class="small-box-footer">الرواتب <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                            </a>
+                            <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-lg-6 col-6 m-auto">
-                        <!-- small box -->
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <h3>1</h3>
-                                <p>مصاريف تشغيلية</p>
+                    <div class="col-lg-6 col-6 m-auto border-bottom">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-money-bill-alt"></i></span>
+                            <a href="{{ aurl('revenue-otheroperation/'.$revenue->id) }}">
+                            <div class="info-box-content">
+                                <span class="info-box-text">مصاريف أخرى</span>
+                                <span class="info-box-number">90,410</span>
                             </div>
-                            <div class="icon">
-                                <i class="fa fa-money-bill-alt"></i>
-                            </div>
-                            <a href="{{ aurl('revenue-expenses/'.$revenue->id) }}" class="small-box-footer">مصاريف
-                                تشغيلية <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                            </a>
+                            <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-lg-6 col-6 m-auto">
-                        <!-- small box -->
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <h3>1</h3>
-                                <p>مصاريف اخرى</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-money-bill-alt"></i>
-                            </div>
-                            <a href="{{ aurl('revenue-otheroperation/'.$revenue->id) }}" class="small-box-footer">مصاريف
-                                اخرى <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                    <div class="col-lg-6 col-6 m-auto pt-3">
+                        <div class="info-box bg-success">
+                            <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">المجموع</span>
+                                    <span class="info-box-number">90,410</span>
+                                </div>
+                            <!-- /.info-box-content -->
                         </div>
                     </div>
-
-
                 </div>
             </div>
             <!-- /.card-body -->

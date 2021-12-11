@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\DataTables\RevenueFuleRevenueDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\RevenueFuleDataTable;
 use Carbon\Carbon;
@@ -38,6 +39,13 @@ class RevenueFuleController extends Controller
             public function index(RevenueFuleDataTable $revenuefule)
             {
                return $revenuefule->render('admin.revenuefule.index',['title'=>trans('admin.revenuefule')]);
+            }
+            public function revenueFuleRevenue(RevenueFuleRevenueDataTable $revenuefule, $id)
+            {
+               return $revenuefule->with('id', $id)->render('admin.revenuefule.index',['title'=>trans('admin.revenuefule')]);
+            }
+            public function revenueFuleRevenueCreate(){
+                return view('admin.revenuefule.sec-create',['title'=>trans('admin.create')]);
             }
 
 
