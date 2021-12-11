@@ -62,35 +62,44 @@
 			</div>
 			<div class="clearfix"></div>
 			<hr />
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.amount')}} :</b>
 				{!! $collection->amount !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.collection_date')}} :</b>
 				{!! $collection->collection_date !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<b>{{trans('admin.source')}} :</b>
-				{!! $collection->source !!}
-			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+            @if($collection->employee_id)
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <b>{{trans('admin.employee_id')}} :</b>
+                    @if(!empty($collection->employee_id()->first()))
+                        {{ $collection->employee_id()->first()->name }}
+                    @endif
+                </div>
+            @else
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <b>{{trans('admin.source')}} :</b>
+                    {!! $collection->source !!}
+                </div>
+            @endif
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.note')}} :</b>
 				{!! $collection->note !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<b>{{trans('admin.employee_id')}} :</b>
-				@if(!empty($collection->employee_id()->first()))
-			{{ $collection->employee_id()->first()->name }}
-			@endif
-			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.revenue_id')}} :</b>
 				@if(!empty($collection->revenue_id()->first()))
 			{{ $collection->revenue_id()->first()->name }}
 			@endif
 			</div>
-			<!-- /.row -->
+
+			<!-- /.row -->
 		</div>
 	</div>
 	<!-- /.card-body -->

@@ -61,6 +61,13 @@ class CollectionController extends Controller
             public function store(CollectionRequest $request)
             {
                 $data = $request->except("_token", "_method");
+                if ($data['collect_type'] == '0'){
+                    $data['source']= null;
+                }
+                else{
+                    $data['employee_id']= null;
+                }
+                unset($data['collect_type']);
             			  		$collection = Collection::create($data);
                 $redirect = isset($request["add_back"])?"/create":"";
                 return redirectWithSuccess(aurl('collection'.$redirect), trans('admin.added')); }
@@ -124,6 +131,13 @@ class CollectionController extends Controller
               	return backWithError(trans("admin.undefinedRecord"),aurl("collection"));
               }
               $data = $this->updateFillableColumns();
+              if ($data['collect_type'] == '0'){
+                  $data['source']= null;
+              }
+              else{
+                  $data['employee_id']= null;
+              }
+              unset($data['collect_type']);
               Collection::where('id',$id)->update($data);
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
               return redirectWithSuccess(aurl('collection'.$redirect), trans('admin.updated'));

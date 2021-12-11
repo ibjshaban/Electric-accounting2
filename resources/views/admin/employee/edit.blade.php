@@ -69,19 +69,19 @@
 </div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
-        {!! Form::label('id_number',trans('admin.id_number'),['class'=>'control-label']) !!}
+        {!! Form::label('id_number',trans('admin.id_number').' (اختياري)',['class'=>'control-label']) !!}
         {!! Form::text('id_number', $employee->id_number ,['class'=>'form-control','placeholder'=>trans('admin.id_number')]) !!}
     </div>
 </div>
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
-        {!! Form::label('address',trans('admin.address'),['class'=>'control-label']) !!}
+        {!! Form::label('address',trans('admin.address').' (اختياري)',['class'=>'control-label']) !!}
         {!! Form::text('address', $employee->address ,['class'=>'form-control','placeholder'=>trans('admin.address')]) !!}
     </div>
 </div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
-        {!! Form::label('phone',trans('admin.phone'),['class'=>'control-label']) !!}
+        {!! Form::label('phone',trans('admin.phone').' (اختياري)',['class'=>'control-label']) !!}
         {!! Form::text('phone', $employee->phone ,['class'=>'form-control','placeholder'=>trans('admin.phone')]) !!}
     </div>
 </div>

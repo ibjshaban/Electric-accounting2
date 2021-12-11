@@ -8,7 +8,7 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class CollectionDataTable extends DataTable
 {
-    	
+
 
      /**
      * dataTable to render Columns.
@@ -19,13 +19,14 @@ class CollectionDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.collection.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -37,7 +38,7 @@ class CollectionDataTable extends DataTable
         return Collection::query()->with(['employee_id','revenue_id',])->select("collections.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -91,14 +92,12 @@ class CollectionDataTable extends DataTable
                 ],
                 'initComplete' => "function () {
 
-
-            
-            ". filterElement('1,4,1,5,1,6,1,7', 'input') . "
+            ". filterElement('1,3,5,6,7', 'input') . "
 
                         //employee_idemployee_id,revenue_id,amount,collection_date,source,note2
             ". filterElement('2', 'select', \App\Models\Employee::pluck("name","name")) . "
             //revenue_idemployee_id,revenue_id,amount,collection_date,source,note3
-            ". filterElement('3', 'select', \App\Models\Revenue::pluck("name","name")) . "
+            ". filterElement('4', 'select', \App\Models\Revenue::pluck("name","name")) . "
 
 
 	            }",
@@ -134,7 +133,7 @@ class CollectionDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -145,7 +144,7 @@ class CollectionDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -172,6 +171,11 @@ class CollectionDataTable extends DataTable
                  'data'=>'employee_id.name',
                  'title'=>trans('admin.employee_id'),
 		    ],
+                [
+                    'name'=>'source',
+                    'data'=>'source',
+                    'title'=>trans('admin.source'),
+                ],
 				[
                  'name'=>'revenue_id.name',
                  'data'=>'revenue_id.name',
@@ -186,11 +190,6 @@ class CollectionDataTable extends DataTable
                  'name'=>'collection_date',
                  'data'=>'collection_date',
                  'title'=>trans('admin.collection_date'),
-		    ],
-				[
-                 'name'=>'source',
-                 'data'=>'source',
-                 'title'=>trans('admin.source'),
 		    ],
 				[
                  'name'=>'note',
@@ -236,5 +235,5 @@ class CollectionDataTable extends DataTable
 	    {
 	        return 'collection_' . time();
 	    }
-    	
+
 }

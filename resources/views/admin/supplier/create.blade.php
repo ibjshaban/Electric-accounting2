@@ -26,7 +26,7 @@
 	</div>
 	<!-- /.card-header -->
 	<div class="card-body">
-								
+
 <form action="{{aurl('/supplier')}}" enctype="multipart/form-data" class="form-horizontal form-row-seperated" method="post" id="supplier">
 <div class="row">
 <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -39,7 +39,7 @@
 </div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
-        <label for="phone" class=" control-label">{{trans('admin.phone')}}</label>
+        <label for="phone" class=" control-label">{{trans('admin.phone')}} (اختياري)</label>
             <input type="text" id="phone" name="phone" value="{{old('phone')}}" class="form-control" placeholder="{{trans('admin.phone')}}" />
     </div>
 </div>

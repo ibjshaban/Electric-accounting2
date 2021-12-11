@@ -31,7 +31,12 @@
 
             {!! Form::open(['url'=>aurl('/debt'),'id'=>'debt','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             <div class="row">
-
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        {!! Form::label('employee_id',trans('admin.employee_id')) !!}
+                        {!! Form::select('employee_id',App\Models\Employee::pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
+                    </div>
+                </div>
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         {!! Form::label('amount',trans('admin.amount'),['class'=>' control-label']) !!}
@@ -40,14 +45,8 @@
                 </div>
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
-                        {!! Form::label('note',trans('admin.note'),['class'=>' control-label']) !!}
+                        {!! Form::label('note',trans('admin.note').' (اختياري)',['class'=>' control-label']) !!}
                         {!! Form::text('note',old('note'),['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('employee_id',trans('admin.employee_id')) !!}
-                        {!! Form::select('employee_id',App\Models\Employee::pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
                     </div>
                 </div>
 
