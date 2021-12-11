@@ -82,6 +82,9 @@ Route::group(['prefix'=>app('admin'),'middleware'=>'Lang'],function(){
 
 		Route::resource('revenuefule','Admin\RevenueFuleController');
 		Route::post('revenuefule/multi_delete','Admin\RevenueFuleController@multi_delete');
+
+        Route::get('revenuefule-revenue/{id}', 'Admin\RevenueFuleController@revenueFuleRevenue');
+        Route::get('revenue-fule-revenue/create', 'Admin\RevenueFuleController@revenueFuleRevenueCreate');
 		////////AdminRoutes/*End*///////////////
 	});
 

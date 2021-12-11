@@ -168,5 +168,9 @@
 		"discount"	=>		"الخصم",
 		"total_amount"	=>		"المبلغ الكلي",
 		"salary"	=>		"الراتب",
+		"revenue-fule-revenue"	=>		"السولار لكل ايرادة",
+		"revenuefule-revenue"	=>		"السولار لكل ايرادة",
+		"revenue-salary"	=>		"الراتب لكل ايرادة",
+		"revenue-otheroperation"	=>		"مصاريف اخرى لكل ايرادة",
 
 ];
