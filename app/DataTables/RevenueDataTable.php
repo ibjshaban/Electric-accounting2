@@ -94,10 +94,9 @@ class RevenueDataTable extends DataTable
 
 
 
-            ". filterElement('1,2,3,4,5', 'input') . "
-
+            ". filterElement('1,2,3,4,6', 'input') . "
                         //city_idname,open_date,close_date,total_amount,city_id6
-            ". filterElement('6', 'select', \App\Models\City::pluck("name","name")) . "
+            ". filterElement('5', 'select', \App\Models\City::pluck("name","name")) . "
 
 
 	            }",
@@ -177,11 +176,6 @@ class RevenueDataTable extends DataTable
                  'title'=>trans('admin.open_date'),
 		    ],
 				[
-                 'name'=>'close_date',
-                 'data'=>'close_date',
-                 'title'=>trans('admin.close_date'),
-		    ],
-				[
                  'name'=>'total_amount',
                  'data'=>'total_amount',
                  'title'=>trans('admin.total_amount'),
@@ -191,6 +185,11 @@ class RevenueDataTable extends DataTable
                  'data'=>'city_id.name',
                  'title'=>trans('admin.city_id'),
 		    ],
+                [
+                    'name'=>'close_date',
+                    'data'=>'close_date',
+                    'title'=>trans('admin.close_date'),
+                ],
             [
 	                'name' => 'created_at',
 	                'data' => 'created_at',

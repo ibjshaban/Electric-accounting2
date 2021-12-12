@@ -86,7 +86,7 @@ class RevenueSalaryDataTable extends DataTable
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){
-                        	window.location.href =  "'.aurl('salary').'/create";
+                        	window.location.href =  "'.aurl('revenue-salary').'/'. $this->request()->route('id') .'/create";
                         }',
                     ],
                 ],

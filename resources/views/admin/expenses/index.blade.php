@@ -46,4 +46,3 @@
 {!! $dataTable->scripts() !!}
 @endpush
 		@endsection
-		

@@ -59,10 +59,10 @@ Route::group(['prefix'=>app('admin'),'middleware'=>'Lang'],function(){
 		Route::resource('debt','Admin\DebtController');
 		Route::post('debt/multi_delete','Admin\DebtController@multi_delete');
 
-		Route::resource('salary','Admin\SalaryController');
+		Route::resource('salary','Admin\SalaryController')->except('create');
+        Route::get('/revenue-salary/{id}/create', 'Admin\SalaryController@create');
 		Route::post('salary/multi_delete','Admin\SalaryController@multi_delete');
-
-        Route::get('revenue-salary/{id}', 'Admin\SalaryController@revenueSalary');
+        Route::get('/revenue-salary/{id}', 'Admin\SalaryController@revenueSalary');
 
 		Route::resource('expenses','Admin\ExpensesController');
 		Route::post('expenses/multi_delete','Admin\ExpensesController@multi_delete');

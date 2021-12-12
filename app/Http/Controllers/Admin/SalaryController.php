@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\RevenueSalaryDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\SalaryDataTable;
+use App\Models\Employee;
+use App\Models\revenue;
 use Carbon\Carbon;
 use App\Models\Salary;
 
@@ -51,10 +53,15 @@ class SalaryController extends Controller
              * Show the form for creating a new resource.
              * @return \Illuminate\Http\Response
              */
-            public function create()
+            public function create($id)
             {
-
-               return view('admin.salary.create',['title'=>trans('admin.create')]);
+                $revenue= revenue::whereId($id)->first();
+                $employees= collect();
+                if (isset($revenue->city_id)) {
+                    $salary_employee_id= Salary::where('revenue_id',$revenue->id)->distinct()->pluck('employee_id');
+                    $employees= Employee::where('city_id',$revenue->city_id)->whereNotIn('id',$salary_employee_id)->get();
+                }
+               return view('admin.salary.create',['title'=>trans('admin.create')],compact('employees'));
             }
 
             /**

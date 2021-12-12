@@ -104,15 +104,16 @@
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($employees as $em)
                     <tr>
-                        <td>1.</td>
-                        <td>Update software</td>
-                        <td>Update software</td>
-                        <td>Update software</td>
+                        <td>{{$em->id}}</td>
+                        <td>{{$em->name}}</td>
+                        <td>{{$em->salary}}</td>
+                        <td>{{ $em->debt()}}</td>
                         <td>
                             <input type="number" name="discount" class="form-group" placeholder="الخصم">
                         </td>
-                        <td><span class="badge bg-success" style="font-size: 20px";>55</span></td>
+                        <td><span class="badge bg-success" style="font-size: 20px";>{{$em->salary}}</span></td>
                         <td>
                             <input name="note" type="text" class="form-group" placeholder="الملاحظات">
                         </td>
@@ -123,6 +124,7 @@
                             <button type="submit" name="submit" class="btn btn-info">سحب</button>
                         </td>
                     </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>

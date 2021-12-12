@@ -2,6 +2,11 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\DataTables\RevenueDataTable;
+use App\Models\Collection;
+use App\Models\Expenses;
+use App\Models\OtherOperation;
+use App\Models\RevenueFule;
+use App\Models\Salary;
 use Carbon\Carbon;
 use App\Models\revenue;
 
@@ -75,11 +80,23 @@ class RevenueController extends Controller
             public function show($id)
             {
         		$revenue =  revenue::find($id);
+                $total_collection= Collection::where('revenue_id',$revenue->id)->sum('amount');
+                $total_fules= RevenueFule::where('revenue_id',$revenue->id)->sum('paid_amount');
+                $total_salary= Salary::where('revenue_id',$revenue->id)->sum('total_amount');
+                $total_expenses= Expenses::where('revenue_id',$revenue->id)->sum('price');
+                $total_other_operation= OtherOperation::where('revenue_id',$revenue->id)->sum('price');
+                $total_all= $total_fules+ $total_salary+ $total_expenses+ $total_other_operation;
         		return is_null($revenue) || empty($revenue)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("revenue")) :
+                    backWithError(trans("admin.undefinedRecord"),aurl("revenue")) :
         		view('admin.revenue.show',[
 				    'title'=>trans('admin.show'),
-					'revenue'=>$revenue
+					'revenue'=>$revenue,
+					'total_collection'=> $total_collection,
+					'total_fules'=> $total_fules,
+					'total_salary'=> $total_salary,
+					'total_expenses'=> $total_expenses,
+					'total_other_operation'=> $total_other_operation,
+					'total_all'=> $total_all,
         		]);
             }
 

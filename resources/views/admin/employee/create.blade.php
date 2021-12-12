@@ -54,6 +54,12 @@
             {!! Form::text('phone',old('phone'),['class'=>'form-control','placeholder'=>trans('admin.phone')]) !!}
     </div>
 </div>
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+    <div class="form-group">
+        {!! Form::label('phone',trans('admin.salary'),['class'=>' control-label']) !!}
+            {!! Form::number('salary',old('salary'),['class'=>'form-control','placeholder'=>trans('admin.salary')]) !!}
+    </div>
+</div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
 	<div class="form-group">
 		{!! Form::label('type_id',trans('admin.type_id')) !!}

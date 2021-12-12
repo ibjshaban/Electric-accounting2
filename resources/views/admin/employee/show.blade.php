@@ -62,35 +62,47 @@
 			</div>
 			<div class="clearfix"></div>
 			<hr />
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.name')}} :</b>
 				{!! $employee->name !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.id_number')}} :</b>
 				{!! $employee->id_number !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.address')}} :</b>
 				{!! $employee->address !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.phone')}} :</b>
 				{!! $employee->phone !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<b>{{trans('admin.salary')}} :</b>
+				{!! ShekelFormat($employee->salary) !!}
+			</div>
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.type_id')}} :</b>
 				@if(!empty($employee->type_id()->first()))
 			{{ $employee->type_id()->first()->name }}
 			@endif
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.city_id')}} :</b>
 				@if(!empty($employee->city_id()->first()))
 			{{ $employee->city_id()->first()->name }}
 			@endif
 			</div>
-			<!-- /.row -->
+
+			<!-- /.row -->
 		</div>
 	</div>
 	<!-- /.card-body -->
