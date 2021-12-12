@@ -22,9 +22,9 @@ class CreateEmployeesTable extends Migration
             $table->string('phone')->nullable();
             $table->foreignId("type_id")->constrained("employee_types")->references("id");
             $table->foreignId("city_id")->constrained("cities")->references("id");
+            $table->bigInteger('salary');
 			$table->softDeletes();
-
-			$table->timestamps();
+			$table->timestamps();
         });
     }
 

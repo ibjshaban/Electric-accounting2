@@ -62,31 +62,37 @@
 			</div>
 			<div class="clearfix"></div>
 			<hr />
-			@if(!empty($expenses->admin_id()->first()))
+
+			@if(!empty($expenses->admin_id()->first()))
 			<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 				<b>{{trans('admin.admin_id')}} :</b>
 				{{ $expenses->admin_id()->first()->name }}
 			</div>
 			@endif
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.name')}} :</b>
 				{!! $expenses->name !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.price')}} :</b>
 				{!! $expenses->price !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.date')}} :</b>
 				{!! $expenses->date !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.revenue_id')}} :</b>
 				@if(!empty($expenses->revenue_id()->first()))
 			{{ $expenses->revenue_id()->first()->name }}
 			@endif
 			</div>
-			<!-- /.row -->
+
+			<!-- /.row -->
 		</div>
 	</div>
 	<!-- /.card-body -->

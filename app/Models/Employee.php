@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
 class Employee extends Model {
-	use SoftDeletes;
+
+	use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
 protected $table    = 'employees';
@@ -22,6 +23,7 @@ protected $fillable = [
 
         'city_id',
 
+        'salary',
 		'created_at',
 		'updated_at',
 		'deleted_at',
@@ -50,6 +52,10 @@ protected $fillable = [
     * @param void
     * @return void
     */
+ 	public function debt(){
+
+        return \App\Models\Debt::where('employee_id',$this->id)->sum('amount') - \App\Models\Salary::where('employee_id',$this->id)->sum('discount');
+    }
    protected static function boot() {
       parent::boot();
       // if you disable constraints should by run this static method to Delete children data
@@ -58,5 +64,5 @@ protected $fillable = [
 			//$employee->city_id()->delete();
          });
    }
-		
+
 }

@@ -66,10 +66,9 @@
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-danger">
                             <span class="info-box-icon"><i class="fas fa-chart-pie"></i></span>
-
                             <div class="info-box-content">
                                 <span class="info-box-text">المبلغ المطلوب</span>
-                                <span class="info-box-number">90,410</span>
+                                <span class="info-box-number">{{ShekelFormat($revenue->total_amount)}}</span>
 
 
                             </div>
@@ -79,15 +78,14 @@
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-gradient-warning">
                             <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
-
+                            <?php $percent= $revenue->total_amount > 0 ? number_format(($total_collection*100)/$revenue->total_amount,1):0;?>
                             <div class="info-box-content">
                                 <span class="info-box-text">المبلغ الذي تم تحصيله</span>
-                                <span class="info-box-number">90,410</span>
-
+                                <span class="info-box-number">{{ShekelFormat($total_collection)}}</span>
+                                <span class="info-box-number">{{$percent}}%</span>
                                 <div class="progress">
-                                    <div class="progress-bar" style="width: 20%"></div>
+                                    <div class="progress-bar" style="width: {{$percent}}%"></div>
                                 </div>
-
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -102,7 +100,7 @@
                             <a href="{{ aurl('revenue-fule-revenue/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">السولار</span>
-                                <span class="info-box-number">90,410</span>
+                                <span class="info-box-number">{{ShekelFormat($total_fules)}}</span>
                             </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -114,7 +112,7 @@
                             <a href="{{ aurl('revenue-salary/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">الرواتب</span>
-                                <span class="info-box-number">90,410</span>
+                                <span class="info-box-number">{{ShekelFormat($total_salary)}}</span>
                             </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -126,7 +124,7 @@
                             <a href="{{ aurl('revenue-expenses/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">مصاريف تشغيلية</span>
-                                <span class="info-box-number">90,410</span>
+                                <span class="info-box-number">{{ShekelFormat($total_expenses)}}</span>
                             </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -138,7 +136,7 @@
                             <a href="{{ aurl('revenue-otheroperation/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">مصاريف أخرى</span>
-                                <span class="info-box-number">90,410</span>
+                                <span class="info-box-number">{{ShekelFormat($total_other_operation)}}</span>
                             </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -149,7 +147,7 @@
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">المجموع</span>
-                                    <span class="info-box-number">90,410</span>
+                                    <span class="info-box-number">{{ShekelFormat($total_all)}}</span>
                                 </div>
                             <!-- /.info-box-content -->
                         </div>

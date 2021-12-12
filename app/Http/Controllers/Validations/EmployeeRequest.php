@@ -31,6 +31,7 @@ class EmployeeRequest extends FormRequest {
              'phone'=>'nullable|string',
              'type_id'=>'required|integer',
              'city_id'=>'required|integer',
+             'salary'=>'required|numeric',
 		];
 	}
 
@@ -42,6 +43,7 @@ class EmployeeRequest extends FormRequest {
              'phone'=>'nullable|string',
              'type_id'=>'required|integer',
              'city_id'=>'required|integer',
+             'salary'=>'required|numeric',
 		];
 	}
 
@@ -65,6 +67,7 @@ class EmployeeRequest extends FormRequest {
              'phone'=>trans('admin.phone'),
              'type_id'=>trans('admin.type_id'),
              'city_id'=>trans('admin.city_id'),
+             'salary'=>trans('admin.salary'),
 		];
 	}
 
