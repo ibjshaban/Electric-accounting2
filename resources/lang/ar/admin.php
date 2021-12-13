@@ -172,5 +172,6 @@
 		"id_number"	=>		"رقم الهوية",
 		"name"	=>		"الاسم",
 		"employee"	=>		"الموظفين",
+		"financial-movements"	=>		"الحركات المالية",
 
 ];

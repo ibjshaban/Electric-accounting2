@@ -172,5 +172,9 @@ class EmployeeController extends Controller
 		}
 	}
 
+	public function movementShow(){
+	    return view('admin.employee.movement-show');
+    }
+
 
 }
