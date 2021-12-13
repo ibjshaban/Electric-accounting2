@@ -97,7 +97,7 @@
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-fill-drip"></i></span>
 
-                            <a href="{{ aurl('revenue-fule-revenue/'.$revenue->id) }}">
+                            <a href="{{ aurl('revenuefule-revenue/'.$revenue->id) }}">
                             <div class="info-box-content">
                                 <span class="info-box-text">السولار</span>
                                 <span class="info-box-number">{{ShekelFormat($total_fules)}}</span>

@@ -101,6 +101,10 @@
 			{{ $employee->city_id()->first()->name }}
 			@endif
 			</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<b>الحركات المالية:</b>
+				<button class="btn-info btn">عرض</button>
+			</div>
 
 			<!-- /.row -->
 		</div>
