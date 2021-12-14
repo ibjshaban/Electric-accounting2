@@ -7,6 +7,7 @@ use App\DataTables\RevenueExpensesDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\ExpensesRequest;
 use App\Models\Expenses;
+use Illuminate\Http\Request;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -144,12 +145,12 @@ class ExpensesController extends Controller
     {
         $expenses = Expenses::find($id);
         if (is_null($expenses) || empty($expenses)) {
-            return backWithSuccess(trans('admin.undefinedRecord'), aurl("expenses"));
+            return backWithSuccess(trans('admin.undefinedRecord'), aurl("revenue-expenses/".$expenses->revenue_id));
         }
 
         it()->delete('expenses', $id);
         $expenses->delete();
-        return redirectWithSuccess(aurl("expenses"), trans('admin.deleted'));
+        return redirectWithSuccess(aurl("revenue-expenses/".$expenses->revenue_id), trans('admin.deleted'));
     }
 
 
@@ -160,22 +161,22 @@ class ExpensesController extends Controller
             foreach ($data as $id) {
                 $expenses = Expenses::find($id);
                 if (is_null($expenses) || empty($expenses)) {
-                    return backWithError(trans('admin.undefinedRecord'), aurl("expenses"));
+                    return backWithError(trans('admin.undefinedRecord'), aurl("revenue-expenses"));
                 }
 
                 it()->delete('expenses', $id);
                 $expenses->delete();
             }
-            return redirectWithSuccess(aurl("expenses"), trans('admin.deleted'));
+            return redirectWithSuccess(aurl("revenue-expenses/".$expenses->revenue_id), trans('admin.deleted'));
         } else {
             $expenses = Expenses::find($data);
             if (is_null($expenses) || empty($expenses)) {
-                return backWithError(trans('admin.undefinedRecord'), aurl("expenses"));
+                return backWithError(trans('admin.undefinedRecord'), aurl("revenue-expenses/".$expenses->revenue_id));
             }
 
             it()->delete('expenses', $data);
             $expenses->delete();
-            return redirectWithSuccess(aurl("expenses"), trans('admin.deleted'));
+            return redirectWithSuccess(aurl("revenue-expenses/".$expenses->revenue_id), trans('admin.deleted'));
         }
     }
 
@@ -183,6 +184,43 @@ class ExpensesController extends Controller
     public function revenueExpenses(RevenueExpensesDataTable $expenses, $id)
     {
         return $expenses->with('id', $id)->render('admin.expenses.index', ['title' => trans('admin.expenses')]);
+    }
+
+    public function revenueCreate($id)
+    {
+        $expenses = Expenses::find($id);
+        return view('admin.expenses.revenue-expenses.create', ['title' => trans('admin.create'),'expenses' => $expenses]);
+    }
+
+    //Create expenses by one revenue
+    public function revenueStore(Request $request, $id){
+        $data = $request->except("_token", "_method");
+        $data['admin_id'] = admin()->id();
+        $data['revenue_id'] = $id;
+        $expenses = Expenses::create($data);
+        $redirect = isset($request["add_back"]) ? "/create" : "";
+        return redirectWithSuccess(aurl('revenue-expenses/'.$id. $redirect), trans('admin.added'));
+    }
+
+    public function revenueEdit($id)
+    {
+        $expenses = Expenses::find($id);
+        return view('admin.expenses.revenue-expenses.edit', ['title' => trans('admin.edit'),'expenses' => $expenses]);
+    }
+
+    //Edit expenses by one revenue
+    public function revenueUpdate(Request $request, $id){
+        // Check Record Exists
+        $expenses = Expenses::find($id);
+        $revenu_id=$expenses->revenue_id;
+        if (is_null($expenses) || empty($expenses)) {
+            return backWithError(trans("admin.undefinedRecord"), aurl("revenue-expenses"));
+        }
+        $data = $request->except("_token", "_method","save");
+        $data['admin_id'] = admin()->id();
+        Expenses::where('id', $id)->update($data);
+        $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
+        return redirectWithSuccess(aurl('revenue-expenses/'.$revenu_id. $redirect), trans('admin.updated'));
     }
 
 
