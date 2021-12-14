@@ -7,6 +7,7 @@ use App\DataTables\RevenueOtherOperationDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\OtherOperationRequest;
 use App\Models\OtherOperation;
+use Illuminate\Http\Request;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -42,10 +43,6 @@ class OtherOperationController extends Controller
         return $otheroperation->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation')]);
     }
 
-    public function revenueOtherOperation(RevenueOtherOperationDataTable $otheroperation, $id)
-    {
-        return $otheroperation->with('id', $id)->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation')]);
-    }
 
 
     /**
@@ -149,12 +146,12 @@ class OtherOperationController extends Controller
     {
         $otheroperation = OtherOperation::find($id);
         if (is_null($otheroperation) || empty($otheroperation)) {
-            return backWithSuccess(trans('admin.undefinedRecord'), aurl("otheroperation"));
+            return backWithSuccess(trans('admin.undefinedRecord'), aurl("revenue-otheroperation/".$otheroperation->revenue_id));
         }
 
         it()->delete('otheroperation', $id);
         $otheroperation->delete();
-        return redirectWithSuccess(aurl("otheroperation"), trans('admin.deleted'));
+        return redirectWithSuccess(aurl("revenue-otheroperation/".$otheroperation->revenue_id), trans('admin.deleted'));
     }
 
 
@@ -165,23 +162,66 @@ class OtherOperationController extends Controller
             foreach ($data as $id) {
                 $otheroperation = OtherOperation::find($id);
                 if (is_null($otheroperation) || empty($otheroperation)) {
-                    return backWithError(trans('admin.undefinedRecord'), aurl("otheroperation"));
+                    return backWithError(trans('admin.undefinedRecord'), aurl("revenue-otheroperation/".$otheroperation->revenue_id));
                 }
 
                 it()->delete('otheroperation', $id);
                 $otheroperation->delete();
             }
-            return redirectWithSuccess(aurl("otheroperation"), trans('admin.deleted'));
+            return redirectWithSuccess(aurl("revenue-otheroperation/".$otheroperation->revenue_id), trans('admin.deleted'));
         } else {
             $otheroperation = OtherOperation::find($data);
             if (is_null($otheroperation) || empty($otheroperation)) {
-                return backWithError(trans('admin.undefinedRecord'), aurl("otheroperation"));
+                return backWithError(trans('admin.undefinedRecord'), aurl("revenue-otheroperation/".$otheroperation->revenue_id));
             }
 
             it()->delete('otheroperation', $data);
             $otheroperation->delete();
-            return redirectWithSuccess(aurl("otheroperation"), trans('admin.deleted'));
+            return redirectWithSuccess(aurl("revenue-otheroperation/".$otheroperation->revenue_id), trans('admin.deleted'));
         }
+    }
+    ///////////////////////////
+
+    public function revenueOtherOperation(RevenueOtherOperationDataTable $otheroperation, $id)
+    {
+        return $otheroperation->with('id', $id)->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation')]);
+    }
+
+    public function otherOperationCreate($id)
+    {
+        $otheroperation = OtherOperation::find($id);
+        return view('admin.otheroperation.revenue-otheroperation.create', ['title' => trans('admin.create'),'otheroperation' => $otheroperation]);
+    }
+
+    //Create expenses by one otherOperation
+    public function otherOperationStore(Request $request, $id){
+        $data = $request->except("_token", "_method");
+        $data['admin_id'] = admin()->id();
+        $data['revenue_id'] = $id;
+        $otheroperation = OtherOperation::create($data);
+        $redirect = isset($request["add_back"]) ? "/create" : "";
+        return redirectWithSuccess(aurl('revenue-otheroperation/'.$id. $redirect), trans('admin.added'));
+    }
+
+    public function otherOperationEdit($id)
+    {
+        $otheroperation = OtherOperation::find($id);
+        return view('admin.otheroperation.revenue-otheroperation.edit', ['title' => trans('admin.edit'),'otheroperation' => $otheroperation]);
+    }
+
+    //Edit expenses by one otherOperation
+    public function otherOperationUpdate(Request $request, $id){
+        // Check Record Exists
+        $otheroperation = OtherOperation::find($id);
+        $revenu_id=$otheroperation->revenue_id;
+        if (is_null($otheroperation) || empty($otheroperation)) {
+            return backWithError(trans("admin.undefinedRecord"), aurl("revenue-otheroperation"));
+        }
+        $data = $request->except("_token", "_method","save");
+        $data['admin_id'] = admin()->id();
+        OtherOperation::where('id', $id)->update($data);
+        $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
+        return redirectWithSuccess(aurl('revenue-otheroperation/'.$revenu_id. $redirect), trans('admin.updated'));
     }
 
 

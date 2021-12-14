@@ -76,10 +76,17 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::put('revenue-expenses/edit/{id}', 'Admin\ExpensesController@revenueUpdate');
         //************
 
+
         Route::resource('otheroperation', 'Admin\OtherOperationController');
         Route::post('otheroperation/multi_delete', 'Admin\OtherOperationController@multi_delete');
 
+        //**revenue-expenses**
         Route::get('revenue-otheroperation/{id}', 'Admin\OtherOperationController@revenueOtherOperation');
+        Route::get('revenue-otheroperation/{id}/create', 'Admin\OtherOperationController@otherOperationCreate');
+        Route::post('revenue-otheroperation/create/{id}', 'Admin\OtherOperationController@otherOperationStore');
+        Route::get('revenue-otheroperation/{id}/edit', 'Admin\OtherOperationController@otherOperationEdit');
+        Route::put('revenue-otheroperation/edit/{id}', 'Admin\OtherOperationController@otherOperationUpdate');
+        //************
 
         Route::resource('collection', 'Admin\CollectionController');
         Route::post('collection/multi_delete', 'Admin\CollectionController@multi_delete');
