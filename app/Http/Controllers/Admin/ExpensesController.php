@@ -7,6 +7,7 @@ use App\DataTables\RevenueExpensesDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\ExpensesRequest;
 use App\Models\Expenses;
+use App\Models\revenue;
 use Illuminate\Http\Request;
 
 // Auto Controller Maker By Baboon Script
@@ -188,7 +189,7 @@ class ExpensesController extends Controller
 
     public function revenueCreate($id)
     {
-        $expenses = Expenses::find($id);
+        $expenses = revenue::find($id);
         return view('admin.expenses.revenue-expenses.create', ['title' => trans('admin.create'),'expenses' => $expenses]);
     }
 

@@ -7,6 +7,7 @@ use App\DataTables\RevenueOtherOperationDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\OtherOperationRequest;
 use App\Models\OtherOperation;
+use App\Models\revenue;
 use Illuminate\Http\Request;
 
 // Auto Controller Maker By Baboon Script
@@ -189,7 +190,7 @@ class OtherOperationController extends Controller
 
     public function otherOperationCreate($id)
     {
-        $otheroperation = OtherOperation::find($id);
+        $otheroperation = revenue::find($id);
         return view('admin.otheroperation.revenue-otheroperation.create', ['title' => trans('admin.create'),'otheroperation' => $otheroperation]);
     }
 
