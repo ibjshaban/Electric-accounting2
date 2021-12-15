@@ -109,7 +109,7 @@
                         <td>{{$em->id}}</td>
                         <td>{{$em->name}}</td>
                         <td>{{$em->salary}}</td>
-                        <td>{{ $em->debt()}}</td>
+                        <td>{{$em->debt()}}</td>
                         <td>
                             <input type="number" name="discount" class="form-group" placeholder="الخصم">
                         </td>
