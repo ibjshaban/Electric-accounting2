@@ -80,7 +80,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::resource('otheroperation', 'Admin\OtherOperationController');
         Route::post('otheroperation/multi_delete', 'Admin\OtherOperationController@multi_delete');
 
-        //**revenue-expenses**
+        //**revenue-otheroperation**
         Route::get('revenue-otheroperation/{id}', 'Admin\OtherOperationController@revenueOtherOperation');
         Route::get('revenue-otheroperation/{id}/create', 'Admin\OtherOperationController@otherOperationCreate');
         Route::post('revenue-otheroperation/create/{id}', 'Admin\OtherOperationController@otherOperationStore');
@@ -97,7 +97,15 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::resource('revenuefule', 'Admin\RevenueFuleController');
         Route::post('revenuefule/multi_delete', 'Admin\RevenueFuleController@multi_delete');
 
+
+        //**revenue-expenses**
         Route::get('revenuefule-revenue/{id}', 'Admin\RevenueFuleController@revenueFuleRevenue');
+        Route::get('revenuefule-revenue/{id}/create', 'Admin\RevenueFuleController@revenueFulCreate');
+        Route::post('revenuefule-revenue/create/{id}', 'Admin\RevenueFuleController@revenueFulStore');
+        Route::get('revenuefule-revenue/{id}/edit', 'Admin\RevenueFuleController@revenueFulEdit');
+        Route::put('revenuefule-revenue/edit/{id}', 'Admin\RevenueFuleController@revenueFulUpdate');
+        //************
+
         Route::get('financial-movements/{id}', 'Admin\EmployeeController@movementShow');
         Route::get('revenue-fule-revenue/create', 'Admin\RevenueFuleController@revenueFuleRevenueCreate');
 
