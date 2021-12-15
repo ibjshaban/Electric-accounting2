@@ -18,7 +18,7 @@ class RevenueFuleRevenueDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
-            ->addColumn('actions', 'admin.revenuefule.buttons.actions')
+            ->addColumn('actions', 'admin.revenuefule.revenuefule-revenue.buttons.actions')
 
    		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
@@ -86,7 +86,7 @@ class RevenueFuleRevenueDataTable extends DataTable
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){
-                        	window.location.href =  "'.aurl('revenue-fule-revenue').'/create";
+                        	window.location.href =  "'.\URL::current().'/create";
                         }',
                     ],
                 ],
@@ -101,9 +101,7 @@ class RevenueFuleRevenueDataTable extends DataTable
             //stock_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note6
             ". filterElement('6', 'select', \App\Models\Stock::pluck("name","name")) . "
             //revenue_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note7
-            ". filterElement('7', 'select', \App\Models\Revenue::pluck("name","name")) . "
             //city_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note8
-            ". filterElement('8', 'select', \App\Models\City::pluck("name","name")) . "
 
 
 	            }",
