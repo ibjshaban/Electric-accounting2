@@ -15,8 +15,7 @@
 <strong>&copy; {{ date('Y') }} {{ setting()->{l('sitename')} }}</strong>
 <div class="float-right d-none d-sm-inline-block">
 @if(function_exists('it_version'))
-<a href="https://github.com/arabnewscms/it" target="_blank"><b>(IT Package)</b> {{ it_version() }} ❤️</a> <br />
-don't forget to remove me
+<a href="#" target="_blank"><b>(I&S)</b> ❤️</a>
 @endif
 </div>
 </footer>
