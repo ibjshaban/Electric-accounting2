@@ -91,6 +91,14 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::resource('collection', 'Admin\CollectionController');
         Route::post('collection/multi_delete', 'Admin\CollectionController@multi_delete');
 
+        //**revenue-collection**
+        Route::get('revenue-collection/{id}', 'Admin\CollectionController@revenueCollection');
+        Route::get('revenue-collection/{id}/create', 'Admin\CollectionController@revenueCollectionCreate');
+        Route::post('revenue-collection/create/{id}', 'Admin\CollectionController@revenueCollectionStore');
+        Route::get('revenue-collection/{id}/edit', 'Admin\CollectionController@revenueCollectionEdit');
+        Route::put('revenue-collection/edit/{id}', 'Admin\CollectionController@revenueCollectionUpdate');
+        //************
+
         Route::resource('filling', 'Admin\FillingController');
         Route::post('filling/multi_delete', 'Admin\FillingController@multi_delete');
 

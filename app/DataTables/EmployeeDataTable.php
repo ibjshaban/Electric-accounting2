@@ -178,6 +178,11 @@ class EmployeeDataTable extends DataTable
                 'title' => trans('admin.id_number'),
             ],
             [
+                'name' => 'salary',
+                'data' => 'salary',
+                'title' => trans('admin.salary'),
+            ],
+            [
                 'name' => 'phone',
                 'data' => 'phone',
                 'title' => trans('admin.phone'),

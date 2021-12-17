@@ -18,7 +18,7 @@ class CreateCollectionsTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId("employee_id")->nullable()->constrained("employees")->references("id");
             $table->foreignId("revenue_id")->constrained("revenues")->references("id");
-            $table->bigInteger('amount');
+            $table->double('amount');
             $table->date('collection_date');
             $table->string('source')->nullable();
             $table->longtext('note')->nullable();
