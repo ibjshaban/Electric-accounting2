@@ -69,7 +69,7 @@ class OtherOperationController extends Controller
         $data['admin_id'] = admin()->id();
         $otheroperation = OtherOperation::create($data);
         $redirect = isset($request["add_back"]) ? "/create" : "";
-        return redirectWithSuccess(aurl('otheroperation' . $redirect), trans('admin.added'));
+        return redirectWithSuccess(url()->previous(), trans('admin.added'));
     }
 
     /**
@@ -82,7 +82,7 @@ class OtherOperationController extends Controller
     {
         $otheroperation = OtherOperation::find($id);
         return is_null($otheroperation) || empty($otheroperation) ?
-            backWithError(trans("admin.undefinedRecord"), aurl("otheroperation")) :
+            backWithError(trans("admin.undefinedRecord"), url()->previous()) :
             view('admin.otheroperation.show', [
                 'title' => trans('admin.show'),
                 'otheroperation' => $otheroperation
@@ -99,7 +99,7 @@ class OtherOperationController extends Controller
     {
         $otheroperation = OtherOperation::find($id);
         return is_null($otheroperation) || empty($otheroperation) ?
-            backWithError(trans("admin.undefinedRecord"), aurl("otheroperation")) :
+            backWithError(trans("admin.undefinedRecord"), url()->previous()) :
             view('admin.otheroperation.edit', [
                 'title' => trans('admin.edit'),
                 'otheroperation' => $otheroperation
@@ -111,13 +111,13 @@ class OtherOperationController extends Controller
         // Check Record Exists
         $otheroperation = OtherOperation::find($id);
         if (is_null($otheroperation) || empty($otheroperation)) {
-            return backWithError(trans("admin.undefinedRecord"), aurl("otheroperation"));
+            return backWithError(trans("admin.undefinedRecord"), url()->previous());
         }
         $data = $this->updateFillableColumns();
         $data['admin_id'] = admin()->id();
         OtherOperation::where('id', $id)->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
-        return redirectWithSuccess(aurl('otheroperation' . $redirect), trans('admin.updated'));
+        return redirectWithSuccess(url()->previous(), trans('admin.updated'));
     }
 
     /**

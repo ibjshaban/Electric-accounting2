@@ -1,5 +1,6 @@
 <?php
 namespace App\DataTables;
+use App\Models\revenue;
 use App\Models\Salary;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Services\DataTable;
@@ -20,7 +21,9 @@ class RevenueSalaryDataTable extends DataTable
         return datatables($query)
             ->addColumn('actions', 'admin.salary.buttons.actions')
 
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+            ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
@@ -94,10 +97,10 @@ class RevenueSalaryDataTable extends DataTable
 
 
 
-            ". filterElement('1,2,3,4,5,6', 'input') . "
+            ". filterElement('1,7,3,4,5,6', 'input') . "
 
                         //employee_idtotal_amount,discount,salary,note,payment_date,employee_id7
-            ". filterElement('7', 'select', \App\Models\Employee::pluck("name","name")) . "
+            ". filterElement('2', 'select', \App\Models\Employee::where('city_id',revenue::whereId(request()->route('id'))->first()->city_id)->pluck("name","name")) . "
 
 
 	            }",
@@ -166,6 +169,11 @@ class RevenueSalaryDataTable extends DataTable
                 'width'          => '10px',
                 'aaSorting'      => 'none'
             ],
+                [
+                    'name'=>'employee_id.name',
+                    'data'=>'employee_id.name',
+                    'title'=>trans('admin.employee_id'),
+                ],
 				[
                  'name'=>'total_amount',
                  'data'=>'total_amount',
@@ -191,24 +199,10 @@ class RevenueSalaryDataTable extends DataTable
                  'data'=>'payment_date',
                  'title'=>trans('admin.payment_date'),
 		    ],
-				[
-                 'name'=>'employee_id.name',
-                 'data'=>'employee_id.name',
-                 'title'=>trans('admin.employee_id'),
-		    ],
             [
 	                'name' => 'created_at',
 	                'data' => 'created_at',
 	                'title' => trans('admin.created_at'),
-	                'exportable' => false,
-	                'printable'  => false,
-	                'searchable' => false,
-	                'orderable'  => false,
-	            ],
-	                    [
-	                'name' => 'updated_at',
-	                'data' => 'updated_at',
-	                'title' => trans('admin.updated_at'),
 	                'exportable' => false,
 	                'printable'  => false,
 	                'searchable' => false,
