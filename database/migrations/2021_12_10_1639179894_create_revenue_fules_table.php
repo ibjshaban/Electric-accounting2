@@ -18,7 +18,7 @@ class CreateRevenueFulesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('quantity');
             $table->bigInteger('price');
-            $table->bigInteger('paid_amount');
+            $table->bigInteger('paid_amount')->nullable();
             $table->foreignId("filling_id")->constrained("fillings")->references("id");
             $table->foreignId("stock_id")->constrained("stocks")->references("id");
             $table->foreignId("revenue_id")->constrained("revenues")->references("id");

@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use App\Models\Salary;
 
 use App\Http\Controllers\Validations\SalaryRequest;
+use Illuminate\Http\Request;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -88,7 +90,7 @@ class SalaryController extends Controller
             {
         		$salary =  Salary::find($id);
         		return is_null($salary) || empty($salary)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("salary")) :
+        		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.salary.show',[
 				    'title'=>trans('admin.show'),
 					'salary'=>$salary
@@ -105,7 +107,7 @@ class SalaryController extends Controller
             {
         		$salary =  Salary::find($id);
         		return is_null($salary) || empty($salary)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("salary")) :
+        		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.salary.edit',[
 				  'title'=>trans('admin.edit'),
 				  'salary'=>$salary
@@ -134,7 +136,7 @@ class SalaryController extends Controller
               // Check Record Exists
               $salary =  Salary::find($id);
               if(is_null($salary) || empty($salary)){
-              	return backWithError(trans("admin.undefinedRecord"),aurl("salary"));
+              	return backWithError(trans("admin.undefinedRecord"),url()->previous());
               }
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
@@ -152,12 +154,12 @@ class SalaryController extends Controller
 	public function destroy($id){
 		$salary = Salary::find($id);
 		if(is_null($salary) || empty($salary)){
-			return backWithSuccess(trans('admin.undefinedRecord'),aurl("salary"));
+			return backWithSuccess(trans('admin.undefinedRecord'),url()->previous());
 		}
 
 		it()->delete('salary',$id);
 		$salary->delete();
-		return redirectWithSuccess(aurl("salary"),trans('admin.deleted'));
+		return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
 	}
 
 
@@ -167,24 +169,60 @@ class SalaryController extends Controller
 			foreach($data as $id){
 				$salary = Salary::find($id);
 				if(is_null($salary) || empty($salary)){
-					return backWithError(trans('admin.undefinedRecord'),aurl("salary"));
+					return backWithError(trans('admin.undefinedRecord'),url()->previous());
 				}
 
 				it()->delete('salary',$id);
 				$salary->delete();
 			}
-			return redirectWithSuccess(aurl("salary"),trans('admin.deleted'));
+			return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
 		}else {
 			$salary = Salary::find($data);
 			if(is_null($salary) || empty($salary)){
-				return backWithError(trans('admin.undefinedRecord'),aurl("salary"));
+				return backWithError(trans('admin.undefinedRecord'),url()->previous());
 			}
 
 			it()->delete('salary',$data);
 			$salary->delete();
-			return redirectWithSuccess(aurl("salary"),trans('admin.deleted'));
+			return redirectWithSuccess( url()->previous(),trans('admin.deleted'));
 		}
 	}
 
+	public function deposit_salary(Request $request){
+	    $status =$this->createSalaryForEmployee($request->id,$request->revenue_id,$request->discount,
+            $request->paid_date,$request->note);
+	    if ($status){
+            return response(null,200);
+        }
+	    return response(null,422);
+
+    }
+
+    public function createSalaryForEmployee($employee_id,$revenue_id,$discount,$paid_date,$note){
+	    $employee = Employee::whereId($employee_id)->first();
+	    $discount= $discount && $discount != "NaN"?  $discount : 0;
+	    $status= false;
+	    if (isset($employee)){
+ 	        if ($employee->debt() > 0 && is_numeric($discount) && $discount > 0){
+            if (!($discount <= $employee->salary && $discount <= $employee->debt())){
+                return false;
+                }
+            }
+
+            $salary =Salary::create([
+                'total_amount'=> $employee->salary,
+                'discount'=> $discount,
+                'salary'=> $employee->salary - $discount,
+                'note'=> $note,
+                'payment_date'=> $paid_date,
+                'employee_id'=> $employee->id,
+                'revenue_id'=> $revenue_id,
+                'admin_id'=> admin()->id()
+            ]);
+            if ($salary){$status= true;}
+
+        }
+	    return $status;
+    }
 
 }

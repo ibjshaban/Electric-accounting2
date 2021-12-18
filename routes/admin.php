@@ -62,6 +62,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
         Route::resource('salary', 'Admin\SalaryController')->except('create');
         Route::get('/revenue-salary/{id}/create', 'Admin\SalaryController@create');
+        Route::post('/revenue-salary/deposit', 'Admin\SalaryController@deposit_salary')->name('deposit_salary');
         Route::post('salary/multi_delete', 'Admin\SalaryController@multi_delete');
         Route::get('/revenue-salary/{id}', 'Admin\SalaryController@revenueSalary');
 

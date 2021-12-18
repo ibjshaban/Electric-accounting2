@@ -27,7 +27,7 @@
 	<!-- /.card-header -->
 	<div class="card-body">
 
-{!! Form::open(['url'=>aurl('/revenue-expenses/create/'.$otheroperation->id),'id'=>'otheroperation','files'=>true,'class'=>'form-horizontal form-row-seperated', 'method' => 'post']) !!}
+{!! Form::open(['url'=>aurl('/revenue-otheroperation/create/'.$otheroperation->id),'id'=>'otheroperation','files'=>true,'class'=>'form-horizontal form-row-seperated', 'method' => 'post']) !!}
 <div class="row">
 
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -64,12 +64,6 @@
             {!! Form::text('note',old('note'),['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
     </div>
 </div>
-{{--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-	<div class="form-group">
-		{!! Form::label('revenue_id',trans('admin.revenue_id')) !!}
-		{!! Form::select('revenue_id',App\Models\revenue::pluck('name','id'),old('revenue_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
-	</div>
-</div>--}}
 
 </div>
 		<!-- /.row -->

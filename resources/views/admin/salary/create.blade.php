@@ -29,65 +29,6 @@
         <!-- /.card-header -->
         <div class="card-body">
 
-            {!! Form::open(['url'=>aurl('/salary'),'id'=>'salary','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
-{{--
-            <div class="row">
-
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('total_amount',trans('admin.total_amount'),['class'=>' control-label']) !!}
-                        {!! Form::number('total_amount',old('total_amount'),['class'=>'form-control','placeholder'=>trans('admin.total_amount')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('salary',trans('admin.salary'),['class'=>' control-label']) !!}
-                        {!! Form::number('salary',old('salary'),['class'=>'form-control','placeholder'=>trans('admin.salary')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('discount',trans('admin.discount'),['class'=>' control-label']) !!}
-                        {!! Form::number('discount',old('discount'),['class'=>'form-control','placeholder'=>trans('admin.discount')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('note',trans('admin.note'),['class'=>' control-label']) !!}
-                        {!! Form::text('note',old('note'),['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <!-- Date range -->
-                    <div class="form-group">
-                        {!! Form::label('payment_date',trans('admin.payment_date')) !!}
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                <span class="input-group-text">
-                    <i class="far fa-calendar-alt"></i>
-                </span>
-                            </div>
-                            {!! Form::text('payment_date',old('payment_date'),['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.payment_date'),'readonly'=>'readonly']) !!}
-                        </div>
-                        <!-- /.input group -->
-                    </div>
-                    <!-- /.form group -->
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('employee_id',trans('admin.employee_id')) !!}
-                        {!! Form::select('employee_id',App\Models\Employee::pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('revenue_id',trans('admin.revenue_id')) !!}
-                        {!! Form::select('revenue_id',App\Models\revenue::pluck('name','id'),old('revenue_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
-                    </div>
-                </div>
-
-            </div>
---}}
             <div class="row">
                 <table class="table table-bordered">
                     <thead>
@@ -98,30 +39,34 @@
                         <th>الديون</th>
                         <th>الخصم</th>
                         <th style="width: 40px">صافي الراتب</th>
-                        <th>الملاحظات</th>
+                        <th>الملاحظات (اختياري)</th>
                         <th>تاريخ الدفع</th>
                         <th>العملية</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($employees as $em)
-                    <tr>
+                    <tr id="employee-{{$em->id}}" class="employee" data-id="{{$em->id}}">
                         <td>{{$em->id}}</td>
                         <td>{{$em->name}}</td>
-                        <td>{{$em->salary}}</td>
-                        <td>{{$em->debt()}}</td>
+                        <td id="employee-{{$em->id}}-all-salary">{{$em->salary}}</td>
+                        <td id="employee-{{$em->id}}-debt">{{$em->debt()}}</td>
                         <td>
-                            <input type="number" name="discount" class="form-group" placeholder="الخصم">
-                        </td>
-                        <td><span class="badge bg-success" style="font-size: 20px";>{{$em->salary}}</span></td>
-                        <td>
-                            <input name="note" type="text" class="form-group" placeholder="الملاحظات">
+                            <input oninput="SalaryCheck({{$em->id}})" id="employee-{{$em->id}}-discount" type="number" name="discount" class="form-group" placeholder="الخصم">
                         </td>
                         <td>
-                            <input type="date" name="date" class="form-group">
+                            <span id="employee-{{$em->id}}-salary" class="badge bg-success" style="font-size: 20px";>
+                                {{$em->salary}}
+                            </span>
                         </td>
                         <td>
-                            <button type="submit" name="submit" class="btn btn-info">سحب</button>
+                            <input id="employee-{{$em->id}}-note" name="note" type="text" class="form-group" placeholder="الملاحظات">
+                        </td>
+                        <td>
+                            <input type="date" name="date" class="form-group" id="employee-{{$em->id}}-paid-date">
+                        </td>
+                        <td>
+                            <button type="button" name="submit" class="btn btn-info" onclick="deposit({{$em->id}})">سحب</button>
                         </td>
                     </tr>
                     @endforeach
@@ -133,10 +78,102 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <button type="submit" name="add" class="btn btn-primary btn-flat"><i
-                    class="fa fa-plus"></i> {{ trans('admin.add') }}</button>
-            <button type="submit" name="add_back" class="btn btn-success btn-flat"><i
-                    class="fa fa-plus"></i> {{ trans('admin.add_back') }}</button>
-            {!! Form::close() !!}    </div>
+            <a href="{{aurl("/revenue-salary/".request()->route('id'))}}" class="btn btn-primary btn-flat"><i
+                    class="fas fa-arrow-alt-circle-right"></i>الذهاب للجدول</a>
+            <button type="button" onclick="depositAll()" name="add_back" class="btn btn-success btn-flat"><i
+                    class="fa fa-plus"></i> السحب للكل</button>
+        </div>
     </div>
 @endsection
+
+@push('js')
+    <script src="{{asset('/assets/plugins/toastr/toastr.min.js')}}"></script>
+    <script>
+        $(document).ready( function() {
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+            $('input[type="date"]').val(today);
+        });
+        function SalaryCheck(id){
+            event.preventDefault();
+            $('.employee-'+id+'-discounterror').remove()
+            const discount= parseFloat($('#employee-'+id+'-discount').val());
+            const allSalary= parseFloat($('#employee-'+id+'-all-salary').text());
+            const debt= parseFloat($('#employee-'+id+'-debt').text());
+            if (discount > 0 && allSalary > 0){
+                if (debt > 0){
+                    if (discount <= allSalary && discount <= debt){
+                        $('#employee-'+id+'-salary').text(allSalary - discount)
+                    }
+                    else {
+                        $('#employee-'+id+'-discount').after('<p class="text-sm text-danger employee-'+id+'-discounterror">قيمة الخصم يجب أن تكون أقل أو يساوي الراتب و الديون</p>');
+                        $('#employee-'+id+'-salary').text(0)
+                    }
+                }
+                else {
+                    $('#employee-'+id+'-discount').after('<p class="text-sm text-danger employee-'+id+'-discounterror" >لا يوجد ديون حتى يتم الخصم</p>');
+                }
+            }
+            else {
+                $('#employee-'+id+'-salary').text(allSalary)
+            }
+        }
+        function deposit(id){
+            event.preventDefault();
+            $('.employee-'+id+'-paiddateerror').remove()
+            var discount= parseFloat($('#employee-'+id+'-discount').val());
+            const allSalary= parseFloat($('#employee-'+id+'-all-salary').text());
+            const debt= parseFloat($('#employee-'+id+'-debt').text());
+            const note= $('#employee-'+id+'-note').val();
+            const paid_date= $('#employee-'+id+'-paid-date').val();
+            var status= true;
+            if (debt > 0 && discount > 0){
+                if (!(discount <= allSalary && discount <= debt)){
+                    status= false;
+                }
+            }
+            if (paid_date && status){
+                var data= {"revenue_id" : {{request()->route('id')}},"id": id,"discount": discount, "note" : note, "paid_date": paid_date, "_token": "{{csrf_token()}}"};
+                $.post( "{{route("deposit_salary")}}", data)
+                    .done(function() {
+                        $('#employee-'+id).remove();
+                        toastr.success('تمت عملية إضافة الراتب للموظف بنجاح بنجاح')
+
+                    })
+                    .fail(function() {
+                        toastr.error('حدث خطأ في حفظ الراتب, يرجى مراجعة المدخلات')
+                    })
+            }
+            else {
+                $('#employee-'+id+'-paid-date').after('<p class="text-sm text-danger employee-'+id+'-paiddateerror">يرجي ادخال تاريخ الدفعة</p>');
+            }
+
+
+        }
+        function depositAll(){
+            Swal.fire({
+                title: 'هل أنت متأكد ؟',
+                text: "تريد سحب الراتب لكل الموظفين دفعة واحدة",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم, اسحب الآن',
+                cancelButtonText: 'إالغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var data = $('.employee').map(function() {
+                        return $(this).data('id');
+                    }).get();
+                    data.forEach(id => deposit(id));
+                }
+            })
+        }
+    </script>
+@endpush
