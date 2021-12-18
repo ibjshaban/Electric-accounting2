@@ -21,7 +21,7 @@ class RevenueCollectionDataTable extends DataTable
             ->addColumn('actions', 'admin.collection.revenue-collection.buttons.actions')
 
    		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
-                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                  <input type="checkbox" class="selected_data clickCheckbox" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}">
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
@@ -79,10 +79,10 @@ class RevenueCollectionDataTable extends DataTable
 					'extend' => 'reload',
 					'className' => 'btn btn-outline',
 					'text' => '<i class="fa fa-sync-alt"></i> '.trans('admin.reload')
-					],	[
+					],/*	[
 						'text' => '<i class="fa fa-trash"></i> '.trans('admin.delete'),
 						'className'    => 'btn btn-outline deleteBtn',
-                    ], 	[
+                    ], */	[
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){
@@ -97,7 +97,6 @@ class RevenueCollectionDataTable extends DataTable
                         //employee_idemployee_id,revenue_id,amount,collection_date,source,note2
             ". filterElement('2', 'select', \App\Models\Employee::pluck("name","name")) . "
             //revenue_idemployee_id,revenue_id,amount,collection_date,source,note3
-            ". filterElement('4', 'select', \App\Models\Revenue::pluck("name","name")) . "
 
 
 	            }",
@@ -205,16 +204,7 @@ class RevenueCollectionDataTable extends DataTable
 	                'searchable' => false,
 	                'orderable'  => false,
 	            ],
-	                    [
-	                'name' => 'updated_at',
-	                'data' => 'updated_at',
-	                'title' => trans('admin.updated_at'),
-	                'exportable' => false,
-	                'printable'  => false,
-	                'searchable' => false,
-	                'orderable'  => false,
-	            ],
-	                    [
+	                  [
 	                'name' => 'actions',
 	                'data' => 'actions',
 	                'title' => trans('admin.actions'),
