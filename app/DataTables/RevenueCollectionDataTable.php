@@ -20,8 +20,10 @@ class RevenueCollectionDataTable extends DataTable
         return datatables($query)
             ->addColumn('actions', 'admin.collection.revenue-collection.buttons.actions')
 
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
-                  <input type="checkbox" class="selected_data clickCheckbox" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}">
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+            ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+            ->addColumn('checkbox', '<div  class="icheck-success">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" onchange="change_status({{$id}})" {{$status  ? "checked" : ""}}>
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);

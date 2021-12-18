@@ -44,6 +44,19 @@
 
 @push('js')
 {!! $dataTable->scripts() !!}
+    <script>
+        function change_status(id){
+            var status =  $("#selectdata"+id).is(':checked');
+            $.post( "{{route("deposit_salary")}}", data)
+                .done(function() {
+                    $('#employee-'+id).remove();
+                    toastr.success('تمت عملية إضافة الراتب للموظف بنجاح بنجاح')
+
+                })
+                .fail(function() {
+                    toastr.error('حدث خطأ في حفظ الراتب, يرجى مراجعة المدخلات')
+                })
+        };
+    </script>
 @endpush
 		@endsection
-		
