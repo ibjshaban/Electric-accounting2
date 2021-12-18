@@ -220,6 +220,7 @@ class OtherOperationController extends Controller
         }
         $data = $request->except("_token", "_method","save");
         $data['admin_id'] = admin()->id();
+        //$data['revenue_id'] = $revenu_id;
         OtherOperation::where('id', $id)->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-otheroperation/'.$revenu_id. $redirect), trans('admin.updated'));

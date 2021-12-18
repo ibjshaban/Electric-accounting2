@@ -58,7 +58,7 @@
 	<!-- /.card-header -->
 	<div class="card-body">
 
-{!! Form::open(['url'=>aurl('/otheroperation/'.$otheroperation->id),'method'=>'put','id'=>'otheroperation','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+{!! Form::open(['url'=>aurl('/revenue-otheroperation/edit/'.$otheroperation->id),'method'=>'put','id'=>'otheroperation','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
 <div class="row">
 
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -95,12 +95,14 @@
         {!! Form::text('note', $otheroperation->note ,['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
     </div>
 </div>
-<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-		<div class="form-group">
-				{!! Form::label('revenue_id',trans('admin.revenue_id'),['class'=>'control-label']) !!}
-{!! Form::select('revenue_id',App\Models\revenue::pluck('name','id'), $otheroperation->revenue_id ,['class'=>'form-control select2','placeholder'=>trans('admin.revenue_id')]) !!}
-		</div>
-</div>
+{{--
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+        <div class="form-group">
+            {!! Form::label('revenue_id',trans('admin.revenue_id'),['class'=>'control-label']) !!}
+            {!! Form::select('revenue_id',App\Models\revenue::pluck('name','id'), $otheroperation->revenue_id ,['class'=>'form-control select2','placeholder'=>trans('admin.revenue_id')]) !!}
+        </div>
+    </div>
+--}}
 
 </div>
 		<!-- /.row -->
