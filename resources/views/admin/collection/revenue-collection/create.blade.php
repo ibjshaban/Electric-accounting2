@@ -54,7 +54,7 @@
 <div id="employeebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
 	<div class="form-group">
 		{!! Form::label('employee_id',trans('admin.employee_id')) !!}
-		{!! Form::select('employee_id',App\Models\Employee::where('type_id',1)->pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
+		{!! Form::select('employee_id',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
 	</div>
 </div>
     <div id="sourcebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12" style="display: none">
@@ -69,12 +69,12 @@
             {!! Form::number('amount',old('amount'),['class'=>'form-control', 'step'=>'0.0001', 'placeholder'=>trans('admin.amount')]) !!}
         </div>
     </div>
-<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+{{--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
 	<div class="form-group">
 		{!! Form::label('revenue_id',trans('admin.revenue_id')) !!}
 		{!! Form::select('revenue_id',App\Models\Revenue::pluck('name','id'),old('revenue_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
 	</div>
-</div>
+</div>--}}
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <!-- Date range -->
     <div class="form-group">

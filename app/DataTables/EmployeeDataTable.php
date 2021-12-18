@@ -98,8 +98,8 @@ class EmployeeDataTable extends DataTable
             ". filterElement('1,2,3,4,5,6', 'input') . "
 
                         //city_idname,city_id3
-            ". filterElement('5', 'select', \App\Models\EmployeeType::pluck("name","id")) . "
-            ". filterElement('6', 'select', \App\Models\City::pluck("name","id")) . "
+            ". filterElement('6', 'select', \App\Models\EmployeeType::pluck("name","id")) . "
+            ". filterElement('7', 'select', \App\Models\City::pluck("name","id")) . "
 
 	            }",
                 'order' => [[1, 'desc']],
