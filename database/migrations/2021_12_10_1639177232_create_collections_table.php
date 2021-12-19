@@ -22,6 +22,7 @@ class CreateCollectionsTable extends Migration
             $table->date('collection_date');
             $table->string('source')->nullable();
             $table->longtext('note')->nullable();
+            $table->boolean('status')->default(0);
 			$table->timestamps();
         });
     }

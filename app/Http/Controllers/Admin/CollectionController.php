@@ -247,5 +247,11 @@ class CollectionController extends Controller
         return redirectWithSuccess(aurl('revenue-collection/'.$collection->revenue_id. $redirect), trans('admin.updated'));
     }
 
+    public function change_status(Request $request){
+	    $status= $request->status == 'false'? 0 : 1;
+	    Collection::whereId($request->id)->first()->update(['status'=> $status]);
+	    return response()->json(null,200);
+    }
+
 
 }

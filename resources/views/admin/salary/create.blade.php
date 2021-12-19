@@ -143,7 +143,7 @@
                 $.post( "{{route("deposit_salary")}}", data)
                     .done(function() {
                         $('#employee-'+id).remove();
-                        toastr.success('تمت عملية إضافة الراتب للموظف بنجاح بنجاح')
+                        toastr.success('تمت عملية إضافة الراتب للموظف بنجاح')
 
                     })
                     .fail(function() {

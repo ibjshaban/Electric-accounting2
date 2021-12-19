@@ -91,6 +91,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
         Route::resource('collection', 'Admin\CollectionController');
         Route::post('collection/multi_delete', 'Admin\CollectionController@multi_delete');
+        Route::post('collection/status', 'Admin\CollectionController@change_status')->name('change_collection_status');
 
         //**revenue-collection**
         Route::get('revenue-collection/{id}', 'Admin\CollectionController@revenueCollection');

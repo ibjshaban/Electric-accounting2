@@ -19,6 +19,7 @@ protected $fillable = [
         'collection_date',
         'source',
         'note',
+        'status',
 		'created_at',
 		'updated_at',
 	];
