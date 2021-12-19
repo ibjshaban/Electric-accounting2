@@ -20,8 +20,10 @@ class CollectionDataTable extends DataTable
         return datatables($query)
             ->addColumn('actions', 'admin.collection.buttons.actions')
 
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
-                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+            ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+            ->addColumn('checkbox', '<div  class="icheck-success">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" onchange="change_status({{$id}})" {{$status  ? "checked" : ""}}>
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
@@ -79,10 +81,10 @@ class CollectionDataTable extends DataTable
 					'extend' => 'reload',
 					'className' => 'btn btn-outline',
 					'text' => '<i class="fa fa-sync-alt"></i> '.trans('admin.reload')
-					],	[
+					],	/*[
 						'text' => '<i class="fa fa-trash"></i> '.trans('admin.delete'),
 						'className'    => 'btn btn-outline deleteBtn',
-                    ], 	[
+                    ],*/ 	[
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){

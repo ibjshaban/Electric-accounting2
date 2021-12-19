@@ -44,17 +44,17 @@
 
 @push('js')
 {!! $dataTable->scripts() !!}
-    <script>
+<script src="{{asset('/assets/plugins/toastr/toastr.min.js')}}"></script>
+<script>
         function change_status(id){
             var status =  $("#selectdata"+id).is(':checked');
-            $.post( "{{route("deposit_salary")}}", data)
+            $.post( "{{route("change_collection_status")}}", {id: id, status: status, _token: "{{csrf_token()}}"})
                 .done(function() {
-                    $('#employee-'+id).remove();
-                    toastr.success('تمت عملية إضافة الراتب للموظف بنجاح بنجاح')
+                    toastr.success('تم تغيير حالة التحصيل بنجاح')
 
                 })
                 .fail(function() {
-                    toastr.error('حدث خطأ في حفظ الراتب, يرجى مراجعة المدخلات')
+                    toastr.error('حدث خطأ في تغيير حالة التحصيل')
                 })
         };
     </script>
