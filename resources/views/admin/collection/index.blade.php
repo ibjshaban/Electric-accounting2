@@ -44,6 +44,19 @@
 
 @push('js')
 {!! $dataTable->scripts() !!}
+<script src="{{asset('/assets/plugins/toastr/toastr.min.js')}}"></script>
+<script>
+        function change_status(id){
+            var status =  $("#selectdata"+id).is(':checked');
+            $.post( "{{route("change_collection_status")}}", {id: id, status: status, _token: "{{csrf_token()}}"})
+                .done(function() {
+                    toastr.success('تم تغيير حالة التحصيل بنجاح')
+
+                })
+                .fail(function() {
+                    toastr.error('حدث خطأ في تغيير حالة التحصيل')
+                })
+        };
+    </script>
 @endpush
 		@endsection
-		

@@ -25,11 +25,11 @@ class CollectionRequest extends FormRequest {
 	 */
 	protected function onCreate() {
 		return [
-             'employee_id'=>'sometimes|nullable|integer',
+             'employee_id'=>'required_if:collect_type,0|nullable|integer',
              'revenue_id'=>'',
              'amount'=>'required|numeric',
              'collection_date'=>'required|date',
-             'source'=>'sometimes|nullable|string',
+             'source'=>'required_if:collect_type,1|nullable|string',
              'note'=>'sometimes|nullable|string',
             'collect_type'=>'required',
 		];
@@ -37,11 +37,11 @@ class CollectionRequest extends FormRequest {
 
 	protected function onUpdate() {
 		return [
-             'employee_id'=>'sometimes|nullable|integer',
+             'employee_id'=>'required_if:collect_type,0|nullable|integer',
              'revenue_id'=>'',
              'amount'=>'required|numeric',
              'collection_date'=>'required|date',
-             'source'=>'sometimes|nullable|string',
+             'source'=>'required_if:collect_type,1|nullable|string',
              'note'=>'sometimes|nullable|string',
              'collect_type'=>'required',
 		];

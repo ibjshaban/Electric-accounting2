@@ -204,9 +204,16 @@ class CollectionController extends Controller
     }
 
     //Create collection by one revenue
-    public function revenueCollectionStore(Request $request, $id){
+    public function revenueCollectionStore(CollectionRequest $request, $id){
         $data = $request->except("_token", "_method");
         $data['revenue_id'] = $id;
+        if ($data['collect_type'] == '0'){
+            $data['source']= null;
+        }
+        else{
+            $data['employee_id']= null;
+        }
+        unset($data['collect_type']);
         $collection = Collection::create($data);
         $redirect = isset($request["add_back"]) ? "/create" : "";
         return redirectWithSuccess(aurl('revenue-collection/'.$id. $redirect), trans('admin.added'));
@@ -219,17 +226,31 @@ class CollectionController extends Controller
     }
 
     //Edit collection by one revenue
-    public function revenueCollectionUpdate(Request $request, $id){
+    public function revenueCollectionUpdate(CollectionRequest $request, $id){
         // Check Record Exists
         $collection = Collection::find($id);
         $revenu_id=$collection->revenue_id;
         if (is_null($collection) || empty($collection)) {
             return backWithError(trans("admin.undefinedRecord"), aurl("revenue-collection"));
         }
-        $data = $request->except("_token", "_method", "save", "collect_type");
+
+        $data = $request->except("_token", "_method", "save");
+        if ($data['collect_type'] == '0'){
+            $data['source']= null;
+        }
+        else{
+            $data['employee_id']= null;
+        }
+        unset($data['collect_type']);
         Collection::where('id', $id)->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $collection->revenue_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-collection/'.$collection->revenue_id. $redirect), trans('admin.updated'));
+    }
+
+    public function change_status(Request $request){
+	    $status= $request->status == 'false'? 0 : 1;
+	    Collection::whereId($request->id)->first()->update(['status'=> $status]);
+	    return response()->json(null,200);
     }
 
 

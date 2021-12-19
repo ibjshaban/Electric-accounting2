@@ -92,7 +92,8 @@
                      style="display: {{$collection->employee_id ? '':'none'}}">
                     <div class="form-group">
                         {!! Form::label('employee_id',trans('admin.employee_id'),['class'=>'control-label']) !!}
-                        {!! Form::select('employee_id',App\Models\Employee::where('type_id',1)->pluck('name','id'), $collection->employee_id ,['class'=>'form-control select2','placeholder'=>trans('admin.employee_id')]) !!}
+                        <?php $employees = App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(\App\Models\Collection::find(request()->route('id'))->revenue_id)->first()->city_id)->pluck('name','id') ?>
+                        {!! Form::select('employee_id',$employees, $collection->employee_id ,['class'=>'form-control select2','placeholder'=>trans('admin.employee_id')]) !!}
                     </div>
                 </div>
                 <div id="sourcebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12"
