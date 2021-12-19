@@ -160,10 +160,10 @@
 		"note"	=>		"الملاحظات",
 		"discount"	=>		"الخصم",
 		"total_amount"	=>		"المبلغ الكلي",
-		"revenue-fule-revenue"	=>		"السولار لكل ايرادة",
-		"revenuefule-revenue"	=>		"السولار لكل ايرادة",
-		"revenue-salary"	=>		"الراتب لكل ايرادة",
-		"revenue-otheroperation"	=>		"مصاريف اخرى لكل ايرادة",
+		"revenue-fule-revenue"	=>		"السولار للايرادة",
+		"revenuefule-revenue"	=>		"السولار للايرادة",
+		"revenue-salary"	=>		"الراتب الايرادة",
+		"revenue-otheroperation"	=>		"مصاريف اخرى للايرادة",
 		"salary"	=>		"الراتب",
 		"city_id"	=>		"المدينة",
 		"type_id"	=>		"النوع",
@@ -173,5 +173,6 @@
 		"name"	=>		"الاسم",
 		"employee"	=>		"الموظفين",
 		"financial-movements"	=>		"الحركات المالية",
+		"revenue-collection"	=>		"تحصيل الايرادة",
 
 ];

@@ -24,6 +24,7 @@ class RevenueFuleRevenueDataTable extends DataTable
             ->addColumn('actions', 'admin.revenuefule.revenuefule-revenue.buttons.actions')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+            ->addColumn('total_price', '{{ $quantity*$price }}')
             ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
@@ -183,6 +184,11 @@ class RevenueFuleRevenueDataTable extends DataTable
                 'name' => 'price',
                 'data' => 'price',
                 'title' => trans('admin.price'),
+            ],
+            [
+                'name' => 'total_price',
+                'data' => 'total_price',
+                'title' => 'السعر الكلي',
             ],
             [
                 'name' => 'paid_amount',

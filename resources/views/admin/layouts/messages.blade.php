@@ -20,7 +20,10 @@
 
                             @if (\Request::is('admin/revenuefule-revenue/*') or \Request::is('admin/revenue-expenses/*') or \Request::is('admin/revenue-otheroperation/*') or \Request::is('admin/revenue-collection/*') or \Request::is('admin/revenue-salary/*'))
                                 <li class="breadcrumb-item active"><a
-                                        href="{{aurl('revenue/'.request()->segment(3))}}">{{trans('admin.'.request()->segment(2))}}</a>
+                                        href="{{aurl('revenue/'.request()->segment(3))}}">الايرادة</a>
+                                </li>
+                                <li class="breadcrumb-item active"><a
+                                        href="#">{{trans('admin.'.request()->segment(2))}}</a>
                                 </li>
 
                             @else
