@@ -59,7 +59,7 @@
                     <input type="hidden" name="_method" value="POST">
                     {!! csrf_field() !!}
                     <div class="input-group">
-                        <input type="hidden" name="email" value="{{ $admin->email }}">
+                        <input type="hidden" name="mobile" value="{{ $admin->mobile }}">
                         <input type="password" name="password" class="form-control" placeholder="{{ trans('admin.password') }}">
                         <div class="input-group-append">
                             <button type="submit" class="btn"><i class="fas fa-arrow-right text-muted"></i></button>

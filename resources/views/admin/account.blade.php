@@ -19,6 +19,12 @@
                 </div>
             </div>
             <div class="form-group col-md-6">
+                {!! Form::label('mobile',trans('admin.mobile'),['class'=>'control-label']) !!}
+                <div class="">
+                    {!! Form::text('mobile',admin()->user()->mobile,['class'=>'form-control','placeholder'=>trans('admin.mobile')]) !!}
+                </div>
+            </div>
+            <div class="form-group col-md-6">
                 {!! Form::label('email',trans('admin.email'),['class'=>'control-label']) !!}
                 <div class="">
                     {!! Form::text('email',admin()->user()->email,['class'=>'form-control','placeholder'=>trans('admin.email')]) !!}

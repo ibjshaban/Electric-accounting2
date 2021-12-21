@@ -19,13 +19,14 @@ class CreateSalariesTable extends Migration
 $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
             $table->bigInteger('total_amount');
             $table->bigInteger('discount');
-            $table->bigInteger('salary');
+            $table->double('salary');
             $table->string('note')->nullable();
             $table->date('payment_date');
             $table->foreignId("employee_id")->constrained("employees")->references("id");
             $table->foreignId("revenue_id")->constrained("revenues")->references("id");
 			$table->softDeletes();
-			$table->timestamps();
+
+			$table->timestamps();
         });
     }
 

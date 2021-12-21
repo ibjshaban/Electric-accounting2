@@ -50,7 +50,7 @@
                         {{ session('error') }}
                     </div>
                     @else
-                    <span> {{ trans('admin.enter_email_and_password') }} </span>
+                    <span> {{ trans('admin.enter_mobile_and_password') }} </span>
                     @endif
                      @if(session()->has('success'))
 
@@ -67,7 +67,7 @@
                         @honeypot
                         {!! csrf_field() !!}
                         <div class="input-group mb-3" dir="{{app('dir')}}">
-                            <input type="email" name="email" class="form-control" placeholder="{{ trans('admin.email') }}" value="{{ $token->email }}">
+                            <input type="number" name="mobile" class="form-control" placeholder="{{ trans('admin.mobile') }}" value="{{ $token->mobile }}">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>

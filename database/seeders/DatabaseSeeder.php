@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder {
 		\App\Models\Admin::create([
 			'name' => 'admin',
 			'email' => 'test@test.com',
+			'mobile' => '0598888888',
 			'group_id' => 1,
 			'password' => bcrypt(123456),
 		]);

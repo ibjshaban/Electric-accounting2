@@ -64,6 +64,12 @@
 					{!! Form::text('name', $admins->name ,['class'=>'form-control','placeholder'=>trans('admin.name')]) !!}
 				</div>
 			</div>
+            <div class="col-md-6">
+				<div class="form-group">
+					{!! Form::label('mobile',trans('admin.mobile'),['class'=>'control-label']) !!}
+					{!! Form::number('mobile', $admins->mobile ,['class'=>'form-control','placeholder'=>trans('admin.mobile')]) !!}
+				</div>
+			</div>
 			<div class="col-md-6">
 				<div class="form-group">
 					{!! Form::label('password',trans('admin.password'),['class'=>'control-label']) !!}

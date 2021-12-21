@@ -12,6 +12,7 @@ class Admin extends Authenticatable {
 		'name',
 		'photo_profile',
 		'password',
+		'mobile',
 		'group_id',
 		'remember_token',
 	];
