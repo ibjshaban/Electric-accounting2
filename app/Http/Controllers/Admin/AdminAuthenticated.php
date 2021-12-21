@@ -15,7 +15,7 @@ class AdminAuthenticated extends Controller {
 	}
 
 	public function lock_screen() {
-		$admin = Admin::where('email', request('email'))->first();
+		$admin = Admin::where('mobile', request('mobile'))->first();
 		admin()->logout();
 		if (is_null($admin) || empty($admin)) {
 			return redirect(aurl('login'));
@@ -28,7 +28,7 @@ class AdminAuthenticated extends Controller {
 
 	public function login_post() {
 		$rememberme = request('rememberme') == 1 ? true : false;
-		if (admin()->attempt(['email' => request('email'), 'password' => request('password')], $rememberme)) {
+		if (admin()->attempt(['mobile' => request('mobile'), 'password' => request('password')], $rememberme)) {
 			return redirect(aurl(''));
 		} else {
 			session()->flash('error', trans('admin.error_loggedin'));
@@ -47,7 +47,7 @@ class AdminAuthenticated extends Controller {
 			[
 				'password' => 'required|min:6|confirmed',
 				'password_confirmation' => 'required',
-				'email' => 'required|email',
+				'mobile' => 'required|mobile',
 			], [], [
 				'password' => trans('admin.password'),
 				'password_confirmation' => trans('admin.password_confirmation'),
@@ -55,10 +55,10 @@ class AdminAuthenticated extends Controller {
 		$token = DB::table('password_resets')->where('token', $tokenstr)->where('created_at', '>', Carbon::now()->subHours(2))->first();
 
 		if (!empty($token)) {
-			$admin = Admin::where('email', $token->email)->update(['password' => bcrypt(request('password'))]);
+			$admin = Admin::where('mobile', $token->mobile)->update(['password' => bcrypt(request('password'))]);
 			session()->flash('success', trans('admin.password_is_changed'));
 			if (request()->has('andlogin')) {
-				auth()->guard('admin')->attempt(['email' => $token->email, 'password' => request('password')]);
+				auth()->guard('admin')->attempt(['mobile' => $token->mobile, 'password' => request('password')]);
 				return redirect(aurl('/'));
 			}
 			DB::table('password_resets')->where('token', $tokenstr)->delete();
@@ -80,22 +80,22 @@ class AdminAuthenticated extends Controller {
 
 	}
 	public function reset_password() {
-		$user = Admin::where('email', request('email'))->first();
+		$user = Admin::where('mobile', request('mobile'))->first();
 		if (!empty($user)) {
 			$token = app('auth.password.broker')->createToken($user);
 			$data = DB::table('password_resets')->insert([
-				'email' => request('email'),
+				'mobile' => request('mobile'),
 				'token' => $token,
 				'created_at' => Carbon::now(),
 			]);
-			$sendmail = Mail::to(request('email'))->send(new AdminResetPassword([
+			$sendmail = Mail::to(request('mobile'))->send(new AdminResetPassword([
 				'url' => aurl('password/reset/' . $token),
 				'data' => $user,
 			]));
 			session()->flash('success', trans('admin.reset_link_sent'));
 			return redirect(aurl('forgot/password'));
 		} else {
-			session()->flash('error', trans('admin.email_not_found'));
+			session()->flash('error', trans('admin.mobile_not_found'));
 			return redirect(aurl('forgot/password'));
 		}
 	}
@@ -108,14 +108,14 @@ class AdminAuthenticated extends Controller {
 
 		$rules = [
 			'name' => 'required',
-			'email' => 'required|email|unique:admins,email,' . admin()->user()->id,
+			'mobile' => 'required|numeric|unique:admins',
 			'password' => 'sometimes|nullable|confirmed',
 			'password_confirmation' => '',
 			'photo_profile' => 'sometimes|nullable|' . it()->image(),
 		];
 		$data = $this->validate(request(), $rules, [], [
 			'name' => trans('admin.name'),
-			'email' => trans('admin.email'),
+			'mobile' => trans('admin.mobile'),
 			'password' => trans('admin.password'),
 			'password_confirmation' => '',
 		]);

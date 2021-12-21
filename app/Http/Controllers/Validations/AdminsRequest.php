@@ -28,6 +28,7 @@ class AdminsRequest extends FormRequest {
 			'photo_profile' => '' . it()->image() . '|nullable|sometimes',
 			'email' => 'required|email|unique:admins',
 			'group_id' => 'required|numeric|exists:admin_groups,id',
+			'mobile' => 'required|numeric|digits:10|unique:admins',
 		];
 	}
 
@@ -38,6 +39,7 @@ class AdminsRequest extends FormRequest {
 			'photo_profile' => '' . it()->image() . '|nullable|sometimes',
 			'email' => 'required|email|unique:admins,email,' . request()->segment(3),
 			'group_id' => 'required|numeric|exists:admin_groups,id',
+			'mobile' => 'required|numeric|digits:10|unique:admins',
 		];
 	}
 
@@ -59,6 +61,7 @@ class AdminsRequest extends FormRequest {
 			'photo_profile' => trans('admin.photo_profile'),
 			'email' => trans('admin.email'),
 			'group_id' => trans('admin.group_id'),
+			'mobile' => trans('admin.mobile'),
 		];
 	}
 

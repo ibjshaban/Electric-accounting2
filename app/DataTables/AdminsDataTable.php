@@ -137,10 +137,15 @@ class AdminsDataTable extends DataTable {
 				'data' => 'photo_profile',
 				'title' => trans('admin.photo_profile'),
 			],
-			[
+			/*[
 				'name' => 'email',
 				'data' => 'email',
 				'title' => trans('admin.email'),
+			],*/
+            [
+				'name' => 'mobile',
+				'data' => 'mobile',
+				'title' => trans('admin.mobile'),
 			],
 			[
 				'name' => 'group_id.group_name',
