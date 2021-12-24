@@ -177,6 +177,11 @@ class SalaryDataTable extends DataTable
                  'data'=>'salary',
                  'title'=>trans('admin.salary'),
 		    ],
+                [
+                    'name'=>'employee_id.debt',
+                    'data'=>'employee_id.debt',
+                    'title'=> 'الدين الكلي',
+                ],
 				[
                  'name'=>'note',
                  'data'=>'note',

@@ -11,6 +11,7 @@ class Employee extends Model {
 	use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
+	protected $appends= ['debt'];
 protected $table    = 'employees';
 protected $fillable = [
 		'id',
@@ -55,7 +56,12 @@ protected $fillable = [
  	public function debt(){
         return \App\Models\Debt::where('employee_id',$this->id)->sum('amount') - \App\Models\Salary::where('employee_id',$this->id)->sum('discount');
     }
-   protected static function boot() {
+    public function getDebtAttribute()
+    {
+        return $this->debt();
+    }
+
+    protected static function boot() {
       parent::boot();
       // if you disable constraints should by run this static method to Delete children data
          static::deleting(function($employee) {

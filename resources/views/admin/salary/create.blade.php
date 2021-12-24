@@ -40,7 +40,7 @@
                         <th>الخصم</th>
                         <th style="width: 40px">صافي الراتب</th>
                         <th>الملاحظات (اختياري)</th>
-                        <th>تاريخ الدفع</th>
+                        <th>تاريخ الدفع <br> <input type="date" name="date" class="form-group" onchange="changeAllPaidDate(this)"></th>
                         <th>العملية</th>
                     </tr>
                     </thead>
@@ -91,15 +91,13 @@
     <script>
         $(document).ready( function() {
             var now = new Date();
-            var month = (now.getMonth() + 1);
-            var day = now.getDate();
-            if (month < 10)
-                month = "0" + month;
-            if (day < 10)
-                day = "0" + day;
-            var today = now.getFullYear() + '-' + month + '-' + day;
-            $('input[type="date"]').val(today);
+            var today = new Date(now.getFullYear(), now.getMonth()+1, 1);
+            today.setDate(0);
+            $('input[type="date"]').val(moment(today).format('YYYY-MM-DD'));
         });
+        function changeAllPaidDate(e){
+            $('input[type="date"]').val($(e).val());
+        }
         function SalaryCheck(id){
             event.preventDefault();
             $('.employee-'+id+'-discounterror').remove()
@@ -109,7 +107,7 @@
             if (discount > 0 && allSalary > 0){
                 if (debt > 0){
                     if (discount <= allSalary && discount <= debt){
-                        $('#employee-'+id+'-salary').text(allSalary - discount)
+                        $('#employee-'+id+'-salary').text((allSalary - discount).toFixed(2))
                     }
                     else {
                         $('#employee-'+id+'-discount').after('<p class="text-sm text-danger employee-'+id+'-discounterror">قيمة الخصم يجب أن تكون أقل أو يساوي الراتب و الديون</p>');

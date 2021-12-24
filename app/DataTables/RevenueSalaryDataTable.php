@@ -20,7 +20,6 @@ class RevenueSalaryDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.salary.buttons.actions')
-
    		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
             ->addColumn('checkbox', '<div  class="icheck-danger">
@@ -189,6 +188,11 @@ class RevenueSalaryDataTable extends DataTable
                  'data'=>'salary',
                  'title'=>trans('admin.salary'),
 		    ],
+                [
+                    'name'=>'employee_id.debt',
+                    'data'=>'employee_id.debt',
+                    'title'=> 'الدين الكلي',
+                ],
 				[
                  'name'=>'note',
                  'data'=>'note',
