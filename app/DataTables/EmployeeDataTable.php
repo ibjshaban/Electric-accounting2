@@ -19,12 +19,14 @@ class EmployeeDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.employee.buttons.actions')
-
-            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+            ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
+            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+            ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
-            ->rawColumns(['checkbox','actions',]);
+            ->rawColumns(['checkbox','actions', 'photo_profile']);
     }
 
 
@@ -188,6 +190,11 @@ class EmployeeDataTable extends DataTable
                 'title' => trans('admin.phone'),
             ],
             [
+                'name' => 'photo_profile',
+                'data' => 'photo_profile',
+                'title' => trans('admin.photo_profile'),
+            ],
+            [
                 'name' => 'type_id',
                 'data' => 'type_id.name',
                 'title' => trans('admin.type_id'),
@@ -206,7 +213,7 @@ class EmployeeDataTable extends DataTable
                 'searchable' => false,
                 'orderable'  => false,
             ],
-            [
+            /*[
                 'name' => 'updated_at',
                 'data' => 'updated_at',
                 'title' => trans('admin.updated_at'),
@@ -214,7 +221,7 @@ class EmployeeDataTable extends DataTable
                 'printable'  => false,
                 'searchable' => false,
                 'orderable'  => false,
-            ],
+            ],*/
             [
                 'name' => 'actions',
                 'data' => 'actions',

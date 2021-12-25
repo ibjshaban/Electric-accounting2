@@ -108,7 +108,7 @@ class AdminAuthenticated extends Controller {
 
 		$rules = [
 			'name' => 'required',
-			'mobile' => 'required|numeric|unique:admins',
+			'mobile' => 'nullable|numeric|unique:admins',
 			'password' => 'sometimes|nullable|confirmed',
 			'password_confirmation' => '',
 			'photo_profile' => 'sometimes|nullable|' . it()->image(),
