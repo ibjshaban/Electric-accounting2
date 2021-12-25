@@ -27,6 +27,7 @@ class SupplierRequest extends FormRequest {
 		return [
              'name'=>'required|string',
              'phone'=>'nullable|string',
+            'photo_profile' => '' . it()->image() . '|nullable|sometimes',
 		];
 	}
 
@@ -34,6 +35,7 @@ class SupplierRequest extends FormRequest {
 		return [
              'name'=>'required|string',
              'phone'=>'nullable|string',
+            'photo_profile' => '' . it()->image() . '|nullable|sometimes',
 		];
 	}
 
@@ -53,6 +55,7 @@ class SupplierRequest extends FormRequest {
 		return [
              'name'=>trans('admin.name'),
              'phone'=>trans('admin.phone'),
+            'photo_profile' => trans('admin.photo_profile'),
 		];
 	}
 

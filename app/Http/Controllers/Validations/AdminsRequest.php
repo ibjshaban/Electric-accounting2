@@ -39,7 +39,7 @@ class AdminsRequest extends FormRequest {
 			'photo_profile' => '' . it()->image() . '|nullable|sometimes',
 			'email' => 'required|email|unique:admins,email,' . request()->segment(3),
 			'group_id' => 'required|numeric|exists:admin_groups,id',
-			'mobile' => 'required|numeric|digits:10|unique:admins',
+			'mobile' => 'numeric|digits:10|unique:admins|nullable',
 		];
 	}
 
