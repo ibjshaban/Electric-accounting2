@@ -19,7 +19,8 @@ class CreateStocksTable extends Migration
             $table->string('name');
             $table->foreignId("city_id")->constrained("cities")->references("id");
 			$table->softDeletes();
-			$table->timestamps();
+
+			$table->timestamps();
         });
     }
 

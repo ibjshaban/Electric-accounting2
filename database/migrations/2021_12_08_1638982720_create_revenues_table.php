@@ -16,12 +16,12 @@ class CreaterevenuesTable extends Migration
     {
         Schema::create('revenues', function (Blueprint $table) {
             $table->bigIncrements('id');
-$table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
+            $table->foreignId("admin_id")->nullable()->constrained("admins")->onUpdate("cascade")->nullOnDelete();
             $table->string('name');
             $table->date('open_date');
             $table->date('close_date')->nullable();
             $table->double('total_amount');
-            $table->foreignId("city_id")->constrained("cities")->references("id");
+            $table->foreignId("city_id")->nullable()->constrained("cities")->references("id")->nullOnDelete();
 			$table->softDeletes();
 
 			$table->timestamps();

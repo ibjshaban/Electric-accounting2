@@ -16,10 +16,10 @@ class CreateDebtsTable extends Migration
     {
         Schema::create('debts', function (Blueprint $table) {
             $table->bigIncrements('id');
-$table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
+            $table->foreignId("admin_id")->nullable()->constrained("admins")->onUpdate("cascade")->nullOnDelete();
             $table->double('amount');
             $table->string('note')->nullable();
-            $table->foreignId("employee_id")->constrained("employees")->references("id");
+            $table->foreignId("employee_id")->nullable()->constrained("employees")->references("id")->nullOnDelete();
 			$table->softDeletes();
 
 			$table->timestamps();

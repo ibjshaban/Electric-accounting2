@@ -21,8 +21,8 @@ class CreateEmployeesTable extends Migration
             $table->string('photo_profile')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->foreignId("type_id")->constrained("employee_types")->references("id");
-            $table->foreignId("city_id")->constrained("cities")->references("id");
+            $table->foreignId("type_id")->nullable()->constrained("employee_types")->references("id")->nullOnDelete();
+            $table->foreignId("city_id")->nullable()->constrained("cities")->references("id")->nullOnDelete();
             $table->double('salary');
 			$table->softDeletes();
 

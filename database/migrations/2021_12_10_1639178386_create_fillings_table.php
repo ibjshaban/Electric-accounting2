@@ -18,7 +18,7 @@ class CreateFillingsTable extends Migration
             $table->bigIncrements('id');
             $table->double('quantity');
             $table->double('price');
-            $table->foreignId("supplier_id")->constrained("suppliers")->references("id");
+            $table->foreignId("supplier_id")->nullable()->constrained("suppliers")->references("id")->nullOnDelete();
             $table->date('filling_date');
             $table->longtext('note')->nullable();
             $table->string('name');
