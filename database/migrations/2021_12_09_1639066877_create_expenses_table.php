@@ -16,11 +16,11 @@ class CreateExpensesTable extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->bigIncrements('id');
-$table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
+            $table->foreignId("admin_id")->nullable()->constrained("admins")->onUpdate("cascade")->nullOnDelete();
             $table->string('name');
             $table->double('price');
             $table->date('date')->nullable();
-            $table->foreignId("revenue_id")->constrained("revenues")->references("id");
+            $table->foreignId("revenue_id")->nullable()->constrained("revenues")->references("id")->nullOnDelete();
 			$table->softDeletes();
 
 			$table->timestamps();

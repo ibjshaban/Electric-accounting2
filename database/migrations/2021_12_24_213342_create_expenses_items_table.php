@@ -19,7 +19,7 @@ class CreateExpensesItemsTable extends Migration
             $table->string('item_number');
             $table->double('amount');
             $table->double('price');
-            $table->foreignId('expenses_id')->references('id')->on('expenses');
+            $table->foreignId('expenses_id')->nullable()->references('id')->on('expenses')->nullOnDelete();
             $table->timestamps();
         });
     }
