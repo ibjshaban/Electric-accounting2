@@ -18,6 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('id_number')->nullable();
+            $table->string('photo_profile')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->foreignId("type_id")->constrained("employee_types")->references("id");
