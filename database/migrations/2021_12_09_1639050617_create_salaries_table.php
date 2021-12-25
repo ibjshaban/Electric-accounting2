@@ -17,8 +17,8 @@ class CreateSalariesTable extends Migration
         Schema::create('salaries', function (Blueprint $table) {
             $table->bigIncrements('id');
 $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
-            $table->bigInteger('total_amount');
-            $table->bigInteger('discount');
+            $table->double('total_amount');
+            $table->double('discount');
             $table->double('salary');
             $table->string('note')->nullable();
             $table->date('payment_date');

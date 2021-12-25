@@ -16,8 +16,8 @@ class CreateFillingsTable extends Migration
     {
         Schema::create('fillings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('quantity');
-            $table->bigInteger('price');
+            $table->double('quantity');
+            $table->double('price');
             $table->foreignId("supplier_id")->constrained("suppliers")->references("id");
             $table->date('filling_date');
             $table->longtext('note')->nullable();

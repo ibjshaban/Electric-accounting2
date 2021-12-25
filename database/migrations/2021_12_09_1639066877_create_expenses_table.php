@@ -18,11 +18,12 @@ class CreateExpensesTable extends Migration
             $table->bigIncrements('id');
 $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
             $table->string('name');
-            $table->bigInteger('price');
+            $table->double('price');
             $table->date('date')->nullable();
             $table->foreignId("revenue_id")->constrained("revenues")->references("id");
 			$table->softDeletes();
-			$table->timestamps();
+
+			$table->timestamps();
         });
     }
 

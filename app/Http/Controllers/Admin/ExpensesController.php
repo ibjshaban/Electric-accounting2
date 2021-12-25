@@ -7,8 +7,10 @@ use App\DataTables\RevenueExpensesDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\ExpensesRequest;
 use App\Models\Expenses;
+use App\Models\ExpensesItem;
 use App\Models\revenue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -195,10 +197,44 @@ class ExpensesController extends Controller
 
     //Create expenses by one revenue
     public function revenueStore(Request $request, $id){
+        $this->validate($request,[
+            'name'=> 'required|string',
+            'date'=>'nullable|string',
+        ],[],['name'=> 'البيان']);
         $data = $request->except("_token", "_method");
         $data['admin_id'] = admin()->id();
         $data['revenue_id'] = $id;
-        $expenses = Expenses::create($data);
+        DB::beginTransaction();
+        $expenses_price= 0;
+        try {
+            $expenses = new Expenses();
+            $expenses->name= $data['name'];
+            $expenses->date= $data['date'];
+            $expenses->admin_id= $data['admin_id'];
+            $expenses->revenue_id= $data['revenue_id'];
+            $expenses->price = 0;
+            $expenses->save();
+
+            for ($i=0; $i < count($data['item']??[]); $i++){
+                ExpensesItem::create([
+                    'item'=> $data['item'][$i],
+                    'item_number'=> $data['item_number'][$i],
+                    'amount'=> number_format($data['amount'][$i],2),
+                    'price'=> number_format($data['price'][$i],2),
+                    'expenses_id'=> $expenses->id,
+                ]);
+                $expenses_price += ($data['price'][$i]*$data['amount'][$i]);
+            }
+            $expenses->update(['price'=> number_format($expenses_price,2)]);
+
+            DB::commit();
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
+
+        }
+
         $redirect = isset($request["add_back"]) ? "/create" : "";
         return redirectWithSuccess(aurl('revenue-expenses/'.$id. $redirect), trans('admin.added'));
     }
@@ -212,6 +248,10 @@ class ExpensesController extends Controller
     //Edit expenses by one revenue
     public function revenueUpdate(Request $request, $id){
         // Check Record Exists
+        $this->validate($request,[
+            'name'=> 'required|string',
+            'date'=>'nullable|string',
+        ],[],['name'=> 'البيان']);
         $expenses = Expenses::find($id);
         $revenu_id=$expenses->revenue_id;
         if (is_null($expenses) || empty($expenses)) {
@@ -219,7 +259,36 @@ class ExpensesController extends Controller
         }
         $data = $request->except("_token", "_method","save");
         $data['admin_id'] = admin()->id();
-        Expenses::where('id', $id)->update($data);
+        DB::beginTransaction();
+        $expenses_price= 0;
+        try {
+
+            $expenses->name= $data['name'];
+            $expenses->date= $data['date'];
+            $expenses->admin_id= $data['admin_id'];
+            //$expenses->price = 0;
+            $expenses->save();
+            ExpensesItem::where('expenses_id',$expenses->id)->delete();
+            for ($i=0; $i < count($data['item']??[]); $i++){
+                ExpensesItem::create([
+                    'item'=> $data['item'][$i],
+                    'item_number'=> $data['item_number'][$i],
+                    'amount'=> InsertLargeNumber($data['amount'][$i]),
+                    'price'=> InsertLargeNumber($data['price'][$i]),
+                    'expenses_id'=> $expenses->id,
+                ]);
+                $expenses_price += ($data['price'][$i]*$data['amount'][$i]);
+            }
+            $expenses->update(['price'=> InsertLargeNumber($expenses_price)]);
+
+            DB::commit();
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            dd($e);
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
+        }
+
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-expenses/'.$revenu_id. $redirect), trans('admin.updated'));
     }
