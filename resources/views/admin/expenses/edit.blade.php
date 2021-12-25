@@ -14,7 +14,7 @@
                     <div class="dropdown-menu" role="menu">
                         <a href="{{aurl('expenses')}}" class="dropdown-item" style="color:#343a40">
                             <i class="fas fa-list"></i> {{trans('admin.show_all')}} </a>
-                        <a href="{{aurl('expenses/'.$expenses->id)}}" class="dropdown-item" style="color:#343a40">
+                        <a href="{{aurl('revenue-expenses/'.$expenses->id)}}" class="dropdown-item" style="color:#343a40">
                             <i class="fa fa-eye"></i> {{trans('admin.show')}} </a>
                         <a class="dropdown-item" style="color:#343a40" href="{{aurl('expenses/create')}}">
                             <i class="fa fa-plus"></i> {{trans('admin.create')}}

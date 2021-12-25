@@ -9,20 +9,21 @@
 				<span class="caret"></span>
 				<span class="sr-only"></span>
 			</a>
-			<div class="dropdown-menu" role="menu">
-				<a href="{{aurl('expenses')}}" class="dropdown-item"  style="color:#343a40">
-				<i class="fas fa-list"></i> {{trans('admin.show_all')}}</a>
-				<a class="dropdown-item"  style="color:#343a40" href="{{aurl('expenses/'.$expenses->id.'/edit')}}">
-					<i class="fas fa-edit"></i> {{trans('admin.edit')}}
-				</a>
-				<a class="dropdown-item"  style="color:#343a40" href="{{aurl('expenses/create')}}">
-					<i class="fas fa-plus"></i> {{trans('admin.create')}}
-				</a>
-				<div class="dropdown-divider"></div>
-				<a data-toggle="modal" data-target="#deleteRecord{{$expenses->id}}" class="dropdown-item"  style="color:#343a40" href="#">
-					<i class="fas fa-trash"></i> {{trans('admin.delete')}}
-				</a>
-			</div>
+            <div class="dropdown-menu" role="menu">
+                <a href="{{aurl('revenue-expenses/'.$expenses->revenue_id)}}" class="dropdown-item" style="color:#343a40">
+                    <i class="fas fa-list"></i> {{trans('admin.show_all')}} </a>
+                <a class="dropdown-item"  style="color:#343a40" href="{{aurl('revenue-expenses/'.$expenses->id.'/edit')}}">
+                    <i class="fas fa-edit"></i> {{trans('admin.edit')}}
+                </a>
+                <a class="dropdown-item" style="color:#343a40" href="{{aurl('revenue-expenses/'.$expenses->revenue_id.'/create')}}">
+                    <i class="fa fa-plus"></i> {{trans('admin.create')}}
+                </a>
+                <div class="dropdown-divider"></div>
+                <a data-toggle="modal" data-target="#deleteRecord{{$expenses->id}}" class="dropdown-item"
+                   style="color:#343a40" href="#">
+                    <i class="fa fa-trash"></i> {{trans('admin.delete')}}
+                </a>
+            </div>
 		</div>
 		</h3>
 		@push('js')
@@ -71,13 +72,13 @@
 			@endif
 
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<b>{{trans('admin.name')}} :</b>
+				<b>البيان :</b>
 				{!! $expenses->name !!}
 			</div>
 
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.price')}} :</b>
-				{!! $expenses->price !!}
+				{!! ShekelFormat($expenses->price) !!}
 			</div>
 
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -91,9 +92,45 @@
 			{{ $expenses->revenue_id()->first()->name }}
 			@endif
 			</div>
-
 			<!-- /.row -->
 		</div>
+        <hr>
+        <div class="row col-12">
+            <div class="mb-3"><b>التفاصيل</b></div>
+
+            <div class="row row-cols-5 col-12 mb-5 element">
+                <div class="col">الصنف</div>
+                <div class="col">رقم الصنف</div>
+                <div class="col">الكمية</div>
+                <div class="col">سعر الوحدة</div>
+                <div class="col">سعر الكمية</div>
+            </div>
+            @foreach($expenses->item() as $it)
+            <div class="row row-cols-5 col-12 mb-5 detail element" >
+                <div class="col">
+                    {{$it->item}}
+                </div>
+                <div class="col">
+                    {{$it->item_number}}
+                </div>
+                <div class="col">
+                    {{$it->amount}}
+                </div>
+                <div class="col">
+                    {{ShekelFormat($it->price)}}
+                </div>
+                <div class="col all_price">{{ShekelFormat($it->price* $it->amount)}}</div>
+            </div>
+            @endforeach
+            <div class="row row-cols-5 col-12 mb-5" >
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col" id="all_total">المجموع: {{ShekelFormat($expenses->price)}}</div>
+                <div class="col"></div>
+            </div>
+        </div>
 	</div>
 	<!-- /.card-body -->
 	<div class="card-footer">

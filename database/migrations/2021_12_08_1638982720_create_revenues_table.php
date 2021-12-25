@@ -20,7 +20,7 @@ $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDel
             $table->string('name');
             $table->date('open_date');
             $table->date('close_date')->nullable();
-            $table->bigInteger('total_amount');
+            $table->double('total_amount');
             $table->foreignId("city_id")->constrained("cities")->references("id");
 			$table->softDeletes();
 

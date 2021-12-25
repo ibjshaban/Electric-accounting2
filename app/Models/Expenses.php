@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
 class Expenses extends Model {
-	use SoftDeletes;
+
+	//use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
 protected $table    = 'expenses';
@@ -33,7 +34,7 @@ protected $fillable = [
    public function admin_id() {
 	   return $this->hasOne(\App\Models\Admin::class, 'id', 'admin_id');
    }
-	
+
 
 	/**
     * revenue_id relation method
@@ -56,5 +57,9 @@ protected $fillable = [
 			//$expenses->revenue_id()->delete();
          });
    }
-		
+
+   public function item(){
+       return $this->hasMany(ExpensesItem::class,'expenses_id')->get();
+   }
+
 }
