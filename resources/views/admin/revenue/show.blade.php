@@ -76,18 +76,36 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
-                        <div class="info-box bg-gradient-warning">
+                        <div class="info-box bg-gradient-olive">
                             <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
                             <?php $percent = $revenue->total_amount > 0 ? number_format(($total_collection * 100) / $revenue->total_amount, 1) : 0;?>
                             <a href="{{ aurl('revenue-collection/'.$revenue->id) }}" style="color: #ffffff;">
-                            <div class="info-box-content">
-                                <span class="info-box-text">المبلغ الذي تم تحصيله</span>
-                                <span class="info-box-number">{{ShekelFormat($total_collection)}}</span>
-                                <span class="info-box-number">{{$percent}}%</span>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: {{$percent}}%"></div>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">المبلغ الذي تم تحصيله</span>
+                                    <span class="info-box-number">{{ShekelFormat($total_collection)}}</span>
+                                    <span class="info-box-number">{{$percent}}%</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: {{$percent}}%"></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-gradient-info">
+                            <span class="info-box-icon"><i class="fas fa-users"></i></span>
+                            <?php $percent = $revenue->total_amount > 0 ? number_format(($total_other_collection * 100) / $revenue->total_amount, 1) : 0;?>
+                            <a href="{{ aurl('revenue-collection/'.$revenue->id) }}" style="color: #ffffff;">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">الجهات الاخرى</span>
+                                    <span class="info-box-number">{{ShekelFormat($total_other_collection)}}</span>
+                                    <span class="info-box-number">{{$percent}}%</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: {{$percent}}%"></div>
+                                    </div>
+                                </div>
                             </a>
                             <!-- /.info-box-content -->
                         </div>
@@ -144,14 +162,44 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-lg-6 col-6 m-auto pt-3">
-                        <div class="info-box bg-success">
+                    <div class="col-lg-6 col-md-6 m-auto pt-3">
+                        <div class="info-box bg-gradient-navy">
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">المجموع</span>
                                 <span class="info-box-number">{{ShekelFormat($total_all)}}</span>
                             </div>
                             <!-- /.info-box-content -->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 m-auto">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-success"><i class="fas fa-sort-amount-up"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">الربح</span>
+                                        <span class="info-box-number"> @if($net_profit > 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-danger"><i class="fas fa-sort-amount-down"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">الخسارة</span>
+                                        <span class="info-box-number"> @if($net_profit < 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
                         </div>
                     </div>
                 </div>
