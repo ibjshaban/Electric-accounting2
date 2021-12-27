@@ -172,34 +172,33 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
+                    <div class="row pt-3 border-top">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-success"><i class="fas fa-sort-amount-up"></i></span>
 
-                    <div class="col-lg-6 col-md-6 m-auto">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-success"><i class="fas fa-sort-amount-up"></i></span>
-
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">الربح</span>
-                                        <span class="info-box-number"> @if($net_profit > 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
-                                    </div>
-                                    <!-- /.info-box-content -->
+                                <div class="info-box-content">
+                                    <span class="info-box-text">الربح</span>
+                                    <span
+                                        class="info-box-number"> @if($net_profit > 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
                                 </div>
-                                <!-- /.info-box -->
+                                <!-- /.info-box-content -->
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
 
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-danger"><i class="fas fa-sort-amount-down"></i></span>
+                            <div class="info-box">
+                                <span class="info-box-icon bg-danger"><i class="fas fa-sort-amount-down"></i></span>
 
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">الخسارة</span>
-                                        <span class="info-box-number"> @if($net_profit < 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
-                                    </div>
-                                    <!-- /.info-box-content -->
+                                <div class="info-box-content">
+                                    <span class="info-box-text">الخسارة</span>
+                                    <span
+                                        class="info-box-number"> @if($net_profit < 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
                                 </div>
-                                <!-- /.info-box -->
+                                <!-- /.info-box-content -->
                             </div>
+                            <!-- /.info-box -->
                         </div>
                     </div>
                 </div>

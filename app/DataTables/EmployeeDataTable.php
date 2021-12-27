@@ -19,6 +19,7 @@ class EmployeeDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.employee.buttons.actions')
+            ->addColumn('name', 'admin.employee.buttons.style')
             ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
@@ -26,7 +27,7 @@ class EmployeeDataTable extends DataTable
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
-            ->rawColumns(['checkbox','actions', 'photo_profile']);
+            ->rawColumns(['checkbox','actions', 'photo_profile', 'name']);
     }
 
 
@@ -37,7 +38,7 @@ class EmployeeDataTable extends DataTable
      */
     public function query()
     {
-        return Employee::query()->with(['type_id','city_id',])->select("employees.*");
+        return Employee::query()->with(['type_id','city_id',])->withTrashed()->select("employees.*");
 
     }
 
