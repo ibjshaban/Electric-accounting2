@@ -22,6 +22,7 @@ class SupplierDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.supplier.buttons.actions')
+            ->addColumn('name', 'admin.supplier.buttons.style')
             ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
@@ -29,7 +30,7 @@ class SupplierDataTable extends DataTable
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
-            ->rawColumns(['checkbox', 'actions','photo_profile']);
+            ->rawColumns(['checkbox', 'actions','photo_profile','name']);
     }
 
 
@@ -40,7 +41,7 @@ class SupplierDataTable extends DataTable
      */
     public function query()
     {
-        return Supplier::query()->select("suppliers.*");
+        return Supplier::query()->withTrashed()->select("suppliers.*");
 
     }
 
