@@ -194,13 +194,16 @@ class CollectionController extends Controller
     //Show expenses for one revenue
     public function revenueCollection(RevenueCollectionDataTable $collection, $id)
     {
-        return $collection->with('id', $id)->render('admin.collection.index', ['title' => trans('admin.collection')]);
+        $revenue = revenue::find($id);
+        $revenue_name = $revenue->name;
+        return $collection->with('id', $id)->render('admin.collection.index', ['title' => trans('admin.collection'). '/(' . $revenue_name . ')']);
     }
 
     public function revenueCollectionCreate($id)
     {
+        $revenue = revenue::find($id)->name;
         $collection = revenue::find($id);
-        return view('admin.collection.revenue-collection.create', ['title' => trans('admin.create'),'collection' => $collection]);
+        return view('admin.collection.revenue-collection.create', ['title' => trans('admin.create'). '/(' . $revenue . ')','collection' => $collection]);
     }
 
     //Create collection by one revenue
@@ -222,7 +225,8 @@ class CollectionController extends Controller
     public function revenueCollectionEdit($id)
     {
         $collection = Collection::find($id);
-        return view('admin.collection.revenue-collection.edit', ['title' => trans('admin.edit'),'collection' => $collection]);
+        $revenue = revenue::find($collection->revenue_id)->name;
+        return view('admin.collection.revenue-collection.edit', ['title' => trans('admin.edit'). '/(' . $revenue . ')','collection' => $collection]);
     }
 
     //Edit collection by one revenue

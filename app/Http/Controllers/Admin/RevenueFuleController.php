@@ -183,15 +183,18 @@ class RevenueFuleController extends Controller
     ///////*** Show per one revenue
     public function revenueFuleRevenue(RevenueFuleRevenueDataTable $revenuefule, $id)
     {
-        return $revenuefule->with('id', $id)->render('admin.revenuefule.index', ['title' => trans('admin.revenuefule')]);
+        $revenue = revenue::find($id)->name;
+        return $revenuefule->with('id', $id)->render('admin.revenuefule.index', ['title' => trans('admin.revenuefule'). '/(' . $revenue . ')']);
     }
 
     //Create per one revenue
     public function revenueFulCreate($id)
     {
         $revenueFule = revenue::find($id);
-        $revenueCity = revenue::find($id)->city_id;
-        return view('admin.revenuefule.revenuefule-revenue.create', ['title' => trans('admin.create'), 'revenueFule' => $revenueFule, 'revenueCity' => $revenueCity]);
+        $revenueCity = $revenueFule->city_id;
+        $revenue = $revenueFule->name;
+
+        return view('admin.revenuefule.revenuefule-revenue.create', ['title' => trans('admin.create'). '/(' . $revenue . ')', 'revenueFule' => $revenueFule, 'revenueCity' => $revenueCity]);
     }
 
     //Store expenses by one revenue
@@ -209,14 +212,15 @@ class RevenueFuleController extends Controller
     //Edit per one revenue
     public function revenueFulEdit($id)
     {
+
         $revenueFule = RevenueFule::find($id);
         $revenueCity = $revenueFule->city_id;
-        return view('admin.revenuefule.revenuefule-revenue.edit', ['title' => trans('admin.edit'),'revenueFule' => $revenueFule, 'revenueCity' => $revenueCity]);
+        $revenue = revenue::find($revenueFule->revenue_id)->name;
+        return view('admin.revenuefule.revenuefule-revenue.edit', ['title' => trans('admin.edit').'/(' . $revenue . ')','revenueFule' => $revenueFule, 'revenueCity' => $revenueCity]);
     }
 
     //Update per one revenue
     public function revenueFulUpdate(Request $request, $id){
-        // Check Record Exists
         $revenueFule = RevenueFule::find($id);
         $revenu_id=$revenueFule->revenue_id;
         if (is_null($revenueFule) || empty($revenueFule)) {

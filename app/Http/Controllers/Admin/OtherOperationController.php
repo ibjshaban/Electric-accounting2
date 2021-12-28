@@ -185,13 +185,15 @@ class OtherOperationController extends Controller
 
     public function revenueOtherOperation(RevenueOtherOperationDataTable $otheroperation, $id)
     {
-        return $otheroperation->with('id', $id)->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation')]);
+        $revenue = revenue::find($id)->name;
+        return $otheroperation->with('id', $id)->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation') . '/(' . $revenue . ')']);
     }
 
     public function otherOperationCreate($id)
     {
+        $revenue = revenue::find($id)->name;
         $otheroperation = revenue::find($id);
-        return view('admin.otheroperation.revenue-otheroperation.create', ['title' => trans('admin.create'),'otheroperation' => $otheroperation]);
+        return view('admin.otheroperation.revenue-otheroperation.create', ['title' => trans('admin.create') . '/(' . $revenue . ')','otheroperation' => $otheroperation]);
     }
 
     //Create expenses by one otherOperation
@@ -207,7 +209,8 @@ class OtherOperationController extends Controller
     public function otherOperationEdit($id)
     {
         $otheroperation = OtherOperation::find($id);
-        return view('admin.otheroperation.revenue-otheroperation.edit', ['title' => trans('admin.edit'),'otheroperation' => $otheroperation]);
+        $revenue = revenue::find($otheroperation->revenue_id)->name;
+        return view('admin.otheroperation.revenue-otheroperation.edit', ['title' => trans('admin.edit'). '/(' . $revenue . ')','otheroperation' => $otheroperation]);
     }
 
     //Edit expenses by one otherOperation
