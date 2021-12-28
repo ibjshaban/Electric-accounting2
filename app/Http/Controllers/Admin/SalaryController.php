@@ -46,7 +46,8 @@ class SalaryController extends Controller
             }
             public function revenueSalary (RevenueSalaryDataTable $salary, $id)
             {
-               return $salary->with('id', $id)->render('admin.salary.index',['title'=>trans('admin.salary')]);
+                $revenue = revenue::find($id)->name;
+               return $salary->with('id', $id)->render('admin.salary.index',['title'=>trans('admin.salary'). '/(' . $revenue . ')']);
             }
 
 
@@ -58,12 +59,13 @@ class SalaryController extends Controller
             public function create($id)
             {
                 $revenue= revenue::whereId($id)->first();
+                $revenue_name = $revenue->name;
                 $employees= collect();
                 if (isset($revenue->city_id)) {
                     $salary_employee_id= Salary::where('revenue_id',$revenue->id)->distinct()->pluck('employee_id');
                     $employees= Employee::where('city_id',$revenue->city_id)->whereNotIn('id',$salary_employee_id)->get();
                 }
-               return view('admin.salary.create',['title'=>trans('admin.create')],compact('employees'));
+               return view('admin.salary.create',['title'=>trans('admin.create'). '/(' . $revenue_name . ')'],compact('employees'));
             }
 
             /**
@@ -88,11 +90,12 @@ class SalaryController extends Controller
              */
             public function show($id)
             {
-        		$salary =  Salary::find($id);
-        		return is_null($salary) || empty($salary)?
+                $salary =  Salary::find($id);
+                $revenue = revenue::find($salary->revenue_id)->name;
+                return is_null($salary) || empty($salary)?
         		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.salary.show',[
-				    'title'=>trans('admin.show'),
+				    'title'=>trans('admin.show').'/('.$revenue.')',
 					'salary'=>$salary
         		]);
             }
@@ -106,10 +109,11 @@ class SalaryController extends Controller
             public function edit($id)
             {
         		$salary =  Salary::find($id);
+                $revenue = revenue::find($salary->revenue_id)->name;
         		return is_null($salary) || empty($salary)?
         		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.salary.edit',[
-				  'title'=>trans('admin.edit'),
+				  'title'=>trans('admin.edit').'/('.$revenue.')',
 				  'salary'=>$salary
         		]);
             }

@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\DB;
 // Copyright Reserved  [it v 1.6.36]
 class ExpensesController extends Controller
 {
+    private $revenue;
 
     public function __construct()
     {
-
         $this->middleware('AdminRole:expenses_show', [
             'only' => ['index', 'show'],
         ]);
@@ -82,10 +82,11 @@ class ExpensesController extends Controller
     public function show($id)
     {
         $expenses = Expenses::find($id);
+        $revenue = revenue::find($expenses->revenue_id)->name;
         return is_null($expenses) || empty($expenses) ?
             backWithError(trans("admin.undefinedRecord"), aurl("expenses")) :
             view('admin.expenses.show', [
-                'title' => trans('admin.show'),
+                'title' => trans('admin.show').'/('.$revenue.')',
                 'expenses' => $expenses
             ]);
     }
@@ -148,12 +149,12 @@ class ExpensesController extends Controller
     {
         $expenses = Expenses::find($id);
         if (is_null($expenses) || empty($expenses)) {
-            return backWithSuccess(trans('admin.undefinedRecord'), aurl("revenue-expenses/".$expenses->revenue_id));
+            return backWithSuccess(trans('admin.undefinedRecord'), aurl("revenue-expenses/" . $expenses->revenue_id));
         }
 
         it()->delete('expenses', $id);
         $expenses->delete();
-        return redirectWithSuccess(aurl("revenue-expenses/".$expenses->revenue_id), trans('admin.deleted'));
+        return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
     }
 
 
@@ -170,127 +171,131 @@ class ExpensesController extends Controller
                 it()->delete('expenses', $id);
                 $expenses->delete();
             }
-            return redirectWithSuccess(aurl("revenue-expenses/".$expenses->revenue_id), trans('admin.deleted'));
+            return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
         } else {
             $expenses = Expenses::find($data);
             if (is_null($expenses) || empty($expenses)) {
-                return backWithError(trans('admin.undefinedRecord'), aurl("revenue-expenses/".$expenses->revenue_id));
+                return backWithError(trans('admin.undefinedRecord'), aurl("revenue-expenses/" . $expenses->revenue_id));
             }
 
             it()->delete('expenses', $data);
             $expenses->delete();
-            return redirectWithSuccess(aurl("revenue-expenses/".$expenses->revenue_id), trans('admin.deleted'));
+            return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
         }
     }
 
     //Show expenses for one revenue
     public function revenueExpenses(RevenueExpensesDataTable $expenses, $id)
     {
-        return $expenses->with('id', $id)->render('admin.expenses.index', ['title' => trans('admin.expenses')]);
+        $revenue = revenue::find($id)->name;
+        return $expenses->with('id', $id)->render('admin.expenses.index', ['title' => trans('admin.expenses') . '/(' . $revenue . ')']);
     }
 
     public function revenueCreate($id)
     {
-        $expenses = revenue::find($id);
-        return view('admin.expenses.revenue-expenses.create', ['title' => trans('admin.create'),'expenses' => $expenses]);
+        $revenue = revenue::find($id);
+        $revenue_name = $revenue->name;
+        return view('admin.expenses.revenue-expenses.create', ['title' => trans('admin.create') . '/(' . $revenue_name . ')', 'expenses' => $revenue]);
     }
 
     //Create expenses by one revenue
-    public function revenueStore(Request $request, $id){
-        $this->validate($request,[
-            'name'=> 'required|string',
-            'date'=>'nullable|string',
-        ],[],['name'=> 'البيان']);
+    public function revenueStore(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'date' => 'nullable|string',
+        ], [], ['name' => 'البيان']);
         $data = $request->except("_token", "_method");
         $data['admin_id'] = admin()->id();
         $data['revenue_id'] = $id;
         DB::beginTransaction();
-        $expenses_price= 0;
+        $expenses_price = 0;
         try {
             $expenses = new Expenses();
-            $expenses->name= $data['name'];
-            $expenses->date= $data['date'];
-            $expenses->admin_id= $data['admin_id'];
-            $expenses->revenue_id= $data['revenue_id'];
+            $expenses->name = $data['name'];
+            $expenses->date = $data['date'];
+            $expenses->admin_id = $data['admin_id'];
+            $expenses->revenue_id = $data['revenue_id'];
             $expenses->price = 0;
             $expenses->save();
 
-            for ($i=0; $i < count($data['item']??[]); $i++){
+            for ($i = 0; $i < count($data['item'] ?? []); $i++) {
                 ExpensesItem::create([
-                    'item'=> $data['item'][$i],
-                    'item_number'=> $data['item_number'][$i],
-                    'amount'=> number_format($data['amount'][$i],2),
-                    'price'=> number_format($data['price'][$i],2),
-                    'expenses_id'=> $expenses->id,
+                    'item' => $data['item'][$i],
+                    'item_number' => $data['item_number'][$i],
+                    'amount' => number_format($data['amount'][$i], 2),
+                    'price' => number_format($data['price'][$i], 2),
+                    'expenses_id' => $expenses->id,
                 ]);
-                $expenses_price += ($data['price'][$i]*$data['amount'][$i]);
+                $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
-            $expenses->update(['price'=> number_format($expenses_price,2)]);
+            $expenses->update(['price' => number_format($expenses_price, 2)]);
 
             DB::commit();
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
 
         }
 
         $redirect = isset($request["add_back"]) ? "/create" : "";
-        return redirectWithSuccess(aurl('revenue-expenses/'.$id. $redirect), trans('admin.added'));
+        return redirectWithSuccess(aurl('revenue-expenses/' . $id . $redirect), trans('admin.added'));
     }
 
     public function revenueEdit($id)
     {
+
         $expenses = Expenses::find($id);
-        return view('admin.expenses.revenue-expenses.edit', ['title' => trans('admin.edit'),'expenses' => $expenses]);
+        $revenue = revenue::find($expenses->revenue_id)->name;
+        return view('admin.expenses.revenue-expenses.edit', ['title' => trans('admin.edit') . '/(' . $revenue . ')', 'expenses' => $expenses]);
     }
 
     //Edit expenses by one revenue
-    public function revenueUpdate(Request $request, $id){
+    public function revenueUpdate(Request $request, $id)
+    {
         // Check Record Exists
-        $this->validate($request,[
-            'name'=> 'required|string',
-            'date'=>'nullable|string',
-        ],[],['name'=> 'البيان']);
+        $this->validate($request, [
+            'name' => 'required|string',
+            'date' => 'nullable|string',
+        ], [], ['name' => 'البيان']);
         $expenses = Expenses::find($id);
-        $revenu_id=$expenses->revenue_id;
+        $revenu_id = $expenses->revenue_id;
         if (is_null($expenses) || empty($expenses)) {
             return backWithError(trans("admin.undefinedRecord"), aurl("revenue-expenses"));
         }
-        $data = $request->except("_token", "_method","save");
+        $data = $request->except("_token", "_method", "save");
         $data['admin_id'] = admin()->id();
         DB::beginTransaction();
-        $expenses_price= 0;
+        $expenses_price = 0;
         try {
 
-            $expenses->name= $data['name'];
-            $expenses->date= $data['date'];
-            $expenses->admin_id= $data['admin_id'];
+            $expenses->name = $data['name'];
+            $expenses->date = $data['date'];
+            $expenses->admin_id = $data['admin_id'];
             //$expenses->price = 0;
             $expenses->save();
-            ExpensesItem::where('expenses_id',$expenses->id)->delete();
-            for ($i=0; $i < count($data['item']??[]); $i++){
+            ExpensesItem::where('expenses_id', $expenses->id)->delete();
+            for ($i = 0; $i < count($data['item'] ?? []); $i++) {
                 ExpensesItem::create([
-                    'item'=> $data['item'][$i],
-                    'item_number'=> $data['item_number'][$i],
-                    'amount'=> InsertLargeNumber($data['amount'][$i]),
-                    'price'=> InsertLargeNumber($data['price'][$i]),
-                    'expenses_id'=> $expenses->id,
+                    'item' => $data['item'][$i],
+                    'item_number' => $data['item_number'][$i],
+                    'amount' => InsertLargeNumber($data['amount'][$i]),
+                    'price' => InsertLargeNumber($data['price'][$i]),
+                    'expenses_id' => $expenses->id,
                 ]);
-                $expenses_price += ($data['price'][$i]*$data['amount'][$i]);
+                $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
-            $expenses->update(['price'=> InsertLargeNumber($expenses_price)]);
+            $expenses->update(['price' => InsertLargeNumber($expenses_price)]);
 
             DB::commit();
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
             return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
         }
 
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
-        return redirectWithSuccess(aurl('revenue-expenses/'.$revenu_id. $redirect), trans('admin.updated'));
+        return redirectWithSuccess(aurl('revenue-expenses/' . $revenu_id . $redirect), trans('admin.updated'));
     }
 
 

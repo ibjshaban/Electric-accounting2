@@ -172,7 +172,8 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="row pt-3 border-top">
+                    <div class="pt-3 border-top">
+                        @if($net_profit >= 0)
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
                             <div class="info-box">
                                 <span class="info-box-icon bg-success"><i class="fas fa-sort-amount-up"></i></span>
@@ -186,6 +187,7 @@
                             </div>
                             <!-- /.info-box -->
                         </div>
+                        @else
                         <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
 
                             <div class="info-box">
@@ -200,6 +202,8 @@
                             </div>
                             <!-- /.info-box -->
                         </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
