@@ -2,127 +2,205 @@
 @section('content')
 
 
-<div class="card card-dark">
-	<div class="card-header">
-		<h3 class="card-title">
-		<div class="">
+    <div class="card card-dark">
+        <div class="card-header">
+            <h3 class="card-title">
+                <div class="">
 			<span>
 			{{ !empty($title)?$title:'' }}
 			</span>
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-			<span class="caret"></span>
-			<span class="sr-only"></span>
-			</a>
-			<div class="dropdown-menu" role="menu">
-				<a href="{{ aurl('collection') }}"  style="color:#343a40"  class="dropdown-item">
-				<i class="fas fa-list"></i> {{ trans('admin.show_all') }}</a>
-			</div>
-		</div>
-		</h3>
-		<div class="card-tools">
-			<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-			<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
-		</div>
-	</div>
-	<!-- /.card-header -->
-	<div class="card-body">
-
-{!! Form::open(['url'=>aurl('/revenue-collection/create/'.$collection->id),'id'=>'collection','files'=>true,'class'=>'form-horizontal form-row-seperated', 'method' => 'post']) !!}
-<div class="row">
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-        <div class="form-group">
-            <div class="form-group clearfix">
-                <label for="radioPrimary3">
-                    نوع المحصل
-                </label>
-                <br>
-                <div class="icheck-primary d-inline">
-                    <input type="radio" id="radioPrimary1" value="0" onchange="change_collect()" name="collect_type" checked="">
-                    <label for="radioPrimary1">
-                        موظف
-                    </label>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only"></span>
+                    </a>
+                    <div class="dropdown-menu" role="menu">
+                        <a href="{{ aurl('collection') }}" style="color:#343a40" class="dropdown-item">
+                            <i class="fas fa-list"></i> {{ trans('admin.show_all') }}</a>
+                    </div>
                 </div>
-                <div class="icheck-primary d-inline">
-                    <input type="radio" id="radioPrimary2" value="1" onchange="change_collect()" name="collect_type">
-                    <label for="radioPrimary2">
-                        جهة أخرى
-                    </label>
-                </div>
+            </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
+                </button>
             </div>
         </div>
-    </div>
-<div id="employeebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-	<div class="form-group">
-		{!! Form::label('employee_id',trans('admin.employee_id')) !!}
-		{!! Form::select('employee_id',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
-	</div>
-</div>
-    <div id="sourcebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12" style="display: none">
-        <div class="form-group">
-            {!! Form::label('source',trans('admin.source'),['class'=>' control-label']) !!}
-            {!! Form::text('source',old('source'),['class'=>'form-control','placeholder'=>trans('admin.source')]) !!}
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-        <div class="form-group">
-            {!! Form::label('amount',trans('admin.amount'),['class'=>' control-label']) !!}
-            {!! Form::number('amount',old('amount'),['class'=>'form-control', 'step'=>'0.0001', 'placeholder'=>trans('admin.amount')]) !!}
-        </div>
-    </div>
-{{--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-	<div class="form-group">
-		{!! Form::label('revenue_id',trans('admin.revenue_id')) !!}
-		{!! Form::select('revenue_id',App\Models\Revenue::pluck('name','id'),old('revenue_id'),['class'=>'form-control select2','placeholder'=>trans('admin.choose')]) !!}
-	</div>
-</div>--}}
-<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-    <!-- Date range -->
-    <div class="form-group">
-        {!! Form::label('collection_date',trans('admin.collection_date')) !!}
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">
-                    <i class="far fa-calendar-alt"></i>
-                </span>
+        <!-- /.card-header -->
+        <div class="card-body">
+
+            {!! Form::open(['url'=>aurl('/revenue-collection/create/'.$collection->id),'id'=>'collection','files'=>true,'class'=>'form-horizontal form-row-seperated', 'method' => 'post']) !!}
+            <div class="row">
+
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                    <tr class="element">
+                        <th>الموظف</th>
+                        <th>جهةاخرى</th>
+                        <th>المبلغ</th>
+                        <th>تاريخ التحصيل</th>
+                        <th>الملاحظات</th>
+                        <th>حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="element">
+                        <td>
+                            {!! Form::select('employee_id[]',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control employeeSel','placeholder'=>trans('admin.choose')]) !!}
+                        </td>
+                        <td>
+                            <input type="text" class="source" name="source[]" placeholder="جهة اخرى">
+                        </td>
+                        <td>
+                            <input type="number" class="amount" name="amount[]" step="0.001" min="0"
+                                   placeholder="المبلغ" oninput="changeAllPrice(this)" required>
+                        </td>
+                        <td>
+                            <input type="date" name="collection_date[]" placeholder="التاريخ" required>
+                        </td>
+                        <td>
+                            <input type="text" name="note[]" placeholder="الملاحظات" required>
+                        </td>
+                        <td>
+                            <button type="button" name="add" class="btn btn-danger btn-flat"
+                                    onclick="removeDetail(this)">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="col p-3">
+                    <button type="button" name="add" class="btn btn-success btn-flat" onclick="addNewDetails()">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <div class="col">
+                    <div class="bg-gradient-info p-3 float-right" id="all_total">المجموع: {{ShekelFormat(00)}}</div>
+                </div>
+
+
             </div>
-            {!! Form::text('collection_date',old('collection_date'),['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.collection_date'),'readonly'=>'readonly']) !!}
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <button type="submit" name="add" class="btn btn-primary btn-flat"><i
+                        class="fa fa-plus"></i> {{ trans('admin.save') }}</button>
+
+            </div>
+            {!! Form::close() !!}
+
+            <div class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{trans('admin.delete')}}</h4>
+                            <button class="close" data-dismiss="modal">x</button>
+                        </div>
+                        <div class="modal-body">
+                            <i class="fa fa-exclamation-triangle"></i> لايمكن ادخال قيمة <strong>موظف و جهة
+                                اخرى</strong> معاً
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-default btn-warning ok" data-dismiss="modal">إغلاق</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <!-- /.input group -->
-    </div>
-    <!-- /.form group -->
-</div>
-<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-    <div class="form-group">
-        {!! Form::label('note',trans('admin.note'),['class'=>'control-label']) !!}
-            {!! Form::textarea('note',old('note'),['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
-    </div>
-</div>
 
-</div>
-		<!-- /.row -->
-	</div>
-	<!-- /.card-body -->
-	<div class="card-footer"><button type="submit" name="add" class="btn btn-primary btn-flat"><i class="fa fa-plus"></i> {{ trans('admin.add') }}</button>
-<button type="submit" name="add_back" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> {{ trans('admin.add_back') }}</button>
-{!! Form::close() !!}	</div>
-</div>
-@endsection
 
-@push('js')
-    <script>
-        function change_collect(){
-            var value = $('input[name="collect_type"]:checked').val();
-            console.log(value)
-            if (value == '0'){
-                $('#sourcebox').css('display', 'none');
-                $('#employeebox').css('display', '');
-            }
-            else if(value == '1'){
-                $('#employeebox').css('display', 'none');
-                $('#sourcebox').css('display', '');
-            }
-        }
-    </script>
-@endpush
+        @endsection
+
+        @push('js')
+            <script>
+
+                function changeAllPrice(e) {
+
+                    var sum = 0;
+                    $('.amount').each(function () {
+                        sum += parseFloat($(this).val());
+                    });
+                    $('#all_total').text('المجموع: ₪ ' + parseFloat(sum).toFixed(2))
+                }
+
+                function addNewDetails() {
+                    $('.element').last().after(
+                        '<tr class="element"> ' +
+                        '<td> {!! Form::select('employee_id[]',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control employeeSel','id'=>'employee_id','placeholder'=>trans('admin.choose')]) !!} </td>' +
+                        '<td> <input type="text" class="source" name="source[]" placeholder="جهة اخرى"> </td>' +
+                        '<td> <input type="number" class="amount" name="amount[]" step="0.001" min="0" placeholder="المبلغ" oninput="changeAllPrice(this)" required> </td>' +
+                        '<td> <input type="date" name="collection_date[]" placeholder="التاريخ" required> </td>' +
+                        '<td> <input type="text" name="note[]" placeholder="الملاحظات" required> </td>' +
+                        '<td>  <button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)"> <i class="fa fa-minus"></i> </button></td>' +
+                        '</tr>'
+                    )
+
+                }
+
+                function removeDetail(e) {
+                    $(e).parent().parent().remove();
+                }
+
+
+                $(".source").last().focus(function (event) {
+                    if ($('tr td .employeeSel').last().val()) {
+                        event.preventDefault();
+                        $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+                    }
+                });
+
+                $(".employeeSel").last().focus(function (event) {
+                    if ($('tr td .source').last().val()) {
+                        event.preventDefault();
+                        $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+                    }
+                });
+
+                $('body').on('DOMNodeInserted', 'tr', function (event) {
+                    $(".source").last().focus(function () {
+                        if ($('.employeeSel').last().val()) {
+                            event.preventDefault();
+                            $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+                        }
+                    });
+                    $(".employeeSel").last().focus(function (event) {
+                        if ($('tr td .source').last().val()) {
+                            event.preventDefault();
+                            $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+                        }
+                    });
+                });
+
+
+
+                $(".test").click(function (event) {
+                    //alert('sadf');
+                    /* $('#source').function()
+                     {*/
+                    if ($('.employeeSel').val()) {
+                        event.preventDefault();
+                        $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+                        //alert('dsad');
+                        //$('.modal').show();
+                    }
+
+                    //}
+
+                });
+                $(".ok").click(function () {
+                    $('.card-body').removeAttr('data-target', '.modal').attr('data-toggle', 'modal');
+                });
+
+
+            </script>
+    @endpush
+
+
 
 
