@@ -28,7 +28,7 @@
                 </div>
             </h3>
             @push('js')
-                <div class="modal fade" id="deleteRecord{{$collection->id}}">
+                <div class="modal fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -36,17 +36,11 @@
                                 <button class="close" data-dismiss="modal">x</button>
                             </div>
                             <div class="modal-body">
-                                <i class="fa fa-exclamation-triangle"></i> {{trans('admin.ask_del')}} {{trans('admin.id')}}
-                                ({{$collection->id}})
+                                <i class="fa fa-exclamation-triangle"></i> لايمكن ادخال قيمة <strong>موظف و جهة
+                                    اخرى</strong> معاً
                             </div>
                             <div class="modal-footer">
-                                {!! Form::open([
-                                'method' => 'DELETE',
-                                'route' => ['collection.destroy', $collection->id]
-                                ]) !!}
-                                {!! Form::submit(trans('admin.approval'), ['class' => 'btn btn-danger btn-flat']) !!}
-                                <a class="btn btn-default btn-flat" data-dismiss="modal">{{trans('admin.cancel')}}</a>
-                                {!! Form::close() !!}
+                                <a class="btn btn-default btn-warning ok" data-dismiss="modal">إغلاق</a>
                             </div>
                         </div>
                     </div>
@@ -62,82 +56,61 @@
         <!-- /.card-header -->
         <div class="card-body">
 
+
             {!! Form::open(['url'=>aurl('/revenue-collection/edit/'.$collection->id),'method'=>'put','id'=>'collection','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             <div class="row">
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        <div class="form-group clearfix">
-                            <label for="radioPrimary3">
-                                نوع المحصل
-                            </label>
-                            <br>
-                            <div class="icheck-primary d-inline">
-                                <input type="radio" id="radioPrimary1" value="0" onchange="change_collect()"
-                                       name="collect_type" {{$collection->employee_id ? 'checked=""':''}}>
-                                <label for="radioPrimary1">
-                                    موظف
-                                </label>
-                            </div>
-                            <div class="icheck-primary d-inline">
-                                <input type="radio" id="radioPrimary2" value="1" onchange="change_collect()"
-                                       name="collect_type" {{$collection->employee_id ? '':'checked=""'}}>
-                                <label for="radioPrimary2">
-                                    جهة أخرى
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="employeebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12"
-                     style="display: {{$collection->employee_id ? '':'none'}}">
-                    <div class="form-group">
-                        {!! Form::label('employee_id',trans('admin.employee_id'),['class'=>'control-label']) !!}
-                        <?php $employees = App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(\App\Models\Collection::find(request()->route('id'))->revenue_id)->first()->city_id)->pluck('name','id') ?>
-                        {!! Form::select('employee_id',$employees, $collection->employee_id ,['class'=>'form-control select2','placeholder'=>trans('admin.employee_id')]) !!}
-                    </div>
-                </div>
-                <div id="sourcebox" class="col-md-6 col-lg-6 col-sm-6 col-xs-12"
-                     style="display: {{$collection->employee_id ? 'none':''}}">
-                    <div class="form-group">
-                        {!! Form::label('source',trans('admin.source'),['class'=>'control-label']) !!}
-                        {!! Form::text('source', $collection->source ,['class'=>'form-control','placeholder'=>trans('admin.source')]) !!}
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('amount',trans('admin.amount'),['class'=>' control-label']) !!}
-                        {!! Form::number('amount',$collection->amount,['class'=>'form-control', 'step'=>'0.0001','placeholder'=>trans('admin.amount')]) !!}
-                    </div>
-                </div>
-               {{-- <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('revenue_id',trans('admin.revenue_id'),['class'=>'control-label']) !!}
-                        {!! Form::select('revenue_id',App\Models\Revenue::pluck('name','id'), $collection->revenue_id ,['class'=>'form-control select2','placeholder'=>trans('admin.revenue_id')]) !!}
-                    </div>
+
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                    <tr class="element">
+                        <th>الموظف</th>
+                        <th>جهةاخرى</th>
+                        <th>المبلغ</th>
+                        <th>تاريخ التحصيل</th>
+                        <th>الملاحظات</th>
+                        <th>حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php $employees = App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(\App\Models\Collection::find(request()->route('id'))->revenue_id)->first()->city_id)->pluck('name','id') ?>
+{{--                    @foreach($collection as $item)--}}
+                    <tr class="element">
+                        <td>
+                            {!! Form::select('employee_id',$employees, $collection->employee_id,['class'=>'form-control employeeSel','placeholder'=>trans('admin.choose')]) !!}
+                        </td>
+                        <td>
+                            <input type="text" value="{{ $collection->source }}" class="source" name="source" placeholder="جهة اخرى">
+                        </td>
+                        <td>
+                            <input type="number" class="amount" value="{{ $collection->amount }}" name="amount" step="0.001" min="0"
+                                   placeholder="المبلغ" oninput="changeAllPrice(this)" required>
+                        </td>
+                        <td>
+                            <input type="date" name="collection_date" value="{{ $collection->collection_date }}" placeholder="التاريخ" required>
+                        </td>
+                        <td>
+                            <input type="text" name="note" value="{{ $collection->note }}" placeholder="الملاحظات" required>
+                        </td>
+                        <td>
+                            <button type="button" name="add" class="btn btn-danger btn-flat"
+                                    onclick="removeDetail(this)">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+{{--                    @endforeach--}}
+                    </tbody>
+                </table>
+
+                {{--<div class="col p-3">
+                    <button type="button" name="add" class="btn btn-success btn-flat" onclick="addNewDetails()">
+                        <i class="fa fa-plus"></i>
+                    </button>
                 </div>--}}
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <!-- Date range -->
-                    <div class="form-group">
-                        {!! Form::label('collection_date',trans('admin.collection_date')) !!}
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                <span class="input-group-text">
-                    <i class="far fa-calendar-alt"></i>
-                </span>
-                            </div>
-                            {!! Form::text('collection_date', $collection->collection_date ,['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.collection_date'),'readonly'=>'readonly']) !!}
-                        </div>
-                        <!-- /.input group -->
-                    </div>
-                    <!-- /.form group -->
+                <div class="col">
+                    <div class="bg-gradient-info p-3 float-right" id="all_total">المجموع: {{ShekelFormat(00)}}</div>
                 </div>
 
-                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {!! Form::label('note',trans('admin.note'),['class'=>'control-label']) !!}
-                        {!! Form::textarea('note', $collection->note ,['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
-                    </div>
-                </div>
 
             </div>
             <!-- /.row -->
@@ -155,16 +128,88 @@
 
 @push('js')
     <script>
-        function change_collect() {
-            var value = $('input[name="collect_type"]:checked').val();
-            console.log(value)
-            if (value == '0') {
-                $('#sourcebox').css('display', 'none');
-                $('#employeebox').css('display', '');
-            } else if (value == '1') {
-                $('#employeebox').css('display', 'none');
-                $('#sourcebox').css('display', '');
-            }
+
+        function changeAllPrice(e) {
+
+            var sum = 0;
+            $('.amount').each(function () {
+                sum += parseFloat($(this).val());
+            });
+            $('#all_total').text('المجموع: ₪ ' + parseFloat(sum).toFixed(2))
         }
+
+        function addNewDetails() {
+            $('.element').last().after(
+                '<tr class="element"> ' +
+                '<td> {!! Form::select('employee_id[]',$employees, $collection->employee_id,['class'=>'form-control employeeSel','placeholder'=>trans('admin.choose')]) !!} </td>' +
+                '<td> <input type="text" class="source" name="source[]" placeholder="جهة اخرى"> </td>' +
+                '<td> <input type="number" class="amount" name="amount[]" step="0.001" min="0" placeholder="المبلغ" oninput="changeAllPrice(this)" required> </td>' +
+                '<td> <input type="date" name="collection_date[]" placeholder="التاريخ" required> </td>' +
+                '<td> <input type="text" name="note[]" placeholder="الملاحظات" required> </td>' +
+                '<td>  <button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)"> <i class="fa fa-minus"></i> </button></td>' +
+                '</tr>'
+            )
+
+        }
+
+        function removeDetail(e) {
+            $(e).parent().parent().remove();
+        }
+
+
+        $(".source").focus(function (event) {
+            if ($('tr td .employeeSel').last().val()) {
+                event.preventDefault();
+                $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+            }
+        });
+
+        $(".employeeSel").focus(function (event) {
+            if ($('tr td .source').last().val()) {
+                event.preventDefault();
+                $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+            }
+        });
+
+        $('body').on('DOMNodeInserted', 'tr', function (event) {
+            $(".source").last().focus(function () {
+                if ($('.employeeSel').last().val()) {
+                    event.preventDefault();
+                    $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+                }
+            });
+            $(".employeeSel").last().focus(function (event) {
+                if ($('tr td .source').last().val()) {
+                    event.preventDefault();
+                    $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+
+                }
+            });
+        });
+
+
+
+        $(".test").click(function (event) {
+            //alert('sadf');
+            /* $('#source').function()
+             {*/
+            if ($('.employeeSel').val()) {
+                event.preventDefault();
+                $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
+                //alert('dsad');
+                //$('.modal').show();
+            }
+
+            //}
+
+        });
+        $(".ok").click(function () {
+            $('.card-body').removeAttr('data-target', '.modal').attr('data-toggle', 'modal');
+        });
+
+
     </script>
 @endpush
