@@ -231,7 +231,7 @@ class ExpensesController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
-            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
 
         }
 
@@ -285,8 +285,7 @@ class ExpensesController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
-            dd($e);
-            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
         }
 
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
 class Stock extends Model {
-	use SoftDeletes;
+
+	use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
 protected $table    = 'stocks';
@@ -16,7 +17,6 @@ protected $fillable = [
 		'admin_id',
         'name',
         'city_id',
-
 		'created_at',
 		'updated_at',
 		'deleted_at',
@@ -43,5 +43,5 @@ protected $fillable = [
 			//$stock->city_id()->delete();
          });
    }
-		
+
 }

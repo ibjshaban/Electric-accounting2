@@ -62,34 +62,92 @@
 			</div>
 			<div class="clearfix"></div>
 			<hr />
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.quantity')}} :</b>
 				{!! $filling->quantity !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.price')}} :</b>
 				{!! $filling->price !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.filling_date')}} :</b>
 				{!! $filling->filling_date !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.note')}} :</b>
 				{!! $filling->note !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.name')}} :</b>
 				{!! $filling->name !!}
 			</div>
-			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.supplier_id')}} :</b>
 				@if(!empty($filling->supplier_id()->first()))
 			{{ $filling->supplier_id()->first()->name }}
 			@endif
 			</div>
-			<!-- /.row -->
+
+			<!-- /.row -->
 		</div>
+        <hr>
+        <div class="row col-12">
+            <div class="mb-3"><b>التفاصيل</b></div>
+
+            <div class="row row-cols-5 col-12 mb-5 element">
+                <div class="col">المنطقة</div>
+                <div class="col">المخزن</div>
+                <div class="col">الايرادة</div>
+                <div class="col">الكمية</div>
+                <div class="col">السعر الكلي</div>
+                <div class="col">السعر المدفوع</div>
+                <div class="col">ملاحظات</div>
+                <div class="col"></div>
+            </div>
+            @foreach($filling->fule() as $it)
+                <div class="row  col-12 mb-5 detail element" >
+                    <div class="col">
+                        <?php $city= \App\Models\City::whereId($it->city_id)->first()?>
+                        {{$city? $city->name : ''}}
+                    </div>
+                    <div class="col">
+                        <?php $stock= \App\Models\Stock::whereId($it->stock_id)->first()?>
+                        {{$stock? $stock->name : ''}}
+                    </div>
+                    <div class="col">
+                        <?php $revenue= \App\Models\revenue::whereId($it->revenue_id)->first()?>
+                        {{$revenue? $revenue->name : ''}}
+                    </div>
+                    <div class="col">
+                        {{$it->quantity}}
+                    </div>
+                    <div class="col">
+                        {{ShekelFormat($it->price*$it->quantity)}}
+                    </div>
+                    <div class="col">
+                        {{ShekelFormat($it->paid_price)}}
+                    </div>
+                    <div class="col">
+                        {{$it->note}}
+                    </div>
+                </div>
+            @endforeach
+            <div class="row row-cols-5 col-12 mb-5" >
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col bg-success" id="all_total">المجموع: {{ShekelFormat($filling->price * $filling->quantity)}}</div>
+                <div class="col"></div>
+            </div>
+        </div>
 	</div>
 	<!-- /.card-body -->
 	<div class="card-footer">

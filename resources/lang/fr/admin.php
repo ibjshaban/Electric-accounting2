@@ -1,7 +1,7 @@
 <?php
 		return [
 		"filling"	=>		"التعبئات",
-		"quantity"	=>		"الكيمة (لتر)",
+		"quantity"	=>		"الكمية (لتر)",
 		"price"	=>		"السعر",
 		"supplier_id"	=>		"المورد",
 		"filling_date"	=>		"تاريخ التعبئة",

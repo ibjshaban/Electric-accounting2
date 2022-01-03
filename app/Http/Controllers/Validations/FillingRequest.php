@@ -27,7 +27,7 @@ class FillingRequest extends FormRequest {
 		return [
              'quantity'=>'required|numeric',
              'price'=>'required|numeric',
-             'supplier_id'=>'required|integer',
+             //'supplier_id'=>'required|integer',
              'filling_date'=>'required',
              'note'=>'nullable',
              'name'=>'required|string',
@@ -38,7 +38,7 @@ class FillingRequest extends FormRequest {
 		return [
              'quantity'=>'required|numeric',
              'price'=>'required|numeric',
-             'supplier_id'=>'required|integer',
+             //'supplier_id'=>'required|integer',
              'filling_date'=>'required',
              'note'=>'nullable',
              'name'=>'required|string',

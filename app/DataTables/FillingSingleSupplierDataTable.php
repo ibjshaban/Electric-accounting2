@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\RevenueFule;
+use App\Models\Filling;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Services\DataTable;
 
 // Auto DataTable By Baboon Script
 // Baboon Maker has been Created And Developed By [it v 1.6.36]
 // Copyright Reserved [it v 1.6.36]
-class RevenueFuleDataTable extends DataTable
+class FillingSingleSupplierDataTable extends DataTable
 {
 
 
@@ -21,7 +21,7 @@ class RevenueFuleDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
-            ->addColumn('actions', 'admin.revenuefule.buttons.actions')
+            ->addColumn('actions', 'admin.filling.buttons.actions')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
             ->addColumn('total_price', '{{ $quantity*$price }}')
@@ -40,8 +40,7 @@ class RevenueFuleDataTable extends DataTable
      */
     public function query()
     {
-        return RevenueFule::query()->with(['filling_id', 'stock_id', 'revenue_id', 'city_id',])->select("revenue_fules.*");
-
+        return Filling::query()->where('supplier_id',request()->route('supplier'))->select("fillings.*");
     }
 
 
@@ -87,30 +86,21 @@ class RevenueFuleDataTable extends DataTable
                     ], [
                         'text' => '<i class="fa fa-trash"></i> ' . trans('admin.delete'),
                         'className' => 'btn btn-outline deleteBtn',
-                    ], /*[
+                    ], [
                         'text' => '<i class="fa fa-plus"></i> ' . trans('admin.add'),
                         'className' => 'btn btn-primary',
                         'action' => 'function(){
-                        	window.location.href =  "' . \URL::current() . '/create";
+                        	window.location.href =  "/admin/filling/'.request()->route('supplier').'/create";
                         }',
-                    ],*/
+                    ],
                 ],
                 'initComplete' => "function () {
 
 
 
-            " . filterElement('1,2,1,3,1,4,1,9', 'input') . "
+            " . filterElement('1,2,1,3,1,5,1,6', 'input') . "
 
-                        //filling_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note5
-            " . filterElement('5', 'select', \App\Models\Filling::pluck("name", "name")) . "
-            //stock_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note6
-            " . filterElement('6', 'select', \App\Models\Stock::pluck("name", "name")) . "
-            //revenue_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note7
-            " . filterElement('7', 'select', \App\Models\Revenue::pluck("name", "name")) . "
-            //city_idquantity,price,paid_amount,filling_id,stock_id,revenue_id,city_id,note8
-            " . filterElement('8', 'select', \App\Models\City::pluck("name", "name")) . "
-
-
+                        //supplier_idquantity,price,supplier_id,filling_date,note4
 	            }",
                 'order' => [[1, 'desc']],
 
@@ -192,29 +182,9 @@ class RevenueFuleDataTable extends DataTable
                 'title' => 'السعر الكلي',
             ],
             [
-                'name' => 'paid_amount',
-                'data' => 'paid_amount',
-                'title' => trans('admin.paid_amount'),
-            ],
-            [
-                'name' => 'filling_id.name',
-                'data' => 'filling_id.name',
-                'title' => trans('admin.filling_id'),
-            ],
-            [
-                'name' => 'stock_id.name',
-                'data' => 'stock_id.name',
-                'title' => trans('admin.stock_id'),
-            ],
-            [
-                'name' => 'revenue_id.name',
-                'data' => 'revenue_id.name',
-                'title' => trans('admin.revenue_id'),
-            ],
-            [
-                'name' => 'city_id.name',
-                'data' => 'city_id.name',
-                'title' => trans('admin.city_id'),
+                'name' => 'filling_date',
+                'data' => 'filling_date',
+                'title' => trans('admin.filling_date'),
             ],
             [
                 'name' => 'note',
@@ -258,7 +228,7 @@ class RevenueFuleDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'revenuefule_' . time();
+        return 'filling_' . time();
     }
 
 }

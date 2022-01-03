@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DataTables\FillingSingleSupplierDataTable;
 use App\DataTables\SupplierDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\SupplierRequest;
@@ -79,12 +80,12 @@ class SupplierController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(FillingSingleSupplierDataTable $filling,$id)
     {
         $supplier = Supplier::find($id);
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
-            view('admin.supplier.show', [
+            $filling->render('admin.supplier.show', [
                 'title' => trans('admin.show'),
                 'supplier' => $supplier
             ]);
