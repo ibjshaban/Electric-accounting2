@@ -101,8 +101,10 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::put('revenue-collection/edit/{id}', 'Admin\CollectionController@revenueCollectionUpdate');
         //************
 
-        Route::resource('filling', 'Admin\FillingController');
+        Route::resource('filling', 'Admin\FillingController')->except('create');
         Route::post('filling/multi_delete', 'Admin\FillingController@multi_delete');
+        Route::get('/filling/{supplier_id}/create', 'Admin\FillingController@create');
+            Route::post('/getrevenue/city', 'Admin\RevenueController@getRevenueByCity')->name('getRevenueByCity');
 
         Route::resource('revenuefule', 'Admin\RevenueFuleController');
         Route::post('revenuefule/multi_delete', 'Admin\RevenueFuleController@multi_delete');

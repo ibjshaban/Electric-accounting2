@@ -21,6 +21,7 @@ class CreaterevenuesTable extends Migration
             $table->date('open_date');
             $table->date('close_date')->nullable();
             $table->double('total_amount');
+            $table->boolean('status')->default(1);
             $table->foreignId("city_id")->nullable()->constrained("cities")->references("id")->nullOnDelete();
 			$table->softDeletes();
 

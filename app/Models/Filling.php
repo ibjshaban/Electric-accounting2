@@ -43,5 +43,7 @@ protected $fillable = [
 			//$filling->supplier_id()->delete();
          });
    }
-		
+    public function fule(){
+        return $this->hasMany(RevenueFule::class,'filling_id')->get();
+    }
 }

@@ -11,6 +11,7 @@ use App\Models\OtherOperation;
 use App\Models\revenue;
 use App\Models\RevenueFule;
 use App\Models\Salary;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
@@ -146,6 +147,7 @@ class RevenueController extends Controller
         }
         $data = $this->updateFillableColumns();
         $data['admin_id'] = admin()->id();
+        $data['status'] = !is_null($request->status) && $request->status ? 0 : 1;
         revenue::where('id', $id)->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue' . $redirect), trans('admin.updated'));
@@ -211,6 +213,14 @@ class RevenueController extends Controller
             $revenue->delete();
             return redirectWithSuccess(aurl("revenue"), trans('admin.deleted'));
         }
+    }
+
+    public function getRevenueByCity(Request $request){
+        $revenues= revenue::where('city_id',$request->id)->where('status',1)->orderByDesc('created_at')->get();
+        if (isset($revenues)){
+            return response()->json(['revenues'=> $revenues],200);
+        }
+        return response()->json(null,500);
     }
 
 

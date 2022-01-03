@@ -51,7 +51,6 @@
             $.post( "{{route("change_collection_status")}}", {id: id, status: status, _token: "{{csrf_token()}}"})
                 .done(function() {
                     toastr.success('تم تغيير حالة التحصيل بنجاح')
-
                 })
                 .fail(function() {
                     toastr.error('حدث خطأ في تغيير حالة التحصيل')

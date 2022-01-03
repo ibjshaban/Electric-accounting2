@@ -18,6 +18,7 @@ protected $fillable = [
         'name',
         'open_date',
         'close_date',
+        'status',
         'total_amount',
         'city_id',
 
