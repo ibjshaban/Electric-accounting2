@@ -1,7 +1,17 @@
 @extends('admin.index')
 @section('content')
 
+@push('css')
+    <style>
+        .createTable{
+            max-width: 100%;
+        }
+        .createTable div:not(:last-child){
+            border: 1px solid black;
+        }
 
+    </style>
+@endpush
 <div class="card card-dark">
 	<div class="card-header">
 		<h3 class="card-title">
@@ -62,7 +72,7 @@
 		<!-- /.row -->
         <hr>
         <div class="row col-12">
-            <div class="row row-cols-5 col-12 mb-5 element">
+            <div class="row row-cols-5 col-12 mb-5 element font-weight-bold createTable">
                 <div class="col">الصنف</div>
                 <div class="col">رقم الصنف</div>
                 <div class="col">الكمية</div>
@@ -70,7 +80,7 @@
                 <div class="col">سعر الكمية</div>
                 <div class="col"></div>
             </div>
-            <div class="row row-cols-5 col-12 mb-5 detail element" >
+            <div class="row row-cols-5 col-12 mb-5 detail element">
                 <div class="col">
                     <input required type="text" class="form-control " name="item[]" placeholder="الصنف">
                 </div>
@@ -83,9 +93,9 @@
                 <div class="col">
                     <input required type="number" step="0.001" min="0" class="form-control " name="price[]" placeholder="سعر الوحدة" oninput="changeAllPrice(this)">
                 </div>
-                <div class="col all_price" data-price="0">0.00 ₪</div>
+                <div class="col all_price font-weight-bolder" data-price="0">0.00 ₪</div>
                 <div class="col">
-                    <button type="button" name="add" class="btn btn-primary btn-flat" onclick="removeDetail(this)">
+                    <button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)">
                         <i class="fa fa-minus"></i>
                     </button>
                 </div>
@@ -99,12 +109,12 @@
                 </div>
                 <div class="col">
                 </div>
-                <div class="col bg-success" id="all_total">المجموع: {{ShekelFormat($expenses->price)}}</div>
+                <div class="col bg-success p-3" id="all_total">المجموع: {{ShekelFormat($expenses->price)}}</div>
                 <div class="col">
                 </div>
             </div>
             <div class="d-flex flex-row-reverse  mx-3">
-                <button type="button" name="add" class="btn btn-primary btn-flat" onclick="addNewDetails()">
+                <button type="button" name="add" class="btn btn-success btn-flat" onclick="addNewDetails()">
                     <i class="fa fa-plus"></i>
                 </button>
             </div>
@@ -145,7 +155,7 @@
                 '<input required type="number" step="0.001" min="0" class="form-control " name="price[]" placeholder="سعر الوحدة" oninput="changeAllPrice(this)"> ' +
                 '</div> <div class="col all_price" data-price="0">0.00 ₪</div> ' +
                 '<div class="col"> ' +
-                '<button type="button" name="add" class="btn btn-primary btn-flat" onclick="removeDetail(this)">' +
+                '<button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)">' +
                 ' <i class="fa fa-minus"></i> </button> </div> </div>');
         }
         function removeDetail(e){

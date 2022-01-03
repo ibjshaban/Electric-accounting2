@@ -84,16 +84,18 @@ class RevenueController extends Controller
     public function show($id)
     {
         $revenue = revenue::find($id);
+        $title = $revenue->name;
 
 
         $employee_id = Collection::select('employee_id')->get();
 
         ////
-        $total_collections = DB::select('SELECT SUM(amount) AS amount FROM collections WHERE revenue_id = ' . $revenue->id . ' AND employee_id IN
+       /* $total_collections = DB::select('SELECT SUM(amount) AS amount FROM collections WHERE revenue_id = ' . $revenue->id . ' AND employee_id IN
                                                (SELECT id FROM employees WHERE type_id = 1)');
-        $total_collection = $total_collections[0]->amount;
+        $total_collection = $total_collections[0]->amount;*/
+        $total_collection= Collection::where(['revenue_id'=>$revenue->id])->whereNotNull('employee_id')->sum('amount');
         //////
-        $total_other_collection = Collection::where(['revenue_id' => $revenue->id])->whereNotNull('source')->sum('amount');
+        $total_other_collection = Collection::where(['revenue_id' => $revenue->id])->whereNull('employee_id')->sum('amount');
 
         //$total_collection= Collection::where(['revenue_id'=>$revenue->id])->sum('amount');
         $total_fules = RevenueFule::where('revenue_id', $revenue->id)->sum('paid_amount');
@@ -102,11 +104,11 @@ class RevenueController extends Controller
         $total_other_operation = OtherOperation::where('revenue_id', $revenue->id)->sum('price');
         $total_all = $total_fules + $total_salary + $total_expenses + $total_other_operation;
         ////
-        $net_profit = $total_all - ($total_collection + $total_other_collection);
+        $net_profit =($total_collection + $total_other_collection) - $total_all;
         return is_null($revenue) || empty($revenue) ?
             backWithError(trans("admin.undefinedRecord"), aurl("revenue")) :
             view('admin.revenue.show', [
-                'title' => trans('admin.show'),
+                'title' => $title,
                 'revenue' => $revenue,
                 'total_collection' => $total_collection,
                 'total_other_collection' => $total_other_collection,
