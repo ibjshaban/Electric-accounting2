@@ -109,20 +109,20 @@
                 <div class="col">السعر الكلي</div>
                 <div class="col">السعر المدفوع</div>
                 <div class="col">ملاحظات</div>
-                <div class="col"></div>
             </div>
             @foreach($filling->fule() as $it)
-                <div class="row  col-12 mb-5 detail element" >
+                <?php $city= \App\Models\City::whereId($it->city_id)->first();
+                 $stock= \App\Models\Stock::whereId($it->stock_id)->first();
+                $revenue= \App\Models\revenue::whereId($it->revenue_id)->first();?>
+
+                <div class="row row-cols-5 col-12 mb-5 element" >
                     <div class="col">
-                        <?php $city= \App\Models\City::whereId($it->city_id)->first()?>
                         {{$city? $city->name : ''}}
                     </div>
                     <div class="col">
-                        <?php $stock= \App\Models\Stock::whereId($it->stock_id)->first()?>
                         {{$stock? $stock->name : ''}}
                     </div>
                     <div class="col">
-                        <?php $revenue= \App\Models\revenue::whereId($it->revenue_id)->first()?>
                         {{$revenue? $revenue->name : ''}}
                     </div>
                     <div class="col">
@@ -137,6 +137,7 @@
                     <div class="col">
                         {{$it->note}}
                     </div>
+
                 </div>
             @endforeach
             <div class="row row-cols-5 col-12 mb-5" >

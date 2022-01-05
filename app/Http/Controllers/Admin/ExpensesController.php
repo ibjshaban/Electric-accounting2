@@ -153,6 +153,7 @@ class ExpensesController extends Controller
         }
 
         it()->delete('expenses', $id);
+        foreach ($expenses->item() as $ex) { $ex->delete();}
         $expenses->delete();
         return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
     }
@@ -169,6 +170,7 @@ class ExpensesController extends Controller
                 }
 
                 it()->delete('expenses', $id);
+                foreach ($expenses->item() as $ex) { $ex->delete();}
                 $expenses->delete();
             }
             return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
@@ -179,6 +181,7 @@ class ExpensesController extends Controller
             }
 
             it()->delete('expenses', $data);
+            foreach ($expenses->item() as $ex) { $ex->delete();}
             $expenses->delete();
             return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
         }
@@ -293,7 +296,6 @@ class ExpensesController extends Controller
 
             return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
         }
-
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-expenses/' . $revenu_id . $redirect), trans('admin.updated'));
     }
