@@ -7,6 +7,7 @@
 	<div class="dropdown-menu" role="menu">
 		<a href="{{ aurl('/employee/'.$id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
 		<a href="{{ aurl('/employee/'.$id)}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+		<a href="{{ aurl('/financial-movements/'.$id)}}" class="dropdown-item" ><i class="fas fa-clipboard"></i> الحركات المالية </a>
 		<div class="dropdown-divider"></div>
 		<a data-toggle="modal" data-target="#delete_record{{$id}}" href="#" class="dropdown-item">
 		<i class="fas fa-trash"></i> {{trans('admin.delete')}}</a>
@@ -34,4 +35,3 @@
 		</div>
 	</div>
 </div>
-		

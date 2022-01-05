@@ -223,13 +223,13 @@ class ExpensesController extends Controller
                 ExpensesItem::create([
                     'item' => $data['item'][$i],
                     'item_number' => $data['item_number'][$i],
-                    'amount' => number_format($data['amount'][$i], 2),
-                    'price' => number_format($data['price'][$i], 2),
+                    'amount' => InsertLargeNumber($data['amount'][$i], 2),
+                    'price' => InsertLargeNumber($data['price'][$i], 2),
                     'expenses_id' => $expenses->id,
                 ]);
                 $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
-            $expenses->update(['price' => number_format($expenses_price, 2)]);
+            $expenses->update(['price' => InsertLargeNumber($expenses_price, 2)]);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -290,7 +290,6 @@ class ExpensesController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
             return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
         }
 

@@ -93,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-6 m-auto">
+                    <div class="col-lg-6 col-6 m-auto pb-5">
                         <div class="info-box bg-gradient-info">
                             <span class="info-box-icon"><i class="fas fa-users"></i></span>
                             <?php $percent = $revenue->total_amount > 0 ? number_format(($total_other_collection * 100) / $revenue->total_amount, 1) : 0;?>
@@ -107,6 +107,34 @@
                                     </div>
                                 </div>
                             </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="pt-3 border-top">
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
+
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-danger"><i class="fas fa-sort-amount-down"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">الخسارة</span>
+                                        <span
+                                            class="info-box-number"> @if($net_profit < 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(0) }} @endif</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                    </div>
+                    <div class="col-lg-6 col-md-6 m-auto pt-3">
+                        <div class="info-box bg-gradient-navy">
+                            <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">المجموع</span>
+                                <span class="info-box-number">@if($net_profit < 0){{ ShekelFormat($net_profit+$total_collection+$total_other_collection) }} @else {{ ShekelFormat($total_collection+$total_other_collection) }} @endif</span>
+                            </div>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
@@ -138,7 +166,7 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-lg-6 col-6 m-auto">
+                    <div class="col-lg-6 col-6 m-auto" style="padding-bottom: 1.7%;">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-money-bill-alt"></i></span>
                             <a href="{{ aurl('revenue-expenses/'.$revenue->id) }}">
@@ -150,7 +178,7 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-lg-6 col-6 m-auto border-bottom">
+                    <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-money-bill-alt"></i></span>
                             <a href="{{ aurl('revenue-otheroperation/'.$revenue->id) }}">
@@ -162,49 +190,32 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
+                    <div class="pt-3 border-top">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-success"><i class="fas fa-sort-amount-up"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">الربح</span>
+                                        <span
+                                            class="info-box-number"> @if($net_profit > 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(0) }} @endif</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                    </div>
                     <div class="col-lg-6 col-md-6 m-auto pt-3">
                         <div class="info-box bg-gradient-navy">
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">المجموع</span>
-                                <span class="info-box-number">{{ShekelFormat($total_all)}}</span>
+                                <span class="info-box-number">@if($net_profit > 0){{ ShekelFormat($net_profit+$total_all) }} @else {{ ShekelFormat($total_all) }} @endif</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="pt-3 border-top">
-                        @if($net_profit >= 0)
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-success"><i class="fas fa-sort-amount-up"></i></span>
 
-                                <div class="info-box-content">
-                                    <span class="info-box-text">الربح</span>
-                                    <span
-                                        class="info-box-number"> @if($net_profit > 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        @else
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-12 m-auto">
-
-                            <div class="info-box">
-                                <span class="info-box-icon bg-danger"><i class="fas fa-sort-amount-down"></i></span>
-
-                                <div class="info-box-content">
-                                    <span class="info-box-text">الخسارة</span>
-                                    <span
-                                        class="info-box-number"> @if($net_profit < 0){{ ShekelFormat($net_profit) }} @else {{ ShekelFormat(00) }} @endif</span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                            <!-- /.info-box -->
-                        </div>
-                        @endif
-
-                    </div>
                 </div>
             </div>
             <!-- /.card-body -->

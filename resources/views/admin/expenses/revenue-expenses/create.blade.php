@@ -109,7 +109,7 @@
                 </div>
                 <div class="col">
                 </div>
-                <div class="col bg-gradient-info p-3" id="all_total">المجموع: {{ShekelFormat($expenses->price)}}</div>
+                <div class="col bg-success p-3" id="all_total">المجموع: {{ShekelFormat($expenses->price)}}</div>
                 <div class="col">
                 </div>
             </div>
