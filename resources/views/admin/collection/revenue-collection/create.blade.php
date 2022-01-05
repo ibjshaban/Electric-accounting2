@@ -59,7 +59,7 @@
                             <input type="date" name="collection_date[]" placeholder="التاريخ" required>
                         </td>
                         <td>
-                            <input type="text" name="note[]" placeholder="الملاحظات" required>
+                            <input type="text" name="note[]" placeholder="الملاحظات">
                         </td>
                         <td>
                             <button type="button" name="add" class="btn btn-danger btn-flat"
@@ -132,7 +132,7 @@
                         '<td> <input type="text" class="source" name="source[]" placeholder="جهة اخرى"> </td>' +
                         '<td> <input type="number" class="amount" name="amount[]" step="0.001" min="0" placeholder="المبلغ" oninput="changeAllPrice(this)" required> </td>' +
                         '<td> <input type="date" name="collection_date[]" placeholder="التاريخ" required> </td>' +
-                        '<td> <input type="text" name="note[]" placeholder="الملاحظات" required> </td>' +
+                        '<td> <input type="text" name="note[]" placeholder="الملاحظات"> </td>' +
                         '<td>  <button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)"> <i class="fa fa-minus"></i> </button></td>' +
                         '</tr>'
                     )

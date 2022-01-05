@@ -290,6 +290,7 @@ class ExpensesController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+
             return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
         }
 
