@@ -2,10 +2,15 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\DataTables\FillingDataTable;
+use App\Models\fillingItem;
+use App\Models\RevenueFule;
+use App\Models\Stock;
 use Carbon\Carbon;
 use App\Models\Filling;
 
 use App\Http\Controllers\Validations\FillingRequest;
+use Illuminate\Support\Facades\DB;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -48,8 +53,8 @@ class FillingController extends Controller
              */
             public function create()
             {
-
-               return view('admin.filling.create',['title'=>trans('admin.create')]);
+                $stocks= Stock::all()->sortBy('name');
+               return view('admin.filling.create',['title'=>trans('admin.create'),'stocks'=> $stocks]);
             }
 
             /**
@@ -61,9 +66,39 @@ class FillingController extends Controller
             public function store(FillingRequest $request)
             {
                 $data = $request->except("_token", "_method");
-            			  		$filling = Filling::create($data);
-                $redirect = isset($request["add_back"])?"/create":"";
-                return redirectWithSuccess(aurl('filling'.$redirect), trans('admin.added')); }
+                DB::beginTransaction();
+                $supplier_id= explode('/',str_replace(url('/'), '', url()->previous()))[3];
+                try {
+                    $filling = new Filling();
+                    $filling->name= $data['name'];
+                    $filling->quantity= $data['quantity'];
+                    $filling->price= $data['price'];
+                    $filling->supplier_id= $supplier_id;
+                    $filling->filling_date= $data['filling_date'];
+                    $filling->note= $data['filling_note'];
+                    $filling->save();
+
+                    for ($i=0; $i < count($data['amount']??[]); $i++){
+                        RevenueFule::create([
+                            'quantity'=> InsertLargeNumber($data['amount'][$i]),
+                            'price'=> InsertLargeNumber($data['price']),
+                            'paid_amount'=> 0,
+                            'stock_id'=> $data['stock'][$i],
+                            'revenue_id'=> $data['revenue'][$i],
+                            'city_id'=> Stock::whereId($data['stock'][$i])->first()->city_id,
+                            'note'=> $data['note'][$i],
+                            'filling_id'=> $filling->id,
+                        ]);
+                    }
+                    DB::commit();
+                }
+                catch (\Exception $e){
+                    DB::rollBack();
+                    return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+
+                }
+                $redirect = isset($request["add_back"])?"filling/create":"supplier/".$supplier_id;
+                return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
             /**
              * Display the specified resource.

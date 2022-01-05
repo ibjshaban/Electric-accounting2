@@ -88,13 +88,13 @@ class RevenueFuleRevenueDataTable extends DataTable
                     ], [
                         'text' => '<i class="fa fa-trash"></i> ' . trans('admin.delete'),
                         'className' => 'btn btn-outline deleteBtn',
-                    ], [
+                    ], /*[
                         'text' => '<i class="fa fa-plus"></i> ' . trans('admin.add'),
                         'className' => 'btn btn-primary',
                         'action' => 'function(){
                         	window.location.href =  "' . \URL::current() . '/create";
                         }',
-                    ],
+                    ],*/
                 ],
                 'initComplete' => "function () {
 

@@ -223,18 +223,18 @@ class ExpensesController extends Controller
                 ExpensesItem::create([
                     'item' => $data['item'][$i],
                     'item_number' => $data['item_number'][$i],
-                    'amount' => InsertLargeNumber($data['amount'][$i], 2),
-                    'price' => InsertLargeNumber($data['price'][$i], 2),
+                    'amount' => InsertLargeNumber($data['amount'][$i]),
+                    'price' => InsertLargeNumber($data['price'][$i]),
                     'expenses_id' => $expenses->id,
                 ]);
                 $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
-            $expenses->update(['price' => InsertLargeNumber($expenses_price, 2)]);
+            $expenses->update(['price' => InsertLargeNumber($expenses_price)]);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
 
         }
 
@@ -290,7 +290,8 @@ class ExpensesController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما');
+
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
         }
 
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
