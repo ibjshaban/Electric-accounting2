@@ -41,122 +41,51 @@
 
                                 <thead class="own">
                                 <tr class="">
-                                    <th colspan="3"></th>
+                                    <th colspan="2"></th>
                                     <th colspan="1">له</th>
                                     <th colspan="4">عليه</th>
                                 </tr>
                                 <tr class="">
-
-                                    <th>رقم الحركة</th>
-                                    <th>تاريخ الحركة</th>
                                     <th>البيان</th>
-                                    <th>الرواتب</th>
-                                    <th>الديون</th>
+                                    <th>تاريخ الحركة</th>
+                                    <th></th>
+                                    <th></th>
                                     <th>الرصيد النهائي</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @foreach($data as $item)
+                                    @if($item->type == 0)
+                                        <tr>
+                                            <td>إيداع راتب @if($item->note)- ملاحظة: {{$item->note}} @endif</td>
+                                            <td>{{$item->payment_date}}</td>
+                                            <td><span class="tag tag-success">{{ShekelFormat($item->total_amount)}}</span></td>
+                                            <td>{{ShekelFormat(-$item->discount)}}</td>
+                                            <td>{{ShekelFormat($item->salary)}}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td>سحب دين @if($item->note)- ملاحظة: {{$item->note}} @endif</td>
+                                            <td>{{$item->payment_date}}</td>
+                                            <td><span class="tag tag-success"></span></td>
+                                            <td>{{ShekelFormat(-$item->total_amount)}}</td>
+                                            <td>{{ShekelFormat(-$item->total_amount)}}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
                                 <tr>
-                                    <td>183</td>
-                                    <td>John Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-success">Approved</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><span class="tag tag-success"></span></td>
+                                    <td> الدين المتبقي:  {{ShekelFormat($data->where('type',1)->sum('total_amount') - $data->where('type',0)->sum('discount'))}}</td>
+                                    <td></td>
                                 </tr>
                                 <tr>
-                                    <td>219</td>
-                                    <td>Alexander Pierce</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-warning">Pending</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-                                </tr>
-                                <tr>
-                                    <td>657</td>
-                                    <td>Bob Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-primary">Approved</span></td>
-                                    <td>Bacon .</td>
-                                    <td>24</td>
-                                </tr>
-                                <tr>
-                                    <td>175</td>
-                                    <td>Mike Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-danger">Denied</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-                                </tr>
-                                <tr>
-                                    <td>134</td>
-                                    <td>Jim Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-success">Approved</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-                                </tr>
-                                <tr>
-                                    <td>494</td>
-                                    <td>Victoria Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-warning">Pending</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-                                </tr>
-                                <tr>
-                                    <td>832</td>
-                                    <td>Michael Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-primary">Approved</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-
-                                </tr>
-                                <tr>
-                                    <td>982</td>
-                                    <td>Rocky Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-danger">Denied</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-
-                                </tr>
-                                <tr>
-                                    <td>982</td>
-                                    <td>Rocky Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-danger">Denied</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-
-                                </tr>
-                                <tr>
-                                    <td>982</td>
-                                    <td>Rocky Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-danger">Denied</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-
-                                </tr>
-                                <tr>
-                                    <td>982</td>
-                                    <td>Rocky Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-danger">Denied</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-
-                                </tr>
-                                <tr>
-                                    <td>982</td>
-                                    <td>Rocky Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-danger">Denied</span></td>
-                                    <td>Bacon ipsum .</td>
-                                    <td>24</td>
-
+                                    <td>المجموع: </td>
+                                    <td></td>
+                                    <td><span class="tag tag-success">{{ShekelFormat($data->where('type',0)->sum('total_amount'))}}</span></td>
+                                    <td>{{ShekelFormat(- $data->where('type',1)->sum('total_amount'))}}</td>
+                                    <td></td>
                                 </tr>
                                 </tbody>
                             </table>

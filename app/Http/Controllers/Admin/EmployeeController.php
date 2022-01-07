@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\EmployeeDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\EmployeeRequest;
+use App\Models\Debt;
 use App\Models\Employee;
+use App\Models\Salary;
+use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -185,9 +188,22 @@ class EmployeeController extends Controller
         }
     }
 
-    public function movementShow()
+    public function movementShow($id)
     {
-        return view('admin.employee.movement-show');
+        $salaries= Salary::where('employee_id',$id)
+            ->get(['total_amount','discount','salary','note','payment_date',DB::raw("0 as type")])
+            ->toBase();
+        $debts= Debt::where('employee_id',$id)
+            ->get()->map(function ($q){
+                $data= collect();
+                $data->total_amount= $q->amount;
+                $data->note= $q->note;
+                $data->payment_date= $q->created_at->format('Y-m-d');
+                $data->type= 1;
+                return $data;
+            });
+        $data= $salaries->merge($debts)->sortBy('payment_date')->reverse();
+        return view('admin.employee.movement-show',compact('data'));
     }
 
 
