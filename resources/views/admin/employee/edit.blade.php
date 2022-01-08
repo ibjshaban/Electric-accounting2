@@ -107,7 +107,6 @@
                         {!! Form::select('city_id',App\Models\City::pluck('name','id'), $employee->city_id ,['class'=>'form-control select2','placeholder'=>trans('admin.city_id')]) !!}
                     </div>
                 </div>
-
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-10">
@@ -130,7 +129,12 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="col-md-6 col-lg-6 col-sm-6 mt-5 col-xs-12">
+                    <div class="form-group">
+                        {!! Form::label('is_delete','تفعيل الموظف',['class'=>'control-label']) !!}
+                        {!! Form::checkbox('is_delete','1', (is_null($employee->deleted_at)) ) !!}
+                    </div>
+                </div>
             </div>
             <!-- /.row -->
         </div>
