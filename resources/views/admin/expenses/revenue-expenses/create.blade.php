@@ -45,6 +45,12 @@
             {!! Form::text('name',old('name'),['class'=>'form-control','placeholder'=> 'البيان','required']) !!}
     </div>
 </div>
+<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+    <div class="form-group">
+        {!! Form::label('discount','الخصم',['class'=>' control-label']) !!}
+        {!! Form::number('discount',old('discount')?? 0,['step'=>'0.0000001','min'=>0,'class'=>'form-control','placeholder'=> 'الخصم','required','oninput'=> 'refreshDiscount()','id'=>'discount_amount']) !!}
+    </div>
+</div>
 {{--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
         {!! Form::label('price',trans('admin.price'),['class'=>' control-label']) !!}
@@ -109,9 +115,12 @@
                 </div>
                 <div class="col">
                 </div>
-                <div class="col bg-success p-3" id="all_total">المجموع: {{ShekelFormat($expenses->price)}}</div>
-                <div class="col">
+                <div class="col bg-success p-3" >
+                    <span id="all_amount">المبلغ: {{ShekelFormat(0)}}</span>
+                    <span id="discount">الخصم: {{ShekelFormat(0)}}</span>
+                    <span id="all_total">المجموع: {{ShekelFormat(0)}}</span>
                 </div>
+                <div class="col"></div>
             </div>
             <div class="d-flex flex-row-reverse  mx-3">
                 <button type="button" name="add" class="btn btn-success btn-flat" onclick="addNewDetails()">
@@ -129,6 +138,18 @@
 
 @push('js')
     <script>
+        function refreshDiscount(){
+            var sum = 0;
+            $('.all_price').each(function()
+            {
+                sum += parseFloat($(this).data('price'));
+            });
+            var discount= $('#discount_amount').val();
+
+            $('#all_amount').text('المبلغ: ₪ '+parseFloat(sum).toFixed(2))
+            $('#discount').text('الخصم: ₪ '+parseFloat(discount).toFixed(2))
+            $('#all_total').text('المجموع: ₪ '+parseFloat(sum-discount).toFixed(2))
+        }
         function changeAllPrice(e){
             var parent= $(e).parent().parent();
             var amount=  parent.find('input[name="amount[]"]').val() ?? 0;
@@ -142,7 +163,9 @@
             {
                 sum += parseFloat($(this).data('price'));
             });
-            $('#all_total').text('المجموع: ₪ '+parseFloat(sum).toFixed(2))
+            $('#all_amount').text('المبلغ: ₪ '+parseFloat(sum).toFixed(2))
+            var discount= $('#discount_amount').val();
+            $('#all_total').text('المجموع: ₪ '+parseFloat(sum-discount).toFixed(2))
         }
         function addNewDetails(){
             $('.element').last().after(

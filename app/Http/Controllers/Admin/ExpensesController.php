@@ -219,6 +219,7 @@ class ExpensesController extends Controller
             $expenses->date = $data['date'];
             $expenses->admin_id = $data['admin_id'];
             $expenses->revenue_id = $data['revenue_id'];
+            $expenses->discount = $data['discount'];
             $expenses->price = 0;
             $expenses->save();
 
@@ -232,7 +233,7 @@ class ExpensesController extends Controller
                 ]);
                 $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
-            $expenses->update(['price' => InsertLargeNumber($expenses_price)]);
+            $expenses->update(['price' => InsertLargeNumber(($expenses_price- $expenses->discount))]);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -275,6 +276,7 @@ class ExpensesController extends Controller
             $expenses->name = $data['name'];
             $expenses->date = $data['date'];
             $expenses->admin_id = $data['admin_id'];
+            $expenses->discount = $data['discount'];
             //$expenses->price = 0;
             $expenses->save();
             ExpensesItem::where('expenses_id', $expenses->id)->delete();
@@ -288,7 +290,8 @@ class ExpensesController extends Controller
                 ]);
                 $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
-            $expenses->update(['price' => InsertLargeNumber($expenses_price)]);
+            $expenses->update(['price' => InsertLargeNumber(($expenses_price- $expenses->discount))]);
+
 
             DB::commit();
         } catch (\Exception $e) {

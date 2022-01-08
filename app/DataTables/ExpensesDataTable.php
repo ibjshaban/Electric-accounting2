@@ -8,7 +8,7 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class ExpensesDataTable extends DataTable
 {
-    	
+
 
      /**
      * dataTable to render Columns.
@@ -19,13 +19,14 @@ class ExpensesDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.expenses.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -37,7 +38,7 @@ class ExpensesDataTable extends DataTable
         return Expenses::query()->with(['revenue_id',])->select("expenses.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -92,7 +93,7 @@ class ExpensesDataTable extends DataTable
                 'initComplete' => "function () {
 
 
-            
+
             ". filterElement('1,2,3,4', 'input') . "
 
                         //revenue_idname,price,date,revenue_id5
@@ -132,7 +133,7 @@ class ExpensesDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -143,7 +144,7 @@ class ExpensesDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -170,6 +171,11 @@ class ExpensesDataTable extends DataTable
                  'data'=>'name',
                  'title'=>trans('admin.name'),
 		    ],
+                [
+                    'name' => 'discount',
+                    'data' => 'discount',
+                    'title' => 'الخصم',
+                ],
 				[
                  'name'=>'price',
                  'data'=>'price',
@@ -224,5 +230,5 @@ class ExpensesDataTable extends DataTable
 	    {
 	        return 'expenses_' . time();
 	    }
-    	
+
 }

@@ -172,6 +172,10 @@ class RevenueExpensesDataTable extends DataTable
                 'title' => trans('admin.name'),
             ],
             [
+                'name' => 'discount',
+                'data' => 'discount',
+                'title' => 'الخصم',
+            ],[
                 'name' => 'price',
                 'data' => 'price',
                 'title' => trans('admin.price'),
