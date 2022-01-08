@@ -83,7 +83,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::withTrashed()->find($id);
         return is_null($employee) || empty($employee) ?
             backWithError(trans("admin.undefinedRecord"), aurl("employee")) :
             view('admin.employee.show', [
@@ -100,7 +100,7 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::whereId($id)->withTrashed()->first();
         return is_null($employee) || empty($employee) ?
             backWithError(trans("admin.undefinedRecord"), aurl("employee")) :
             view('admin.employee.edit', [
@@ -112,7 +112,7 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, $id)
     {
         // Check Record Exists
-        $employee = Employee::find($id);
+        $employee = Employee::withTrashed()->find($id);
         if (is_null($employee) || empty($employee)) {
             return backWithError(trans("admin.undefinedRecord"), aurl("employee"));
         }
@@ -121,7 +121,14 @@ class EmployeeController extends Controller
             it()->delete($employee->photo_profile);
             $data['photo_profile'] = it()->upload('photo_profile', 'admins');
         }
-        Employee::where('id', $id)->update($data);
+        unset($data['is_delete']);
+        if ($request->is_delete){
+            $data['deleted_at']= null;
+        }
+        else{
+            $data['deleted_at']= now();
+        }
+        $employee->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
         return redirectWithSuccess(aurl('employee' . $redirect), trans('admin.updated'));
     }
