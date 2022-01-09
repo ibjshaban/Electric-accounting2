@@ -19,7 +19,7 @@ protected $fillable = [
         'price',
         'date',
         'revenue_id',
-
+        'discount',
 		'created_at',
 		'updated_at',
 		'deleted_at',

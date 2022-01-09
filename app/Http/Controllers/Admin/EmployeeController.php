@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\EmployeeDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\EmployeeRequest;
+use App\Models\Debt;
 use App\Models\Employee;
+use App\Models\Salary;
+use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -80,7 +83,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::withTrashed()->find($id);
         return is_null($employee) || empty($employee) ?
             backWithError(trans("admin.undefinedRecord"), aurl("employee")) :
             view('admin.employee.show', [
@@ -97,7 +100,7 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::whereId($id)->withTrashed()->first();
         return is_null($employee) || empty($employee) ?
             backWithError(trans("admin.undefinedRecord"), aurl("employee")) :
             view('admin.employee.edit', [
@@ -109,7 +112,7 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, $id)
     {
         // Check Record Exists
-        $employee = Employee::find($id);
+        $employee = Employee::withTrashed()->find($id);
         if (is_null($employee) || empty($employee)) {
             return backWithError(trans("admin.undefinedRecord"), aurl("employee"));
         }
@@ -118,7 +121,14 @@ class EmployeeController extends Controller
             it()->delete($employee->photo_profile);
             $data['photo_profile'] = it()->upload('photo_profile', 'admins');
         }
-        Employee::where('id', $id)->update($data);
+        unset($data['is_delete']);
+        if ($request->is_delete){
+            $data['deleted_at']= null;
+        }
+        else{
+            $data['deleted_at']= now();
+        }
+        $employee->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
         return redirectWithSuccess(aurl('employee' . $redirect), trans('admin.updated'));
     }
@@ -185,9 +195,22 @@ class EmployeeController extends Controller
         }
     }
 
-    public function movementShow()
+    public function movementShow($id)
     {
-        return view('admin.employee.movement-show');
+        $salaries= Salary::where('employee_id',$id)
+            ->get(['total_amount','discount','salary','note','payment_date',DB::raw("0 as type")])
+            ->toBase();
+        $debts= Debt::where('employee_id',$id)
+            ->get()->map(function ($q){
+                $data= collect();
+                $data->total_amount= $q->amount;
+                $data->note= $q->note;
+                $data->payment_date= $q->created_at->format('Y-m-d');
+                $data->type= 1;
+                return $data;
+            });
+        $data= $salaries->merge($debts)->sortBy('payment_date')->reverse();
+        return view('admin.employee.movement-show',compact('data'));
     }
 
 

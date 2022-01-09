@@ -182,7 +182,14 @@ class RevenueController extends Controller
         if (is_null($revenue) || empty($revenue)) {
             return backWithSuccess(trans('admin.undefinedRecord'), aurl("revenue"));
         }
-
+        $collection= Collection::where(['revenue_id'=>$revenue->id])->exists();
+        $fules = RevenueFule::where('revenue_id', $revenue->id)->exists();
+        $salary = Salary::where('revenue_id', $revenue->id)->exists();
+        $expenses = Expenses::where('revenue_id', $revenue->id)->exists();
+        $other_operation = OtherOperation::where('revenue_id', $revenue->id)->exists();
+        if($collection || $fules || $salary || $expenses || $other_operation){
+            return backWithError('لحذف الإيرادة يجب حذف كل ما هو مرتبط بها من التحصيلات و الوقود و الرواتب و المصاريف', aurl("revenue"));
+        }
         it()->delete('revenue', $id);
         $revenue->delete();
         return redirectWithSuccess(aurl("revenue"), trans('admin.deleted'));
@@ -198,7 +205,14 @@ class RevenueController extends Controller
                 if (is_null($revenue) || empty($revenue)) {
                     return backWithError(trans('admin.undefinedRecord'), aurl("revenue"));
                 }
-
+                $collection= Collection::where(['revenue_id'=>$revenue->id])->exists();
+                $fules = RevenueFule::where('revenue_id', $revenue->id)->exists();
+                $salary = Salary::where('revenue_id', $revenue->id)->exists();
+                $expenses = Expenses::where('revenue_id', $revenue->id)->exists();
+                $other_operation = OtherOperation::where('revenue_id', $revenue->id)->exists();
+                if($collection || $fules || $salary || $expenses || $other_operation){
+                    return backWithError('لحذف الإيرادة يجب حذف كل ما هو مرتبط بها من التحصيلات و الوقود و الرواتب و المصاريف', aurl("revenue"));
+                }
                 it()->delete('revenue', $id);
                 $revenue->delete();
             }
@@ -208,7 +222,14 @@ class RevenueController extends Controller
             if (is_null($revenue) || empty($revenue)) {
                 return backWithError(trans('admin.undefinedRecord'), aurl("revenue"));
             }
-
+            $collection= Collection::where(['revenue_id'=>$revenue->id])->exists();
+            $fules = RevenueFule::where('revenue_id', $revenue->id)->exists();
+            $salary = Salary::where('revenue_id', $revenue->id)->exists();
+            $expenses = Expenses::where('revenue_id', $revenue->id)->exists();
+            $other_operation = OtherOperation::where('revenue_id', $revenue->id)->exists();
+            if($collection || $fules || $salary || $expenses || $other_operation){
+                return backWithError('لحذف الإيرادة يجب حذف كل ما هو مرتبط بها من التحصيلات و الوقود و الرواتب و المصاريف', aurl("revenue"));
+            }
             it()->delete('revenue', $data);
             $revenue->delete();
             return redirectWithSuccess(aurl("revenue"), trans('admin.deleted'));
