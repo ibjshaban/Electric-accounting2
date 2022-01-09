@@ -1,5 +1,5 @@
-@if($status)
+@if($status==1)
     <div class="alert-warning">الإيرادة مفتوحة</div>
-@else
+@elseif($status==0)
     <div class="alert-success">{{ $close_date }}</div>
 @endif
