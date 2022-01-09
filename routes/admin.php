@@ -122,7 +122,9 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::get('revenue-fule-revenue/create', 'Admin\RevenueFuleController@revenueFuleRevenueCreate');
 
 
-        ////////AdminRoutes/*End*///////////////
+        Route::resource('payment','Admin\PaymentController'); 
+		Route::post('payment/multi_delete','Admin\PaymentController@multi_delete'); 
+		////////AdminRoutes/*End*///////////////
     });
 
 });
