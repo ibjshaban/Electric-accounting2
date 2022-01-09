@@ -439,3 +439,31 @@ with font-awesome or any other icon font library -->
 {{--</li>--}}
 {{--@endif--}}
 <!--revenuefule_end_route-->
+
+<!--payment_start_route-->
+@if(admin()->user()->role("payment_show"))
+<li class="nav-item {{active_link('payment','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('payment','active')}}">
+    <i class="nav-icon fa fa-icons"></i>
+    <p>
+      {{trans('admin.payment')}} 
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('payment')}}" class="nav-link  {{active_link('payment','active')}}">
+        <i class="fa fa-icons nav-icon"></i>
+        <p>{{trans('admin.payment')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('payment/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--payment_end_route-->
