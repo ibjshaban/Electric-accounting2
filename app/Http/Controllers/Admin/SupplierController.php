@@ -6,6 +6,9 @@ use App\DataTables\FillingSingleSupplierDataTable;
 use App\DataTables\SupplierDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\SupplierRequest;
+use App\Models\Filling;
+use App\Models\Payment;
+use App\Models\RevenueFule;
 use App\Models\Supplier;
 
 // Auto Controller Maker By Baboon Script
@@ -83,11 +86,15 @@ class SupplierController extends Controller
     public function show(FillingSingleSupplierDataTable $filling,$id)
     {
         $supplier = Supplier::find($id);
+        $supplier->PayFillingsAutoFromPayments();
+        $financial_difference= $supplier->FinancialDifferenceBetweenPaymentsAndFillings();
+
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
             $filling->render('admin.supplier.show', [
                 'title' => trans('admin.show'),
-                'supplier' => $supplier
+                'supplier' => $supplier,
+                'financial_difference' => $financial_difference,
             ]);
     }
 
