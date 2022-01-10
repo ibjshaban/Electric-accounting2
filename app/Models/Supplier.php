@@ -56,13 +56,14 @@ class Supplier extends Model
        return Payment::where('supplier_id', $this->id)->sum('amount') - RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))->sum('paid_amount');
     }
     public function PayFillingsAutoFromPayments(){
+        /*$revenueFule= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
+                ->select('*',DB::raw("(`price` * `quantity`) as total_price"))
+                //->where('total_price' ,'!=' ,'paid_amount')
+                ->get();*/
         $revenueFule=
-            //RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
-                //->whereRaw("paid_amount != (price*quantity)")
-        DB::select('SELECT * FROM  `revenue_fules` WHERE filling_id IN (SELECT `id` FROM `fillings` WHERE `supplier_id` = '.$this->id.') SELECT price*quantity AS total_price WHERE `paid_amount` != `total_price`');
-                //->select('(price * quantity)  AS total_price')
-                //->whereRaw("ORDER BY total_price DESC , ORDER BY created_at DESC")
-                //->get();
+            DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
+                                  (SELECT id FROM fillings WHERE supplier_id = '.$this->id.')
+                                   AND price * quantity != paid_amount');
         dd($revenueFule);
     }
 }
