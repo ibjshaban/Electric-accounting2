@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 // Auto Models By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -51,4 +52,17 @@ class Supplier extends Model
         return $this->hasOne(\App\Models\Admin::class, 'id', 'admin_id');
     }
 
+    public function FinancialDifferenceBetweenPaymentsAndFillings(){
+       return Payment::where('supplier_id', $this->id)->sum('amount') - RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))->sum('paid_amount');
+    }
+    public function PayFillingsAutoFromPayments(){
+        $revenueFule=
+            //RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
+                //->whereRaw("paid_amount != (price*quantity)")
+        DB::select('SELECT * FROM  `revenue_fules` WHERE filling_id IN (SELECT `id` FROM `fillings` WHERE `supplier_id` = '.$this->id.') SELECT price*quantity AS total_price WHERE `paid_amount` != `total_price`');
+                //->select('(price * quantity)  AS total_price')
+                //->whereRaw("ORDER BY total_price DESC , ORDER BY created_at DESC")
+                //->get();
+        dd($revenueFule);
+    }
 }
