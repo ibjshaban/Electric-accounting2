@@ -84,6 +84,14 @@
                     <b>{{trans('admin.phone')}} :</b>
                     {!! $supplier->phone !!}
                 </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <b>الفرق المالي بين الدفعات و التعبئات للمورد :</b>
+                    @if($financial_difference > 0)
+                        لك : {{ShekelFormat($financial_difference)}}
+                    @else
+                        له : {{ShekelFormat($financial_difference)}}
+                    @endif
+                </div>
                 <div class="col-md-6 col-lg-6 col-xs-6">
                     <b>{{trans('admin.photo_profile')}} :</b>
                     @include("admin.show_image",["image"=>$supplier->photo_profile])
