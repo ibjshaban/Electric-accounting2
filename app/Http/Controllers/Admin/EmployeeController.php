@@ -9,6 +9,9 @@ use App\Models\Debt;
 use App\Models\Employee;
 use App\Models\Salary;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use PDF;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -211,6 +214,13 @@ class EmployeeController extends Controller
             });
         $data= $salaries->merge($debts)->sortBy('payment_date')->reverse();
         return view('admin.employee.movement-show',compact('data'));
+    }
+    public function pdfview(Request $request)
+    {
+
+        $pdf = PDF::loadView('pdfview');
+        // download pdf
+        return $pdf->download('userlist.pdf');
     }
 
 

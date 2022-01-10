@@ -166,7 +166,7 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    <div class="col-lg-6 col-6 m-auto" style="padding-bottom: 1.7%;">
+                    <div class="col-lg-6 col-6 m-auto" style="padding-bottom: 2.5%;">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-money-bill-alt"></i></span>
                             <a href="{{ aurl('revenue-expenses/'.$revenue->id) }}">
