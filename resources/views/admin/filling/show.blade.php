@@ -131,8 +131,8 @@
                     <div class="col">
                         {{ShekelFormat($it->price*$it->quantity)}}
                     </div>
-                    <div class="col">
-                        {{ShekelFormat($it->paid_price)}}
+                    <div class="col {{ number_format($it->paid_amount,2) == number_format($it->price*$it->quantity,2)?'bg-success':''}}">
+                        {{ShekelFormat($it->paid_amount)}}
                     </div>
                     <div class="col">
                         {{$it->note}}

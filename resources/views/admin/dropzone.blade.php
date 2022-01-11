@@ -291,7 +291,6 @@ $mimetypes = array_filter(explode('|',$acceptedMimeTypes));
         i++;
 
         @endforeach
-        //console.log(myDropzone{{$dz_param}}.files);
 
 
 
@@ -385,7 +384,6 @@ $mimetypes = array_filter(explode('|',$acceptedMimeTypes));
   myDropzone{{$dz_param}}.on("error", function(file, response) {
     if(response && response.errors){
       var msg = response.errors.{{ $dz_param }}[0];
-      //console.log(file.previewElement);
       $(file.previewElement).find('.error').text(msg);
     }
   });
@@ -407,7 +405,7 @@ $mimetypes = array_filter(explode('|',$acceptedMimeTypes));
     if(!file.type.match('image.*')){
     file.previewElement.querySelector("img").src = findMimeTypeImage(file.type);
     }
-      console.log(file.type);
+
   });
 
   // Setup the buttons for all transfers

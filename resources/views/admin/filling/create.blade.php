@@ -160,7 +160,7 @@
                 amount += parseFloat(am);
             });
             var filling_amount= $('#filling_amount').val() ?? 0
-            console.log(amount,filling_amount)
+
             if (amount == filling_amount){
                 //$('#MainForm').submit();
                 return true;
