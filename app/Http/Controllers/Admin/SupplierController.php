@@ -85,6 +85,7 @@ class SupplierController extends Controller
      */
     public function show(FillingSingleSupplierDataTable $filling,$id)
     {
+
         $supplier = Supplier::find($id);
         $financial_difference= $supplier->FinancialDifferenceBetweenPaymentsAndFillings();
 

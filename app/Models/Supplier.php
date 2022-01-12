@@ -59,6 +59,7 @@ class Supplier extends Model
 
     public function PayFillingsAutoFromPayments(){
 
+
         $sum_payments_amount= Payment::where('supplier_id', $this->id)->sum('amount');
 
         $sum_paid_fules_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))->where('paid_amount','!=', 0)->sum('paid_amount');;

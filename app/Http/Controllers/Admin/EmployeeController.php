@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\EmployeeDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\EmployeeRequest;
+use App\Http\Requests;
 use App\Models\Debt;
 use App\Models\Employee;
 use App\Models\Salary;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -122,11 +124,10 @@ class EmployeeController extends Controller
             $data['photo_profile'] = it()->upload('photo_profile', 'admins');
         }
         unset($data['is_delete']);
-        if ($request->is_delete){
-            $data['deleted_at']= null;
-        }
-        else{
-            $data['deleted_at']= now();
+        if ($request->is_delete) {
+            $data['deleted_at'] = null;
+        } else {
+            $data['deleted_at'] = now();
         }
         $employee->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
@@ -197,20 +198,42 @@ class EmployeeController extends Controller
 
     public function movementShow($id)
     {
-        $salaries= Salary::where('employee_id',$id)
-            ->get(['total_amount','discount','salary','note','payment_date',DB::raw("0 as type")])
+        $salaries = Salary::where('employee_id', $id)
+            ->get(['total_amount', 'discount', 'salary', 'note', 'employee_id', 'payment_date', DB::raw("0 as type")])
             ->toBase();
-        $debts= Debt::where('employee_id',$id)
-            ->get()->map(function ($q){
-                $data= collect();
-                $data->total_amount= $q->amount;
-                $data->note= $q->note;
-                $data->payment_date= $q->created_at->format('Y-m-d');
-                $data->type= 1;
+        //dd($salaries[0]->employee_id);
+        $debts = Debt::where('employee_id', $id)
+            ->get()->map(function ($q) {
+                $data = collect();
+                $data->total_amount = $q->amount;
+                $data->note = $q->note;
+                $data->payment_date = $q->created_at->format('Y-m-d');
+                $data->type = 1;
                 return $data;
             });
-        $data= $salaries->merge($debts)->sortBy('payment_date')->reverse();
-        return view('admin.employee.movement-show',compact('data'));
+        $data = $salaries->merge($debts)->sortBy('payment_date')->reverse();
+        return view('admin.employee.movement-show', compact('data', 'salaries'));
+    }
+
+    public function pdfview($id)
+    {
+        $salaries = Salary::where('employee_id', $id)
+            ->get(['total_amount', 'discount', 'salary', 'note', 'payment_date', DB::raw("0 as type")])
+            ->toBase();
+        //dd($salaries);
+        $debts = Debt::where('employee_id', $id)
+            ->get()->map(function ($q) {
+                $data = collect();
+                $data->total_amount = $q->amount;
+                $data->note = $q->note;
+                $data->payment_date = $q->created_at->format('Y-m-d');
+                $data->type = 1;
+                return $data;
+            });
+        $data3 = $salaries->merge($debts)->sortBy('payment_date')->reverse();
+
+        $pdf = PDF::loadView('admin.employee.print', ['data' => $data3]);
+        return $pdf->download('hello.pdf');
     }
 
 

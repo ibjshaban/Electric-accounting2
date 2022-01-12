@@ -122,8 +122,10 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::get('revenue-fule-revenue/create', 'Admin\RevenueFuleController@revenueFuleRevenueCreate');
 
 
-        Route::resource('payment','Admin\PaymentController'); 
-		Route::post('payment/multi_delete','Admin\PaymentController@multi_delete'); 
+        Route::resource('payment','Admin\PaymentController');
+		Route::post('payment/multi_delete','Admin\PaymentController@multi_delete');
+
+        Route::get('generate-pdf/{id}', 'Admin\EmployeeController@pdfview')->name('generate-pdf');
 		////////AdminRoutes/*End*///////////////
     });
 
