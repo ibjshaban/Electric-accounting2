@@ -5,6 +5,7 @@ use App\DataTables\FillingDataTable;
 use App\Models\fillingItem;
 use App\Models\RevenueFule;
 use App\Models\Stock;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use App\Models\Filling;
 
@@ -97,6 +98,7 @@ class FillingController extends Controller
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
 
                 }
+                Supplier::withoutTrashed()->whereId($supplier_id)->first()->PayFillingsAutoFromPayments();
                 $redirect = isset($request["add_back"]) ?"filling/create":"supplier/".$supplier_id;
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
@@ -160,12 +162,11 @@ class FillingController extends Controller
               if(is_null($filling) || empty($filling)){
               	return backWithError(trans("admin.undefinedRecord"),url()->previous());
               }
-              $data = $this->updateFillableColumns();
-             // Filling::where('id',$id)->update($data);
+              $data = $request;
 
                 DB::beginTransaction();
                 try {
-                    $filling = new Filling();
+
                     $filling->name= $data['name'];
                     $filling->quantity= $data['quantity'];
                     $filling->price= $data['price'];
@@ -174,7 +175,7 @@ class FillingController extends Controller
                     $filling->save();
 
                     $paid_price=[];
-                    foreach ($filling->fule() as $fule) { array_push($fule->paid_amount,$paid_price);$fule->delete();}
+                    foreach ($filling->fule() as $fule) { $fule->delete();}
                     for ($i=0; $i < count($data['amount']??[]); $i++){
                         RevenueFule::create([
                             'quantity'=> InsertLargeNumber($data['amount'][$i]),
@@ -192,10 +193,9 @@ class FillingController extends Controller
                 catch (\Exception $e){
                     DB::rollBack();
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-
                 }
-
-                $redirect = isset($request["save_back"])?"filling/".$id."/edit":"supplier/".$supplier_id;
+              Supplier::withoutTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
+              $redirect = isset($request["save_back"])?"filling/".$id."/edit":"supplier/".$filling->supplier_id;
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }
 

@@ -145,7 +145,6 @@
     <script>
         function change_collect(){
             var value = $('input[name="collect_type"]:checked').val();
-            console.log(value)
             if (value == '0'){
                 $('#sourcebox').css('display', 'none');
                 $('#employeebox').css('display', '');
