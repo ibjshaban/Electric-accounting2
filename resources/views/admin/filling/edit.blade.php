@@ -58,24 +58,24 @@
 	<!-- /.card-header -->
 	<div class="card-body">
 
-{!! Form::open(['url'=>aurl('/filling/'.$filling->id),'method'=>'put','id'=>'filling','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
-<div class="row">
+{!! Form::open(['url'=>aurl('/filling/'.$filling->id),'method'=>'put','id'=>'MainForm','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+        <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
         <div class="form-group">
             {!! Form::label('name',trans('admin.name'),['class'=>'control-label']) !!}
-            {!! Form::text('name', $filling->name ,['class'=>'form-control','placeholder'=>trans('admin.name')]) !!}
+            {!! Form::text('name', $filling->name ,['class'=>'form-control','placeholder'=>trans('admin.name'),'required'=>'required']) !!}
         </div>
     </div>
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
         <div class="form-group">
             {!! Form::label('quantity',trans('admin.quantity'),['class'=>' control-label']) !!}
-            {!! Form::number('quantity',$filling->quantity,['class'=>'form-control','placeholder'=>trans('admin.quantity')]) !!}
+            {!! Form::number('quantity',$filling->quantity,['class'=>'form-control','placeholder'=>trans('admin.quantity'),'required'=>'required','id'=> 'filling_amount']) !!}
         </div>
     </div>
     <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
         <div class="form-group">
             {!! Form::label('price',trans('admin.price'),['class'=>' control-label']) !!}
-            {!! Form::number('price',$filling->price,['class'=>'form-control','placeholder'=>trans('admin.price')]) !!}
+            {!! Form::number('price',$filling->price,['class'=>'form-control','placeholder'=>'سعر(لتر)','step'=>"0.001",'min'=>"0",'id'=> 'filling_price','required'=>'required','oninput'=>'changeAllPrice(this)']) !!}
         </div>
     </div>
 {{--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -103,7 +103,8 @@
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
         {!! Form::label('filling_note',trans('admin.note'),['class'=>'control-label']) !!}
-        {!! Form::textarea('filling_note', $filling->note ,['class'=>'form-control','placeholder'=>trans('admin.note'),'rows'=> 3]) !!}
+        {!! Form::textarea('filling_note',$filling->note,['name'=>'filling_note','class'=>'form-control','placeholder'=>trans('admin.note'),'rows'=> 3]) !!}
+
     </div>
 </div>
 
@@ -176,6 +177,7 @@
 </div>
 </div>
 @endsection
+
 @push('js')
     <script>
         $('#MainForm').on('submit', function(){
@@ -186,7 +188,7 @@
                 amount += parseFloat(am);
             });
             var filling_amount= $('#filling_amount').val() ?? 0
-            console.log(amount,filling_amount)
+
             if (amount == filling_amount){
                 //$('#MainForm').submit();
                 return true;
@@ -221,6 +223,7 @@
                 var amount= $(this).val()? $(this).val(): 0
                 sum += parseFloat(amount*filling_price);
             });
+
             $('#all_total').text('المجموع: ₪ '+parseFloat(sum).toFixed(2))
         }
         function addNewDetails(){

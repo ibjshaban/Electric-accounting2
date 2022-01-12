@@ -85,8 +85,8 @@ class SupplierController extends Controller
      */
     public function show(FillingSingleSupplierDataTable $filling,$id)
     {
-        $supplier = Supplier::withTrashed()->find($id);
-        //$supplier->PayFillingsAutoFromPayments();
+
+        $supplier = Supplier::find($id);
         $financial_difference= $supplier->FinancialDifferenceBetweenPaymentsAndFillings();
 
         return is_null($supplier) || empty($supplier) ?

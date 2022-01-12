@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\DataTables\PaymentDataTable;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use App\Models\Payment;
 
@@ -63,6 +64,8 @@ class PaymentController extends Controller
                 $data = $request->except("_token", "_method");
             	$data['admin_id'] = admin()->id();
 		  		$payment = Payment::create($data);
+
+                Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
                 $redirect = isset($request["add_back"])?"/create":"";
                 return redirectWithSuccess(aurl('payment'.$redirect), trans('admin.added')); }
 
@@ -127,6 +130,8 @@ class PaymentController extends Controller
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
               Payment::where('id',$id)->update($data);
+
+              Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
               return redirectWithSuccess(aurl('payment'.$redirect), trans('admin.updated'));
             }
