@@ -36,10 +36,13 @@
                 <div class="card-header">
                     <h3 class="card-title float-left">جدول الحركات المالية</h3>
                 </div>
-                <a class="btn btn-secondary buttons-pdf btn-outline col-md-2" style="color: #FFFFFF;"
-                     href="{{ route('') }}"   type="button"><span><i class="fa fa-file-pdf"> </i> تصدير الى PDF</span>
-                </a>
-                <!-- /.card-header -->
+                @if(!$salaries->isEmpty())
+                    <a class="btn btn-secondary buttons-pdf btn-outline col-md-2" style="color: #FFFFFF;"
+                       href="{{ aurl('generate-pdf/'.$salaries[0]->employee_id) }}" type="button"><span><i
+                                class="fa fa-file-pdf"> </i> تصدير الى PDF</span>
+                    </a>
+            @endif
+            <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 300px;">
                     {{--<table class="table table-head-fixed text-nowrap">--}}
                     <table class="table text-nowrap">

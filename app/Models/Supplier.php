@@ -59,7 +59,7 @@ class Supplier extends Model
         $revenueFule=
             //RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
                 //->whereRaw("paid_amount != (price*quantity)")
-        DB::select('SELECT * FROM  `revenue_fules` WHERE filling_id IN (SELECT `id` FROM `fillings` WHERE `supplier_id` = '.$this->id.') SELECT price*quantity AS total_price WHERE `paid_amount` != `total_price`');
+        DB::select('SELECT * FROM `revenue_fules` WHERE filling_id IN (SELECT `id` FROM `fillings` WHERE `supplier_id` = '.$this->id.') AND price * quantity != paid_amount');
                 //->select('(price * quantity)  AS total_price')
                 //->whereRaw("ORDER BY total_price DESC , ORDER BY created_at DESC")
                 //->get();
