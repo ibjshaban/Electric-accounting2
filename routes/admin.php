@@ -126,6 +126,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 		Route::post('payment/multi_delete','Admin\PaymentController@multi_delete');
 
         Route::get('generate-pdf/{id}', 'Admin\EmployeeController@pdfview')->name('generate-pdf');
+        Route::get('print-view', 'Admin\EmployeeController@printView')->name('print-view');
 		////////AdminRoutes/*End*///////////////
     });
 

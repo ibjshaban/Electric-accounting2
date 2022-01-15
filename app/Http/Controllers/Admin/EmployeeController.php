@@ -232,9 +232,27 @@ class EmployeeController extends Controller
             });
         $data3 = $salaries->merge($debts)->sortBy('payment_date')->reverse();
 
-        $pdf = PDF::loadView('admin.employee.print', ['data' => $data3]);
+        $headerHtml = view()->make('admin.employee.header')->render();
+        $pdf = PDF::setOption('enable-local-file-access', true)->setOption('header-html', $headerHtml)->loadView('admin.employee.print', ['data' => $data3]);
         return $pdf->download('hello.pdf');
     }
 
+    public function printView(){
+        $salaries = Salary::where('employee_id', 12)
+            ->get(['total_amount', 'discount', 'salary', 'note', 'payment_date', DB::raw("0 as type")])
+            ->toBase();
+        //dd($salaries);
+        $debts = Debt::where('employee_id', 12)
+            ->get()->map(function ($q) {
+                $data = collect();
+                $data->total_amount = $q->amount;
+                $data->note = $q->note;
+                $data->payment_date = $q->created_at->format('Y-m-d');
+                $data->type = 1;
+                return $data;
+            });
+        $data3 = $salaries->merge($debts)->sortBy('payment_date')->reverse();
+        return view('admin.employee.print', ['data' => $data3]);
+    }
 
 }
