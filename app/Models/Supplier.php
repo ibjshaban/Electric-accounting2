@@ -58,10 +58,7 @@ class Supplier extends Model
     }
 
     public function PayFillingsAutoFromPayments(){
-
-
         $sum_payments_amount= Payment::where('supplier_id', $this->id)->sum('amount');
-
         $sum_paid_fules_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))->where('paid_amount','!=', 0)->sum('paid_amount');;
         $revenueFuleNotPaid=collect(DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
                                   (SELECT id FROM fillings WHERE supplier_id = '.$this->id.')
@@ -94,4 +91,41 @@ class Supplier extends Model
             return;
         };
     }
+
+    public function DeletePiadPriceFromFillingWhenDeletePayment($dPrice){
+
+        $deleted_price = $dPrice;
+        $remain_price= $this->FinancialDifferenceBetweenPaymentsAndFillings();
+        if ($remain_price > 0){
+            $deleted_price -= $remain_price;
+        }
+        if ($deleted_price > 0){
+            $revenueFulePaid=collect(DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
+                                  (SELECT id FROM fillings WHERE supplier_id = '.$this->id.')
+                                   AND paid_amount != 0 ORDER BY created_at DESC'));
+            foreach ($revenueFulePaid as $fule){
+                if ($deleted_price == 0){
+                    break;
+                }
+                if ($deleted_price >= $fule->paid_amount){
+                    $deleted_price -= $fule->paid_amount;
+                    DB::table('revenue_fules')
+                        ->where('id', $fule->id)  // find your user by their email
+                        ->limit(1)  // optional - to ensure only one record is updated.
+                        ->update(array('paid_amount' => InsertLargeNumber(0)));
+                }
+                else{
+                    DB::table('revenue_fules')
+                        ->where('id', $fule->id)  // find your user by their email
+                        ->limit(1)  // optional - to ensure only one record is updated.
+                        ->update(array('paid_amount' => InsertLargeNumber($fule->paid_amount - $deleted_price)));
+                    $deleted_price= 0;
+                }
+            }
+        }
+
+        return;
+    }
+
+
 }
