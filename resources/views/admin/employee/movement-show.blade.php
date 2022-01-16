@@ -67,8 +67,8 @@
                                 <tr>
                                     <td>إيداع راتب @if($item->note)- ملاحظة: {{$item->note}} @endif</td>
                                     <td>{{$item->payment_date}}</td>
-                                    <td><span class="tag tag-success">{{ShekelFormat($item->total_amount)}}</span></td>
-                                    <td>{{ShekelFormat(-$item->discount)}}</td>
+                                    <td><span class="tag tag-success">{{$item->discount > 0 ? ShekelFormat($item->total_amount) .' - '. ShekelFormat($item->discount) : ShekelFormat($item->total_amount)}}</span></td>
+                                    <td></td>
                                     <td>{{ShekelFormat($item->salary)}}</td>
                                 </tr>
                             @else
