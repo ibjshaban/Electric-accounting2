@@ -93,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-6 m-auto pb-5">
+                    <div class="col-lg-6 col-6 m-auto" style="padding-bottom: 9%;">
                         <div class="info-box bg-gradient-info">
                             <span class="info-box-icon"><i class="fas fa-users"></i></span>
                             <?php $percent = $revenue->total_amount > 0 ? number_format(($total_other_collection * 100) / $revenue->total_amount, 1) : 0;?>
