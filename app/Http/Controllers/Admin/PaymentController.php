@@ -2,11 +2,15 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\DataTables\PaymentDataTable;
+use App\Models\Filling;
+use App\Models\RevenueFule;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use App\Models\Payment;
 
 use App\Http\Controllers\Validations\PaymentRequest;
+use Illuminate\Support\Facades\DB;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -149,6 +153,7 @@ class PaymentController extends Controller
 		}
 
 		it()->delete('payment',$id);
+		Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
 		$payment->delete();
 		return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
 	}
@@ -164,7 +169,8 @@ class PaymentController extends Controller
 				}
 
 				it()->delete('payment',$id);
-				$payment->delete();
+                Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
+                $payment->delete();
 			}
 			return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
 		}else {
@@ -174,7 +180,9 @@ class PaymentController extends Controller
 			}
 
 			it()->delete('payment',$data);
-			$payment->delete();
+            Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
+
+            $payment->delete();
 			return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
 		}
 	}
