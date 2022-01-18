@@ -30,6 +30,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
         ////////AdminRoutes/*Start*///////////////
         Route::get('/', 'Admin\Dashboard@home');
+        Route::get('/statistics', 'Admin\Dashboard@statistics');
         Route::any('logout', 'Admin\AdminAuthenticated@logout');
         Route::get('account', 'Admin\AdminAuthenticated@account');
         Route::post('account', 'Admin\AdminAuthenticated@account_post');
@@ -127,6 +128,8 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
         Route::get('generate-pdf/{id}', 'Admin\EmployeeController@pdfview')->name('generate-pdf');
         Route::get('print-view', 'Admin\EmployeeController@printView')->name('print-view');
+		Route::resource('generalrevenue','Admin\GeneralRevenueController');
+		Route::post('generalrevenue/multi_delete','Admin\GeneralRevenueController@multi_delete');
 		////////AdminRoutes/*End*///////////////
     });
 

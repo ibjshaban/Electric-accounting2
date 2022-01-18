@@ -9,6 +9,10 @@ class Dashboard extends Controller {
 		return view('admin.home', ['title' => trans('admin.dashboard')]);
 	}
 
+	public function statistics() {
+		return view('admin.statistics', ['title' => 'الاحصائيات']);
+	}
+
 	public function prepareKey($key) {
 		$setting = setting()->theme_setting;
 		if (!empty($setting) && !empty($setting->{$key})) {
