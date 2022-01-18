@@ -9,6 +9,14 @@ with font-awesome or any other icon font library -->
     </p>
   </a>
 </li>
+<li class="nav-item">
+  <a href="{{ aurl('statistics') }}" class="nav-link {{ active_link("statistics",'active') }}">
+      <i class="fas fa-chart-bar"></i>
+    <p>
+      الاحصائيات
+    </p>
+  </a>
+</li>
 @if(admin()->user()->role('settings_show'))
 <li class="nav-item">
   <a href="{{ aurl('settings') }}" class="nav-link  {{ active_link('settings','active') }}">
@@ -446,7 +454,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('payment','active')}}">
     <i class="nav-icon fa fa-icons"></i>
     <p>
-      {{trans('admin.payment')}} 
+      {{trans('admin.payment')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
@@ -467,3 +475,31 @@ with font-awesome or any other icon font library -->
 </li>
 @endif
 <!--payment_end_route-->
+
+<!--generalrevenue_start_route-->
+@if(admin()->user()->role("generalrevenue_show"))
+<li class="nav-item {{active_link('generalrevenue','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('generalrevenue','active')}}">
+    <i class="nav-icon fa fa-box-tissue"></i>
+    <p>
+      {{trans('admin.generalrevenue')}}
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('generalrevenue')}}" class="nav-link  {{active_link('generalrevenue','active')}}">
+        <i class="fa fa-box-tissue nav-icon"></i>
+        <p>{{trans('admin.generalrevenue')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('generalrevenue/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--generalrevenue_end_route-->
