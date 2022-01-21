@@ -6,6 +6,8 @@
 * [it v 1.6.36]
 */
 return [
+	"withdrawals"=>["create","read","update","delete"],
+	"payments"=>["create","read","update","delete"],
 	"generalrevenue"=>["create","read","update","delete"],
 	"payment"=>["create","read","update","delete"],
 	"employee"=>["create","read","update","delete"],

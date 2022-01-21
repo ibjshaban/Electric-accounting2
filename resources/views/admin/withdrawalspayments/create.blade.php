@@ -14,7 +14,7 @@
 			<span class="sr-only"></span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-				<a href="{{ aurl('generalrevenue') }}"  style="color:#343a40"  class="dropdown-item">
+				<a href="{{ aurl(request()->type == '0' ? 'withdrawals' : 'payments')  }}"  style="color:#343a40"  class="dropdown-item">
 				<i class="fas fa-list"></i> {{ trans('admin.show_all') }}</a>
 			</div>
 		</div>
@@ -26,8 +26,7 @@
 	</div>
 	<!-- /.card-header -->
 	<div class="card-body">
-
-{!! Form::open(['url'=>aurl('/generalrevenue'),'id'=>'generalrevenue','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+{!! Form::open(['url'=>aurl('/'. (request()->type == "0" ? 'withdrawals' : 'payments')),'id'=>'withdrawalspayments','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
 <div class="row">
 
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -36,13 +35,12 @@
             {!! Form::text('name',old('name'),['class'=>'form-control','placeholder'=>trans('admin.name')]) !!}
     </div>
 </div>
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-        <div class="form-group">
-            <?php echo Form::label('price',trans('admin.price'),['class'=>' control-label']); ?>
-
-            <?php echo Form::number('price',old('price'),['class'=>'form-control', 'step'=>'0.0001','min'=> 0, 'placeholder'=> 'المبلغ']); ?>
-        </div>
+<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+    <div class="form-group">
+        {!! Form::label('price',trans('admin.price'),['class'=>' control-label']) !!}
+        {!! Form::number('price',old('price'),['class'=>'form-control','placeholder'=>'سعر(لتر)','step'=>"0.001",'min'=>"0",'id'=> 'filling_price','required'=>'required','oninput'=>'changeAllPrice(this)']) !!}
     </div>
+</div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <!-- Date range -->
     <div class="form-group">

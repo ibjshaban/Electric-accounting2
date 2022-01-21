@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "71036b30-8832-4fa3-9a35-7989a4c655be",
+        "_postman_id": "d5f09413-8c7e-4063-b70c-67579a6309ea",
         "name": "Laravel",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
@@ -1815,6 +1815,10 @@
                     "response": []
                 }
             ]
+        },
+        {
+            "name": "withdrawalspayments",
+            "item": []
         },
         {
             "name": "debt",
