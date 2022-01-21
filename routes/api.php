@@ -60,6 +60,8 @@ Route::group(['middleware' => ['ApiLang', 'cors'], 'prefix' => 'v1', 'namespace'
 			Route::post("payment/multi_delete","PaymentControllerApi@multi_delete"); 
 			Route::apiResource("generalrevenue","GeneralRevenueControllerApi", ["as" => "api.generalrevenue"]); 
 			Route::post("generalrevenue/multi_delete","GeneralRevenueControllerApi@multi_delete"); 
+			Route::apiResource("withdrawalspayments","WithdrawalsPaymentsControllerApi", ["as" => "api.withdrawalspayments"]); 
+			Route::post("withdrawalspayments/multi_delete","WithdrawalsPaymentsControllerApi@multi_delete"); 
 			//Auth-Api-End//
 	});
 	// Insert your Api Here End //

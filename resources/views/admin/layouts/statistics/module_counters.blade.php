@@ -242,3 +242,18 @@
     </div>
 </div>
 <!--generalrevenue_end-->
+<!--withdrawalspayments_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\WithdrawalsPayments::count()) }}</h3>
+        <p>{{ trans("admin.withdrawalspayments") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-icons"></i>
+      </div>
+      <a href="{{ aurl("withdrawalspayments") }}" class="small-box-footer">{{ trans("admin.withdrawalspayments") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--withdrawalspayments_end-->

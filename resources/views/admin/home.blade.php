@@ -63,11 +63,49 @@
                     </div>
                 </div>
                 <div class="leftSide col-md-6">
-
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-gradient-olive">
+                            <span class="info-box-icon"><i class="fa fa-box-open"></i></span>
+                            <a href="#" style="color: #ffffff;">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">الصندوق</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    @if(admin()->user()->role("withdrawals_show"))
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
-
+                            <a href="{{aurl('/withdrawals')}}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">مسحوبات شخصية</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    @endif
+                    @if(admin()->user()->role("payments_show"))
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <a href="{{aurl('/payments')}}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">دفعات التجار</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    @endif
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
                             <a href="#">
                                 <div class="info-box-content">
                                     <span class="info-box-text">الدفتر</span>
@@ -87,7 +125,6 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- /.card-body -->

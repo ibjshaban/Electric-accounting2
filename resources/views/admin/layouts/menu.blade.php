@@ -503,3 +503,56 @@ with font-awesome or any other icon font library -->
 </li>
 @endif
 <!--generalrevenue_end_route-->
+
+<!--withdrawals_start_route-->
+@if(admin()->user()->role("withdrawals_show"))
+<li class="nav-item {{active_link('withdrawals','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('withdrawals','active')}}">
+    <i class="nav-icon fa fa-icons"></i>
+    <p>
+      {{trans('admin.withdrawals')}}
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('withdrawals')}}" class="nav-link  {{active_link('withdrawals','active')}}">
+        <i class="fa fa-icons nav-icon"></i>
+        <p>{{trans('admin.withdrawals')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('withdrawals/0/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+@if(admin()->user()->role("payments_show"))
+<li class="nav-item {{active_link('payments','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('payments','active')}}">
+    <i class="nav-icon fa fa-icons"></i>
+    <p>
+      {{trans('admin.payments')}}
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('payments')}}" class="nav-link  {{active_link('payments','active')}}">
+        <i class="fa fa-icons nav-icon"></i>
+        <p>{{trans('admin.payments')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('payments/1/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--payments_end_route-->
