@@ -205,7 +205,10 @@ class CollectionController extends Controller
     {
         $revenue = revenue::find($id)->name;
         $collection = revenue::find($id);
-        return view('admin.collection.revenue-collection.create', ['title' => trans('admin.create') . '/(' . $revenue . ')', 'collection' => $collection]);
+        $revenue_total_amount= revenue::whereId($id)->first()->total_amount;
+        $sum_employee_collection= Collection::where(['revenue_id'=>$id])->whereNotNull('employee_id')->sum('amount');
+        $remain_total= $revenue_total_amount - $sum_employee_collection;
+        return view('admin.collection.revenue-collection.create', ['title' => trans('admin.create') . '/(' . $revenue . ')', 'collection' => $collection,'remain_total'=> $remain_total]);
     }
 
     //Create collection by one revenue
@@ -218,26 +221,39 @@ class CollectionController extends Controller
         ]);
         $data = $request->except("_token", "_method");
         $data['revenue_id'] = $id;
-
-        for ($i = 0; $i < count($data['amount'] ?? []); $i++) {
-            if ($data['employee_id'][$i] == "" && $data['source'][$i] == "") {
-                return redirectWithError(aurl('revenue-collection/' . $id . '/create'), 'ادخل احدى القيمتان (الموظف او المحصل)');
-            } elseif ($data['employee_id'][$i] != '' && $data['source'][$i] != '') {
-                return redirectWithError(aurl('revenue-collection/' . $id . '/create'), 'لا يمكن ادخال القيمتان (الموظف و المحصل) معاً');
+        $revenue_total_amount= revenue::whereId($id)->first()->total_amount;
+        $sum_request_amount= 0;
+        for ($i = 0; $i < count($data['amount'] ?? []); $i++){
+            if ($data['employee_id'][$i]){
+                $sum_request_amount += $data['amount'][$i];
             }
-
-            Collection::create([
-                'employee_id' => $data['employee_id'][$i],
-                'source' => $data['source'][$i],
-                'amount' => InsertLargeNumber($data['amount'][$i], 2),
-                'collection_date' => $data['collection_date'][$i],
-                'note' => $data['note'][$i],
-                'revenue_id' => $data['revenue_id'],
-            ]);
         }
+        $sum_employee_collection= Collection::where(['revenue_id'=>$id])->whereNotNull('employee_id')->sum('amount');
+        $remain_total= $revenue_total_amount - $sum_employee_collection;
+        if ($revenue_total_amount > $sum_employee_collection){
+            if ($remain_total >= $sum_request_amount){
+                for ($i = 0; $i < count($data['amount'] ?? []); $i++) {
+                    if ($data['employee_id'][$i] == "" && $data['source'][$i] == "") {
+                        return redirectWithError(aurl('revenue-collection/' . $id . '/create'), 'ادخل احدى القيمتان (الموظف او المحصل)');
+                    } elseif ($data['employee_id'][$i] != '' && $data['source'][$i] != '') {
+                        return redirectWithError(aurl('revenue-collection/' . $id . '/create'), 'لا يمكن ادخال القيمتان (الموظف و المحصل) معاً');
+                    }
 
-        $redirect = isset($request["add_back"]) ? "/create" : "";
-        return redirectWithSuccess(aurl('revenue-collection/' . $id . $redirect), trans('admin.added'));
+                    Collection::create([
+                        'employee_id' => $data['employee_id'][$i],
+                        'source' => $data['source'][$i],
+                        'amount' => InsertLargeNumber($data['amount'][$i], 2),
+                        'collection_date' => $data['collection_date'][$i],
+                        'note' => $data['note'][$i],
+                        'revenue_id' => $data['revenue_id'],
+                    ]);
+                }
+                $redirect = isset($request["add_back"]) ? "/create" : "";
+                return redirectWithSuccess(aurl('revenue-collection/' . $id . $redirect), trans('admin.added'));
+            }
+        }
+        return redirectWithError(aurl('revenue-collection/' . $id.'/create'), $remain_total.'مجموع التحصيلات المدخلة أكبر من المبلغ المطلوب للمجموعة, المبلغ المتبقي لتحصيل مبلغ المجموعة يساوي ')->withInput();
+
     }
 
     public function revenueCollectionEdit($id)
@@ -259,7 +275,6 @@ class CollectionController extends Controller
 
         // Check Record Exists
         $collection = Collection::find($id);
-        //$collections = Collection::all();
         $revenu_id = $collection->revenue_id;
         if (is_null($collection) || empty($collection)) {
             return backWithError(trans("admin.undefinedRecord"), aurl("revenue-collection"));
@@ -283,7 +298,6 @@ class CollectionController extends Controller
             ]);
             //DB::table('collections')->update([$data]);
         }*/
-
         $redirect = isset($request["save_back"]) ? "/" . $collection->revenue_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-collection/' . $collection->revenue_id . $redirect), trans('admin.updated'));
     }

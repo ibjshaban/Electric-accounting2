@@ -96,15 +96,11 @@
                     <div class="col-lg-6 col-6 m-auto pb-5">
                         <div class="info-box bg-gradient-info">
                             <span class="info-box-icon"><i class="fas fa-users"></i></span>
-                            <?php $percent = $revenue->total_amount > 0 ? number_format(($total_other_collection * 100) / $revenue->total_amount, 1) : 0;?>
                             <a href="{{ aurl('revenue-collection/'.$revenue->id) }}" style="color: #ffffff;">
                                 <div class="info-box-content">
                                     <span class="info-box-text">الجهات الاخرى</span>
                                     <span class="info-box-number">{{ShekelFormat($total_other_collection)}}</span>
-                                    <span class="info-box-number">{{$percent}}%</span>
-                                    <div class="progress">
-                                        <div class="progress-bar" style="width: {{$percent}}%"></div>
-                                    </div>
+
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
