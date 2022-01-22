@@ -31,7 +31,7 @@
 
             {!! Form::open(['url'=>aurl('/revenue-collection/create/'.$collection->id),'id'=>'collection','files'=>true,'class'=>'form-horizontal form-row-seperated', 'method' => 'post']) !!}
             <div class="row">
-
+                <span>المبلغ المتبقي للتحصيل كي يصل للمبلغ المطلوب يساوي  {{ShekelFormat($remain_total)}}</span>
                 <table class="table table-head-fixed text-nowrap">
                     <thead>
                     <tr class="element">
@@ -44,30 +44,80 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="element">
-                        <td>
-                            {!! Form::select('employee_id[]',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control employeeSel','placeholder'=>trans('admin.choose')]) !!}
-                        </td>
-                        <td>
-                            <input type="text" class="source" name="source[]" placeholder="جهة اخرى">
-                        </td>
-                        <td>
-                            <input type="number" class="amount" name="amount[]" step="0.001" min="0"
-                                   placeholder="المبلغ" oninput="changeAllPrice(this)" required>
-                        </td>
-                        <td>
-                            <input type="date" name="collection_date[]" placeholder="التاريخ" required>
-                        </td>
-                        <td>
-                            <input type="text" name="note[]" placeholder="الملاحظات">
-                        </td>
-                        <td>
-                            <button type="button" name="add" class="btn btn-danger btn-flat"
-                                    onclick="removeDetail(this)">
-                                <i class="fa fa-minus"></i>
-                            </button>
-                        </td>
-                    </tr>
+
+                    @if(old('amount'))
+                        @for($i=0; $i < count(old('amount')); $i++)
+                        <tr class="element">
+
+                            @if((old('employee_id')[$i]))
+                                <td>
+                                    <select class="form-control employeeSel" name="employee_id[]">
+                                        <option >..... اختر .....</option>
+                                        @foreach(App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->get() as $item)
+                                            <option value="{{$item->id}}" {{$item->id == old('employee_id')[$i] ? "selected" : ""}}>{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="source" name="source[]" placeholder="جهة اخرى">
+                                </td>
+                            @else
+                                <td>
+                                    <select class="form-control employeeSel" name="employee_id[]">
+                                        <option selected="selected" value="">..... اختر .....</option>
+                                        @foreach(App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->get() as $item)
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="source" value="{{old('source')[$i]}}" name="source[]" placeholder="جهة اخرى">
+                                </td>
+                            @endif
+                            <td>
+                                <input type="number" value="{{old('amount')[$i]}}" class="amount" name="amount[]" step="0.001" min="0"
+                                       placeholder="المبلغ" oninput="changeAllPrice(this)" required>
+                            </td>
+                            <td>
+                                <input type="date" name="collection_date[]" value="{{old('collection_date')[$i]}}" placeholder="التاريخ" required>
+                            </td>
+                            <td>
+                                <input type="text" name="note[]" value="{{old('note')[$i]}}" placeholder="الملاحظات">
+                            </td>
+                            <td>
+                                <button type="button" name="add" class="btn btn-danger btn-flat"
+                                        onclick="removeDetail(this)">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endfor
+                    @else
+                        <tr class="element">
+                            <td>
+                                {!! Form::select('employee_id[]',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control employeeSel','placeholder'=>trans('admin.choose')]) !!}
+                            </td>
+                            <td>
+                                <input type="text" class="source" name="source[]" placeholder="جهة اخرى">
+                            </td>
+                            <td>
+                                <input type="number" class="amount" name="amount[]" step="0.001" min="0"
+                                       placeholder="المبلغ" oninput="changeAllPrice(this)" required>
+                            </td>
+                            <td>
+                                <input type="date" name="collection_date[]" placeholder="التاريخ" required>
+                            </td>
+                            <td>
+                                <input type="text" name="note[]" placeholder="الملاحظات">
+                            </td>
+                            <td>
+                                <button type="button" name="add" class="btn btn-danger btn-flat"
+                                        onclick="removeDetail(this)">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endif
                     </tbody>
                 </table>
 
@@ -128,7 +178,7 @@
                 function addNewDetails() {
                     $('.element').last().after(
                         '<tr class="element"> ' +
-                        '<td> {!! Form::select('employee_id[]',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),old('employee_id'),['class'=>'form-control employeeSel','id'=>'employee_id','placeholder'=>trans('admin.choose')]) !!} </td>' +
+                        '<td> {!! Form::select('employee_id[]',App\Models\Employee::where('type_id',1)->where('city_id',\App\Models\revenue::whereId(request()->route('id'))->first()->city_id)->pluck('name','id'),null,['class'=>'form-control employeeSel','placeholder'=>trans('admin.choose')]) !!} </td>' +
                         '<td> <input type="text" class="source" name="source[]" placeholder="جهة اخرى"> </td>' +
                         '<td> <input type="number" class="amount" name="amount[]" step="0.001" min="0" placeholder="المبلغ" oninput="changeAllPrice(this)" required> </td>' +
                         '<td> <input type="date" name="collection_date[]" placeholder="التاريخ" required> </td>' +

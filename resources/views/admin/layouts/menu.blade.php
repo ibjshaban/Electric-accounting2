@@ -508,7 +508,7 @@ with font-awesome or any other icon font library -->
 @if(admin()->user()->role("withdrawals_show"))
 <li class="nav-item {{active_link('withdrawals','menu-open')}} ">
   <a href="#" class="nav-link {{active_link('withdrawals','active')}}">
-    <i class="nav-icon fa fa-icons"></i>
+    <i class="nav-icon fa fa-people-arrows"></i>
     <p>
       {{trans('admin.withdrawals')}}
       <i class="right fas fa-angle-left"></i>
@@ -517,7 +517,7 @@ with font-awesome or any other icon font library -->
   <ul class="nav nav-treeview">
     <li class="nav-item">
       <a href="{{aurl('withdrawals')}}" class="nav-link  {{active_link('withdrawals','active')}}">
-        <i class="fa fa-icons nav-icon"></i>
+        <i class="fa fa-people-arrows nav-icon"></i>
         <p>{{trans('admin.withdrawals')}} </p>
       </a>
     </li>
@@ -533,7 +533,7 @@ with font-awesome or any other icon font library -->
 @if(admin()->user()->role("payments_show"))
 <li class="nav-item {{active_link('payments','menu-open')}} ">
   <a href="#" class="nav-link {{active_link('payments','active')}}">
-    <i class="nav-icon fa fa-icons"></i>
+    <i class="nav-icon fa fa-universal-access"></i>
     <p>
       {{trans('admin.payments')}}
       <i class="right fas fa-angle-left"></i>
@@ -542,7 +542,7 @@ with font-awesome or any other icon font library -->
   <ul class="nav nav-treeview">
     <li class="nav-item">
       <a href="{{aurl('payments')}}" class="nav-link  {{active_link('payments','active')}}">
-        <i class="fa fa-icons nav-icon"></i>
+        <i class="fa fa-universal-access nav-icon"></i>
         <p>{{trans('admin.payments')}} </p>
       </a>
     </li>
