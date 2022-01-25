@@ -179,6 +179,9 @@ return [
     "discount" => "الخصم",
     "price" => "السعر",
     "name" => "البيان",
+    "withdrawalspayments"	=>		"مسحوبات شخصية و دفعات التجار",
+    "payments"	=>		"دفعات التجار",
+    "withdrawals"	=>		"مسحوبات شخصية",
     "basicparentitems" => "عناصر الاساسية",
     "startup" => "المصاريف الاساسية",
     "heavy-expenses" => "المصاريف الثقيلة",
@@ -188,5 +191,5 @@ return [
     "heavy-expenses-items" => "عناصر المصاريف الاساسية",
     "rentals-items" => "عناصر المصاريف الاساسية",
     "other-notebooks-items" => "عناصر المصاريف الاساسية",
-
+    "generalrevenue" => "الإيرادات العامة",
 ];

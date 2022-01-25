@@ -46,22 +46,28 @@ Route::group(['middleware' => ['ApiLang', 'cors'], 'prefix' => 'v1', 'namespace'
 			Route::post("debt/multi_delete","DebtControllerApi@multi_delete");
 			Route::apiResource("salary","SalaryControllerApi", ["as" => "api.salary"]);
 			Route::post("salary/multi_delete","SalaryControllerApi@multi_delete");
-			Route::apiResource("expenses","ExpensesControllerApi", ["as" => "api.expenses"]); 
-			Route::post("expenses/multi_delete","ExpensesControllerApi@multi_delete"); 
-			Route::apiResource("otheroperation","OtherOperationControllerApi", ["as" => "api.otheroperation"]); 
-			Route::post("otheroperation/multi_delete","OtherOperationControllerApi@multi_delete"); 
-			Route::apiResource("collection","CollectionControllerApi", ["as" => "api.collection"]); 
-			Route::post("collection/multi_delete","CollectionControllerApi@multi_delete"); 
-			Route::apiResource("filling","FillingControllerApi", ["as" => "api.filling"]); 
-			Route::post("filling/multi_delete","FillingControllerApi@multi_delete"); 
-			Route::apiResource("revenuefule","RevenueFuleControllerApi", ["as" => "api.revenuefule"]); 
-			Route::post("revenuefule/multi_delete","RevenueFuleControllerApi@multi_delete"); 
-			Route::apiResource("payment","PaymentControllerApi", ["as" => "api.payment"]); 
-			Route::post("payment/multi_delete","PaymentControllerApi@multi_delete"); 
-			Route::apiResource("basicparents","BasicParentsApi", ["as" => "api.basicparents"]); 
-			Route::post("basicparents/multi_delete","BasicParentsApi@multi_delete"); 
-			Route::apiResource("basicparentitems","BasicParentItemsApi", ["as" => "api.basicparentitems"]); 
-			Route::post("basicparentitems/multi_delete","BasicParentItemsApi@multi_delete"); 
+			Route::apiResource("expenses","ExpensesControllerApi", ["as" => "api.expenses"]);
+			Route::post("expenses/multi_delete","ExpensesControllerApi@multi_delete");
+			Route::apiResource("otheroperation","OtherOperationControllerApi", ["as" => "api.otheroperation"]);
+			Route::post("otheroperation/multi_delete","OtherOperationControllerApi@multi_delete");
+			Route::apiResource("collection","CollectionControllerApi", ["as" => "api.collection"]);
+			Route::post("collection/multi_delete","CollectionControllerApi@multi_delete");
+			Route::apiResource("filling","FillingControllerApi", ["as" => "api.filling"]);
+			Route::post("filling/multi_delete","FillingControllerApi@multi_delete");
+			Route::apiResource("revenuefule","RevenueFuleControllerApi", ["as" => "api.revenuefule"]);
+			Route::post("revenuefule/multi_delete","RevenueFuleControllerApi@multi_delete");
+			Route::apiResource("payment","PaymentControllerApi", ["as" => "api.payment"]);
+			Route::post("payment/multi_delete","PaymentControllerApi@multi_delete");
+
+			Route::apiResource("basicparents","BasicParentsApi", ["as" => "api.basicparents"]);
+			Route::post("basicparents/multi_delete","BasicParentsApi@multi_delete");
+			Route::apiResource("basicparentitems","BasicParentItemsApi", ["as" => "api.basicparentitems"]);
+			Route::post("basicparentitems/multi_delete","BasicParentItemsApi@multi_delete");
+
+			Route::apiResource("generalrevenue","GeneralRevenueControllerApi", ["as" => "api.generalrevenue"]);
+			Route::post("generalrevenue/multi_delete","GeneralRevenueControllerApi@multi_delete");
+			Route::apiResource("withdrawalspayments","WithdrawalsPaymentsControllerApi", ["as" => "api.withdrawalspayments"]);
+			Route::post("withdrawalspayments/multi_delete","WithdrawalsPaymentsControllerApi@multi_delete");
 			//Auth-Api-End//
 	});
 	// Insert your Api Here End //

@@ -8,6 +8,9 @@
 return [
 	"basicparentitems"=>["create","read","update","delete"],
 	"basicparents"=>["create","read","update","delete"],
+    "withdrawals"=>["create","read","update","delete"],
+	"payments"=>["create","read","update","delete"],
+	"generalrevenue"=>["create","read","update","delete"],
 	"payment"=>["create","read","update","delete"],
 	"employee"=>["create","read","update","delete"],
 	"salary"=>["create","read","update","delete"],

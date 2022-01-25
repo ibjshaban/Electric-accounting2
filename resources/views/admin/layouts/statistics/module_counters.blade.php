@@ -227,11 +227,13 @@
     </div>
 </div>
 <!--payment_end-->
-<!--basicparents_start-->
+
+<!--generalrevenue_start-->
 <div class="col-lg-3 col-6">
     <!-- small box -->
     <div class="small-box bg-primary">
       <div class="inner">
+
         <h3>{{ mK(App\Models\BasicParent::count()) }}</h3>
         <p>{{ trans("admin.basicparents") }}</p>
       </div>
@@ -243,10 +245,23 @@
 </div>
 <!--basicparents_end-->
 <!--basicparentitems_start-->
+
+        <h3>{{ mK(App\Models\GeneralRevenue::count()) }}</h3>
+        <p>{{ trans("admin.generalrevenue") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-box-tissue"></i>
+      </div>
+      <a href="{{ aurl("generalrevenue") }}" class="small-box-footer">{{ trans("admin.generalrevenue") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--generalrevenue_end-->
+<!--withdrawalspayments_start-->
 <div class="col-lg-3 col-6">
     <!-- small box -->
     <div class="small-box bg-primary">
       <div class="inner">
+
         <h3>{{ mK(App\Models\BasicParentItem::count()) }}</h3>
         <p>{{ trans("admin.basicparentitems") }}</p>
       </div>
@@ -257,3 +272,14 @@
     </div>
 </div>
 <!--basicparentitems_end-->
+
+        <h3>{{ mK(App\Models\WithdrawalsPayments::count()) }}</h3>
+        <p>{{ trans("admin.withdrawalspayments") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-icons"></i>
+      </div>
+      <a href="{{ aurl("withdrawalspayments") }}" class="small-box-footer">{{ trans("admin.withdrawalspayments") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--withdrawalspayments_end-->
