@@ -75,6 +75,54 @@
                             <!-- /.info-box-content -->
                         </div>
                     </div>
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <a href="{{ aurl('startup') }}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">المصاريف الاساسية</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <a href="{{ aurl('heavy-expenses') }}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">المصاريف الثقيلة</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <a href="{{ aurl('rentals') }}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">دفتر الايجارات</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <a href="{{ aurl('other-notebooks') }}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">دفاتر أخرى</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
                     @if(admin()->user()->role("withdrawals_show"))
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
@@ -103,18 +151,7 @@
                         </div>
                     </div>
                     @endif
-                    <div class="col-lg-6 col-6 m-auto">
-                        <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
-                            <a href="#">
-                                <div class="info-box-content">
-                                    <span class="info-box-text">الدفتر</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
-                                </div>
-                            </a>
-                            <!-- /.info-box-content -->
-                        </div>
-                    </div>
+
                     <div class="col-lg-6 col-md-6 m-auto pt-3">
                         <div class="info-box bg-gradient-navy">
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
