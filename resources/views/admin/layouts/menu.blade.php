@@ -446,7 +446,7 @@ with font-awesome or any other icon font library -->
   <a href="#" class="nav-link {{active_link('payment','active')}}">
     <i class="nav-icon fa fa-icons"></i>
     <p>
-      {{trans('admin.payment')}} 
+      {{trans('admin.payment')}}
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
@@ -467,3 +467,79 @@ with font-awesome or any other icon font library -->
 </li>
 @endif
 <!--payment_end_route-->
+
+<!--basicparents_start_route-->
+@if(admin()->user()->role("basicparents_show"))
+<li class="nav-item {{active_link('basicparents','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('basicparents','active')}}">
+    <i class="nav-icon fa fa-icons"></i>
+    <p>
+      {{trans('admin.basicparents')}}
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('basicparents')}}" class="nav-link  {{active_link('basicparents','active')}}">
+        <i class="fa fa-icons nav-icon"></i>
+        <p>{{trans('admin.basicparents')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('basicparents/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('startup') }}" class="nav-link">
+        <p>مصاريف اساسية</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('heavy-expenses') }}" class="nav-link">
+        <p>مصاريف ثقيلة</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('rentals') }}" class="nav-link">
+        <p>دفتر الايجارات</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('other-notebooks') }}" class="nav-link">
+        <p>دفاتر اخرى</p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--basicparents_end_route-->
+
+<!--basicparentitems_start_route-->
+@if(admin()->user()->role("basicparentitems_show"))
+<li class="nav-item {{active_link('basicparentitems','menu-open')}} ">
+  <a href="#" class="nav-link {{active_link('basicparentitems','active')}}">
+    <i class="nav-icon fa fa-sitemap"></i>
+    <p>
+      {{trans('admin.basicparentitems')}}
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{{aurl('basicparentitems')}}" class="nav-link  {{active_link('basicparentitems','active')}}">
+        <i class="fa fa-sitemap nav-icon"></i>
+        <p>{{trans('admin.basicparentitems')}} </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ aurl('basicparentitems/create') }}" class="nav-link">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>{{trans('admin.create')}} </p>
+      </a>
+    </li>
+  </ul>
+</li>
+@endif
+<!--basicparentitems_end_route-->

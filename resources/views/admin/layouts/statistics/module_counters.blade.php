@@ -227,3 +227,33 @@
     </div>
 </div>
 <!--payment_end-->
+<!--basicparents_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\BasicParent::count()) }}</h3>
+        <p>{{ trans("admin.basicparents") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-icons"></i>
+      </div>
+      <a href="{{ aurl("basicparents") }}" class="small-box-footer">{{ trans("admin.basicparents") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--basicparents_end-->
+<!--basicparentitems_start-->
+<div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>{{ mK(App\Models\BasicParentItem::count()) }}</h3>
+        <p>{{ trans("admin.basicparentitems") }}</p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-sitemap"></i>
+      </div>
+      <a href="{{ aurl("basicparentitems") }}" class="small-box-footer">{{ trans("admin.basicparentitems") }} <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<!--basicparentitems_end-->

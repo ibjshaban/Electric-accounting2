@@ -3,9 +3,11 @@
 * To implement in admingroups permissions
 * to remove CRUD from Validation remove route name
 * CRUD Role permission (create,read,update,delete)
-* [it v 1.6.36]
+* [it v 1.6.37]
 */
 return [
+	"basicparentitems"=>["create","read","update","delete"],
+	"basicparents"=>["create","read","update","delete"],
 	"payment"=>["create","read","update","delete"],
 	"employee"=>["create","read","update","delete"],
 	"salary"=>["create","read","update","delete"],
