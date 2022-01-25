@@ -126,8 +126,52 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::resource('payment','Admin\PaymentController');
 		Route::post('payment/multi_delete','Admin\PaymentController@multi_delete');
 
+		// PDF laravel-snappy
         Route::get('generate-pdf/{id}', 'Admin\EmployeeController@pdfview')->name('generate-pdf');
         Route::get('print-view', 'Admin\EmployeeController@printView')->name('print-view');
+
+
+        // Start basic parent
+		Route::resource('basicparents','Admin\BasicParents');
+		Route::post('basicparents/multi_delete','Admin\BasicParents@multi_delete');
+
+		//start-up basic parent
+        Route::get('startup','Admin\BasicParents@indexStartup');
+        Route::get('startup/create','Admin\BasicParents@createStartup');
+        Route::post('startup/store','Admin\BasicParents@storeStartup');
+        Route::get('startup/{id}/edit','Admin\BasicParents@editStartup');
+        Route::put('startup/update/{id}','Admin\BasicParents@updateStartup');
+
+        //heavy-expenses basic parent
+        Route::get('heavy-expenses','Admin\BasicParents@indexStartup');
+        Route::get('heavy-expenses/create','Admin\BasicParents@createStartup');
+        Route::post('heavy-expenses/store','Admin\BasicParents@storeStartup');
+        Route::get('heavy-expenses/{id}/edit','Admin\BasicParents@editStartup');
+        Route::put('heavy-expenses/update/{id}','Admin\BasicParents@updateStartup');
+
+        //rentals basic parent
+        Route::get('rentals','Admin\BasicParents@indexStartup');
+        Route::get('rentals/create','Admin\BasicParents@createStartup');
+        Route::post('rentals/store','Admin\BasicParents@storeStartup');
+        Route::get('rentals/{id}/edit','Admin\BasicParents@editStartup');
+        Route::put('rentals/update/{id}','Admin\BasicParents@updateStartup');
+
+        //rentals basic parent
+        Route::get('other-notebooks','Admin\BasicParents@indexStartup');
+        Route::get('other-notebooks/create','Admin\BasicParents@createStartup');
+        Route::post('other-notebooks/store','Admin\BasicParents@storeStartup');
+        Route::get('other-notebooks/{id}/edit','Admin\BasicParents@editStartup');
+        Route::put('other-notebooks/update/{id}','Admin\BasicParents@updateStartup');
+
+        // Items
+        Route::resource('basicparentitems','Admin\BasicParentItems');
+        Route::post('basicparentitems/multi_delete','Admin\BasicParentItems@multi_delete');
+
+        Route::get('startup-items/{id}/create','Admin\BasicParentItems@create');
+        Route::post('startup-items/store/{id}','Admin\BasicParentItems@store');
+
+        ////////AdminRoutes/*End*///////////////
+
 		Route::resource('generalrevenue','Admin\GeneralRevenueController');
 		Route::post('generalrevenue/multi_delete','Admin\GeneralRevenueController@multi_delete');
 
@@ -152,6 +196,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 		Route::post('withdrawals/multi_delete','Admin\WithdrawalsPaymentsController@multi_delete_withdrawals')->name('multi_delete_withdrawals');
 		Route::post('payments/multi_delete','Admin\WithdrawalsPaymentsController@multi_delete_payments')->name('multi_delete_payments');
 		////////AdminRoutes/*End*///////////////
+
     });
 
 });

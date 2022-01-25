@@ -171,7 +171,7 @@ if (!function_exists('redirectWithError')) {
 if (!function_exists('backWithSuccess')) {
 	function backWithSuccess($msg = null, $url = null) {
 		if (request()->ajax() || !request()->ajax()) {
-			!empty($msg) && !is_null($msg) ? session()->flash('error', $msg) : '';
+			!empty($msg) && !is_null($msg) ? session()->flash('success', $msg) : '';
 		}
 
 		if (request()->ajax() or request()->wantsJson()) {
