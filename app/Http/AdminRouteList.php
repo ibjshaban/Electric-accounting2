@@ -6,6 +6,7 @@
 * [it v 1.6.37]
 */
 return [
+	"notebooks"=>["create","read","update","delete"],
 	""=>["create","read","update","delete"],
 	"subitems"=>["create","read","update","delete"],
 	"parentsubitems"=>["create","read","update","delete"],
