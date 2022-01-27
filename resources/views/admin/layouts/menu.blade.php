@@ -504,6 +504,8 @@ with font-awesome or any other icon font library -->
         </ul>
     </li>
 @endif
+<!--withdrawals_end_route-->
+<!--payments_start_route-->
 @if(admin()->user()->role("payments_show"))
     <li class="nav-item {{active_link('payments','menu-open')}} ">
         <a href="#" class="nav-link {{active_link('payments','active')}}">
@@ -529,10 +531,10 @@ with font-awesome or any other icon font library -->
         </ul>
     </li>
 @endif
-
-
-    <li class="nav-item {{active_link('payments','menu-open')}} ">
-        <a href="#" class="nav-link {{active_link('payments','active')}}">
+<!--payments_end_route-->
+<!--startup_start_route-->
+    <li class="nav-item {{active_link('startup','menu-open')}} ">
+        <a href="#" class="nav-link {{active_link('startup','active')}}">
             <i class="nav-icon fa fa-universal-access"></i>
             <p>
                 {{trans('admin.startup')}}
@@ -567,3 +569,30 @@ with font-awesome or any other icon font library -->
 
         </ul>
     </li>
+<!--startup_end_route-->
+@if(admin()->user()->role("notebooks_show"))
+    <li class="nav-item {{active_link('notebooks','menu-open')}} ">
+        <a href="#" class="nav-link {{active_link('notebooks','active')}}">
+            <i class="nav-icon fas fa-book-open"></i>
+            <p>
+                {{trans('admin.notebooks')}}
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{aurl('notebooks')}}" class="nav-link  {{active_link('notebooks','active')}}">
+                    <i class="fa fas fa-book-open nav-icon"></i>
+                    <p>{{trans('admin.notebooks')}} </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ aurl('notebooks/1/create') }}" class="nav-link">
+                    <i class="fas fa-plus nav-icon"></i>
+                    <p>{{trans('admin.create')}} </p>
+                </a>
+            </li>
+        </ul>
+    </li>
+@endif
+

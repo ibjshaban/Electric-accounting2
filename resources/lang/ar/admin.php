@@ -1,6 +1,5 @@
 <?php
 		return [
-		"price"	=>		"السعر",
 		"parentItem_id"	=>		"العنصر الاب",
 		"parentsubitems"	=>		"عناصر فرعية",
 		"basicparents"	=>		"القالب الاساسي",
@@ -176,7 +175,6 @@
 		"supplier_id"	=>		"المورد",
 		"payment"	=>		"الدفعات",
 		"basic_id"	=>		"الاب الاساسي",
-		"date"	=>		"التاريخ",
 		"discount"	=>		"الخصم",
 		"withdrawalspayments"	=>		"مسحوبات شخصية و دفعات التجار",
 		"payments"	=>		"دفعات التجار",
@@ -191,9 +189,13 @@
 		"rentals-items"	=>		"عناصر المصاريف الاساسية",
 		"other-notebooks-items"	=>		"عناصر المصاريف الاساسية",
 		"generalrevenue"	=>		"الإيرادات العامة",
-		"note"	=>		"ملاحظات",
 		"amount"	=>		"الكمية",
-		"name"	=>		"الاسم",
 		"subitems"	=>		"عناصر فرعية",
+		"note"	=>		"الملاحظات",
+		"name"	=>		"البيان",
+		"date"	=>		"التاريخ",
+		"price"	=>		"المبلغ",
+		"notebooks"	=>		"دفتر المفكرة",
+		"notebook"	=>		"دفتر المفكرة",
 
 ];
