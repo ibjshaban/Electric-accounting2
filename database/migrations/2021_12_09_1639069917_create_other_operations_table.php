@@ -16,15 +16,15 @@ class CreateOtherOperationsTable extends Migration
     {
         Schema::create('other_operations', function (Blueprint $table) {
             $table->bigIncrements('id');
-$table->foreignId("admin_id")->nullable()->constrained("admins")->onUpdate("cascade")->nullOnDelete();
+            $table->foreignId("admin_id")->nullable()->constrained("admins")->onUpdate("cascade")->nullOnDelete();
             $table->string('name');
             $table->double('price');
             $table->date('date');
             $table->string('note')->nullable();
             $table->foreignId("revenue_id")->nullable()->constrained("revenues")->references("id")->nullOnDelete();
-			$table->softDeletes();
+            $table->softDeletes();
 
-			$table->timestamps();
+            $table->timestamps();
         });
     }
 

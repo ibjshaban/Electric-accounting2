@@ -30,6 +30,36 @@
         <div class="card-body">
 
             {!! Form::open(['url'=>aurl('/startup-items/store/'.$id),'id'=>'basicparentitems','method'=>'post','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+            <div class="row pb-4">
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        {!! Form::label('name',trans('admin.name'),['class'=>' control-label']) !!}
+                        {!! Form::text('name',old('name'),['class'=>'form-control name parentName','placeholder'=>trans('admin.name')]) !!}
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        {!! Form::label('discount',trans('admin.discount'),['class'=>' control-label']) !!}
+                        {!! Form::number('discount',old('discount'),['class'=>'form-control parentDiscount','step'=>'0.00000001','placeholder'=>trans('admin.discount')])!!}
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
+                    <!-- Date range -->
+                    <div class="form-group">
+                        {!! Form::label('date',trans('admin.date')) !!}
+                        <div class="input-group">
+                            <div class="input-group-prepend parentDate">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                            </div>
+                            {!! Form::text('date',old('date'),['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.date'),'readonly'=>'readonly']) !!}
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
+                </div>
+            </div>
             {{--
                         <div class="row">
 
@@ -87,20 +117,20 @@
                 <table class="table table-head-fixed text-nowrap">
                     <thead>
                     <tr class="element">
-                        <th>البيان</th>
+                        {{--                        <th>البيان</th>--}}
                         <th>السعر</th>
                         @if($basicparent->item != '2')
-                            <th>الخصم</th>
+                            {{--                            <th>الخصم</th>--}}
                             <th>الكمية</th>
                         @endif
-                        <th>التاريخ</th>
+                        {{--                        <th>التاريخ</th>--}}
                         <th>الملاحظات</th>
                         <th>حذف</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="element">
-                        <td>
+                        <td hidden>
                             <input type="text" class="name" name="name[]" placeholder="البيان">
                         </td>
                         <td>
@@ -109,7 +139,7 @@
                         </td>
                         @if($basicparent->item != '2')
 
-                            <td>
+                            <td hidden>
                                 <input type="number" class="discount" name="discount[]" step="0.0000001" min="0"
                                        placeholder="المبلغ" required>
                             </td>
@@ -118,8 +148,8 @@
                                        placeholder="الكمية" oninput="changeAllPrice(this)" required>
                             </td>
                         @endif
-                        <td>
-                            <input type="date" name="date[]" placeholder="التاريخ" required>
+                        <td hidden>
+                            <input type="date" class="date" name="date[]" placeholder="التاريخ" required>
                         </td>
 
                         <td>
@@ -186,13 +216,13 @@
         function addNewDetails() {
             $('.element').last().after(
                 '<tr class="element"> ' +
-                '<td><input type="text" class="name" name="name[]" placeholder="البيان"></td>' +
+                '<td hidden><input type="text" class="name" name="name[]" placeholder="البيان"></td>' +
                 '<td> <input type="number" class="price" name="price[]" min="0" step="0.0000001" placeholder="السعر" oninput="changeAllPrice(this)"> </td>' +
                 @if($basicparent->item != '2')
-                    '<td> <input type="number" class="discount" name="discount[]" step="0.0000001" min="0" placeholder="المبلغ" required> </td>' +
-                    '<td> <input type="number" class="amount" name="amount[]" step="0.0000001" min="0" placeholder="الكمية" oninput="changeAllPrice(this)" required> </td>' +
+                    '<td hidden> <input type="number" class="discount" name="discount[]" step="0.0000001" min="0" placeholder="المبلغ" required> </td>' +
+                '<td> <input type="number" class="amount" name="amount[]" step="0.0000001" min="0" placeholder="الكمية" oninput="changeAllPrice(this)" required> </td>' +
                 @endif
-                    '<td> <input type="date" name="date[]" placeholder="التاريخ" required> </td>' +
+                    '<td hidden> <input type="date" value="' + $(".datepicker").val() + '" name="date[]" class="date" placeholder="التاريخ" required> </td>' +
                 '<td> <input type="text" name="note[]" placeholder="الملاحظات"> </td>' +
                 '<td>  <button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)"> <i class="fa fa-minus"></i> </button></td>' +
                 '</tr>'
@@ -253,6 +283,17 @@
             $('.card-body').removeAttr('data-target', '.modal').attr('data-toggle', 'modal');
         });*/
 
-
+        $(".parentName").on("keyup", function () {
+            var value = $(this).val();
+            $(".name").val(value);
+        });
+        $(".parentDiscount").on("keyup", function () {
+            var value = $(this).val();
+            $(".discount").val(value);
+        });
+        $(".datepicker").on("change", function () {
+            var value = $(this).val();
+            $(".date").val(value);
+        });
     </script>
 @endpush

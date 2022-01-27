@@ -6,9 +6,12 @@
 * [it v 1.6.37]
 */
 return [
+	""=>["create","read","update","delete"],
+	"subitems"=>["create","read","update","delete"],
+	"parentsubitems"=>["create","read","update","delete"],
 	"basicparentitems"=>["create","read","update","delete"],
 	"basicparents"=>["create","read","update","delete"],
-    "withdrawals"=>["create","read","update","delete"],
+	"withdrawals"=>["create","read","update","delete"],
 	"payments"=>["create","read","update","delete"],
 	"generalrevenue"=>["create","read","update","delete"],
 	"payment"=>["create","read","update","delete"],

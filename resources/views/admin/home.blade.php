@@ -115,6 +115,7 @@
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
                             <a href="{{ aurl('other-notebooks') }}">
+
                                 <div class="info-box-content">
                                     <span class="info-box-text">دفاتر أخرى</span>
                                     <span class="info-box-number">{{ShekelFormat(0)}}</span>
