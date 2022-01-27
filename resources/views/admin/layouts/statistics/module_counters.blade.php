@@ -152,21 +152,7 @@
     </div>
 </div>
 <!--expenses_end-->
-<!--otheroperation_start-->
-<div class="col-lg-3 col-6">
-    <!-- small box -->
-    <div class="small-box bg-primary">
-      <div class="inner">
-        <h3>{{ mK(App\Models\OtherOperation::count()) }}</h3>
-        <p>{{ trans("admin.otheroperation") }}</p>
-      </div>
-      <div class="icon">
-        <i class="fa fa-money-bill-alt"></i>
-      </div>
-      <a href="{{ aurl("otheroperation") }}" class="small-box-footer">{{ trans("admin.otheroperation") }} <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-</div>
-<!--otheroperation_end-->
+
 <!--collection_start-->
 <div class="col-lg-3 col-6">
     <!-- small box -->

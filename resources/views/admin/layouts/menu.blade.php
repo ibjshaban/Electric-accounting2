@@ -336,33 +336,7 @@ with font-awesome or any other icon font library -->
 {{--@endif--}}
 <!--expenses_end_route-->
 
-<!--otheroperation_start_route-->
-{{--@if(admin()->user()->role("otheroperation_show"))--}}
-{{--<li class="nav-item {{active_link('otheroperation','menu-open')}} ">--}}
-{{--  <a href="#" class="nav-link {{active_link('otheroperation','active')}}">--}}
-{{--    <i class="nav-icon fa fa-money-bill-alt"></i>--}}
-{{--    <p>--}}
-{{--      {{trans('admin.otheroperation')}}--}}
-{{--      <i class="right fas fa-angle-left"></i>--}}
-{{--    </p>--}}
-{{--  </a>--}}
-{{--  <ul class="nav nav-treeview">--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{aurl('otheroperation')}}" class="nav-link  {{active_link('otheroperation','active')}}">--}}
-{{--        <i class="fa fa-money-bill-alt nav-icon"></i>--}}
-{{--        <p>{{trans('admin.otheroperation')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{ aurl('otheroperation/create') }}" class="nav-link">--}}
-{{--        <i class="fas fa-plus nav-icon"></i>--}}
-{{--        <p>{{trans('admin.create')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--  </ul>--}}
-{{--</li>--}}
-{{--@endif--}}
-<!--otheroperation_end_route-->
+
 
 <!--collection_start_route-->
 @if(admin()->user()->role("collection_show"))

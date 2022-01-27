@@ -51,12 +51,6 @@
         {!! Form::number('discount',old('discount')?? 0,['step'=>'0.0000001','min'=>0,'class'=>'form-control','placeholder'=> 'الخصم','required','oninput'=> 'refreshDiscount()','id'=>'discount_amount']) !!}
     </div>
 </div>
-{{--<div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-    <div class="form-group">
-        {!! Form::label('price',trans('admin.price'),['class'=>' control-label']) !!}
-            {!! Form::text('price',old('price'),['class'=>'form-control','placeholder'=>trans('admin.price')]) !!}
-    </div>
-</div>--}}
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <!-- Date range -->
     <div class="form-group">
