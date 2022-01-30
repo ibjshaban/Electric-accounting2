@@ -21,7 +21,7 @@ $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDel
             $table->bigInteger('price');
             $table->date('date');
             $table->longtext('note')->nullable();
-            $table->string('type');
+            $table->string('parent_id');
 			$table->timestamps();
         });
     }

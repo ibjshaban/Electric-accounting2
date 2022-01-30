@@ -14,7 +14,7 @@
 			<span class="sr-only"></span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-				<a href="{{ aurl(request()->type == '0' ? 'withdrawals' : 'payments')  }}"  style="color:#343a40"  class="dropdown-item">
+				<a href="{{ aurl((\Request::is('admin/basicparents/withdrawals/*') ? 'withdrawals/' : 'payments/').request()->route('parent_id') ) }}"  style="color:#343a40"  class="dropdown-item">
 				<i class="fas fa-list"></i> {{ trans('admin.show_all') }}</a>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 	</div>
 	<!-- /.card-header -->
 	<div class="card-body">
-{!! Form::open(['url'=>aurl('/'. (request()->type == "0" ? 'withdrawals' : 'payments')),'id'=>'withdrawalspayments','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+{!! Form::open(['url'=>aurl((\Request::is('admin/basicparents/withdrawals/*') ? '/basicparents/withdrawals/' : '/basicparents/payments/').request()->route('parent_id')),'id'=>'withdrawalspayments','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
 <div class="row">
 
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">

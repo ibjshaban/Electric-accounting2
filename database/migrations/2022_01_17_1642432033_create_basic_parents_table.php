@@ -19,7 +19,7 @@ class CreateBasicParentsTable extends Migration
 $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
             $table->string('name');
             $table->string('description')->nullable();
-            $table->enum('item',['0','1','2','3'])->nullable();
+            $table->enum('item',['0','1','2','3','4','5'])->nullable();
 			$table->timestamps();
         });
     }

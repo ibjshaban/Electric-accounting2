@@ -36,6 +36,10 @@
                 {!! Form::open(['url'=>aurl('/rentals/store'),'id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             @elseif(\Request::is('admin/other-notebooks/create'))
                 {!! Form::open(['url'=>aurl('/other-notebooks/store'),'id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+            @elseif(\Request::is('admin/withdrawals/create'))
+                {!! Form::open(['url'=>aurl('/withdrawals/store'),'id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+            @elseif(\Request::is('admin/payments/create'))
+                {!! Form::open(['url'=>aurl('/payments/store'),'id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             @endif
            {{-- <?php
             $currentRoute = \Route::current()->uri;

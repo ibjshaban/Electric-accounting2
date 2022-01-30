@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\DataTables\BasicParentsDataTable;
 use App\DataTables\PaymentsDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\WithdrawalsDataTable;
+use App\Http\Controllers\Validations\BasicParentsRequest;
+use App\Models\BasicParent;
 use Carbon\Carbon;
 use App\Models\WithdrawalsPayments;
 
@@ -50,11 +53,11 @@ class WithdrawalsPaymentsController extends Controller
              */
             public function index_withdrawals(WithdrawalsDataTable $withdrawals)
             {
-               return $withdrawals->render('admin.withdrawalspayments.index',['title'=> 'مسحوبات شخصية', 'type'=> 0]);
+               return $withdrawals->render('admin.withdrawalspayments.index',['title'=> 'مسحوبات شخصية']);
             }
             public function index_payments(PaymentsDataTable $payments)
             {
-               return $payments->render('admin.withdrawalspayments.index',['title'=> 'دفعات التجار','type'=> 1]);
+               return $payments->render('admin.withdrawalspayments.index',['title'=> 'دفعات التجار']);
             }
 
             /**
@@ -64,18 +67,13 @@ class WithdrawalsPaymentsController extends Controller
              */
             public function create_withdrawals()
             {
-                if (request()->type == 0 || request()->type == '0')
+
                     return view('admin.withdrawalspayments.create',['title'=>trans('admin.create')]);
-                else
-                    return redirect()->back();
             }
 
             public function create_payments()
             {
-                if (request()->type == 1 || request()->type == '1')
                     return view('admin.withdrawalspayments.create',['title'=>trans('admin.create')]);
-                else
-                    return redirect()->back();
             }
 
             /**
@@ -88,20 +86,20 @@ class WithdrawalsPaymentsController extends Controller
             {
                 $data = $request->except("_token", "_method");
             	$data['admin_id'] = admin()->id();
-                $data['type']= '0';
+                $data['parent_id']= $request->route('parent_id');
 		  		$withdrawalspayments = WithdrawalsPayments::create($data);
-		  		$url= 'withdrawals';
-                $redirect = isset($request["add_back"])? '/'.$url.'/0/create': $url;
+		  		$url= 'withdrawals/'.$request->parent_id;
+                $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url;
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
             public function store_payments(WithdrawalsPaymentsRequest $request)
             {
                 $data = $request->except("_token", "_method");
             	$data['admin_id'] = admin()->id();
-                $data['type']= '1';
+                $data['parent_id']= $request->route('parent_id');
 		  		$withdrawalspayments = WithdrawalsPayments::create($data);
-		  		$url= 'payments';
-                $redirect = isset($request["add_back"])? '/'.$url.'/1/create': $url;
+		  		$url= 'payments/'.$request->parent_id;
+                $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url;
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
             /**
@@ -114,7 +112,7 @@ class WithdrawalsPaymentsController extends Controller
             {
         		$withdrawalspayments =  WithdrawalsPayments::find($id);
         		return is_null($withdrawalspayments) || empty($withdrawalspayments)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("withdrawalspayments")) :
+        		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.withdrawalspayments.show',[
 				    'title'=>trans('admin.show'),
 					'withdrawalspayments'=>$withdrawalspayments
@@ -124,7 +122,7 @@ class WithdrawalsPaymentsController extends Controller
             {
         		$withdrawalspayments =  WithdrawalsPayments::find($id);
         		return is_null($withdrawalspayments) || empty($withdrawalspayments)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("withdrawalspayments")) :
+        		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.withdrawalspayments.show',[
 				    'title'=>trans('admin.show'),
 					'withdrawalspayments'=>$withdrawalspayments
@@ -140,8 +138,9 @@ class WithdrawalsPaymentsController extends Controller
             public function edit_withdrawals($id)
             {
         		$withdrawalspayments =  WithdrawalsPayments::find($id);
+
         		return is_null($withdrawalspayments) || empty($withdrawalspayments)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("withdrawalspayments")) :
+        		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.withdrawalspayments.edit',[
 				  'title'=>trans('admin.edit'),
 				  'withdrawalspayments'=>$withdrawalspayments
@@ -152,7 +151,7 @@ class WithdrawalsPaymentsController extends Controller
             {
         		$withdrawalspayments =  WithdrawalsPayments::find($id);
         		return is_null($withdrawalspayments) || empty($withdrawalspayments)?
-        		backWithError(trans("admin.undefinedRecord"),aurl("withdrawalspayments")) :
+        		backWithError(trans("admin.undefinedRecord"),url()->previous()) :
         		view('admin.withdrawalspayments.edit',[
 				  'title'=>trans('admin.edit'),
 				  'withdrawalspayments'=>$withdrawalspayments
@@ -215,20 +214,20 @@ class WithdrawalsPaymentsController extends Controller
                 if(is_null($withdrawalspayments) || empty($withdrawalspayments)){
                     return backWithSuccess(trans('admin.undefinedRecord'),aurl("withdrawals"));
                 }
-
+                $parent_id= $withdrawalspayments->parent_id;
                 it()->delete('withdrawalspayments',$id);
                 $withdrawalspayments->delete();
-                return redirectWithSuccess(aurl("withdrawals"),trans('admin.deleted'));
+                return redirectWithSuccess(aurl("withdrawals/".$parent_id),trans('admin.deleted'));
             }
             public function destroy_payments($id){
                 $withdrawalspayments = WithdrawalsPayments::find($id);
                 if(is_null($withdrawalspayments) || empty($withdrawalspayments)){
                     return backWithSuccess(trans('admin.undefinedRecord'),aurl("payments"));
                 }
-
+                $parent_id= $withdrawalspayments->parent_id;
                 it()->delete('withdrawalspayments',$id);
                 $withdrawalspayments->delete();
-                return redirectWithSuccess(aurl("payments"),trans('admin.deleted'));
+                return redirectWithSuccess(aurl("payments/".$parent_id),trans('admin.deleted'));
             }
 
             public function multi_delete_withdrawals(){
@@ -237,7 +236,7 @@ class WithdrawalsPaymentsController extends Controller
                     foreach($data as $id){
                         $withdrawalspayments = WithdrawalsPayments::find($id);
                         if(is_null($withdrawalspayments) || empty($withdrawalspayments)){
-                            return backWithError(trans('admin.undefinedRecord'),aurl("withdrawalspayments"));
+                            return backWithError(trans('admin.undefinedRecord'),url()->previous());
                         }
 
                         it()->delete('withdrawalspayments',$id);
@@ -280,5 +279,69 @@ class WithdrawalsPaymentsController extends Controller
                 }
             }
 
+    // -------------------- Startup basic -----------------------------------------//
+    public function indexStartup(BasicParentsDataTable $basicparents)
+    {
+        $currentRoute = \Route::current()->uri;
+        $item = CheckParentRoute($currentRoute);
+        $title = CheckParentTitle($currentRoute);
+        return $basicparents->with('item', $item)->render('admin.basicparents.index', ['title' => $title]);
+    }
 
+    public function createStartup()
+    {
+        $currentRoute = \Route::current()->uri;
+        $title = CheckParentTitle($currentRoute);
+        return view('admin.basicparents.create', ['title' => $title . '/' . trans('admin.create')]);
+    }
+    public function storeStartup(BasicParentsRequest $request)
+    {
+        $data = $request->except("_token", "_method");
+        $data['admin_id'] = admin()->id();
+        /*if (\Request::is('admin/startup/*')) {
+            $data['item'] = '0';
+        }*/
+        $currentRoute = \Route::current()->uri;
+        $item = CheckParentRoute($currentRoute);
+        $tokens = explode('/', $currentRoute);
+        $data['item'] = $item;
+        $path = $tokens[sizeof($tokens)-2];
+        $basicparents = BasicParent::create($data);
+        $redirect = isset($request["add_back"]) ? "/create" : "";
+        return redirectWithSuccess(aurl($path . $redirect), trans('admin.added'));
+    }
+    public function editStartup($id)
+    {
+        $currentRoute = \Route::current()->uri;
+        $title = CheckParentTitle($currentRoute);
+
+        $basicparents = BasicParent::find($id);
+        return is_null($basicparents) || empty($basicparents) ?
+            backWithError(trans("admin.undefinedRecord"), aurl("startup")) :
+            view('admin.basicparents.edit', [
+                'title' => $title.'/'. trans('admin.edit'),
+                'basicparents' => $basicparents
+            ]);
+    }
+    public function updateStartup(BasicParentsRequest $request, $id)
+    {
+        // Check Record Exists
+        $basicparents = BasicParent::find($id);
+        if (is_null($basicparents) || empty($basicparents)) {
+            return backWithError(trans("admin.undefinedRecord"), aurl("basicparents"));
+        }
+        $data = $this->updateFillableColumns();
+        $data['admin_id'] = admin()->id();
+
+        $currentRoute = \Route::current()->uri;
+        //dd($currentRoute);
+        $tokens = explode('/', $currentRoute);
+        $path = $tokens[sizeof($tokens)-3];
+
+        BasicParent::where('id', $id)->update($data);
+        $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
+        return redirectWithSuccess(aurl($path . $redirect), trans('admin.updated'));
+    }
+
+    //------------------------------ ------------------------------------//
 }
