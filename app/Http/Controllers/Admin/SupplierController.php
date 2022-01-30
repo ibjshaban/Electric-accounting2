@@ -40,9 +40,10 @@ class SupplierController extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(SupplierDataTable $supplier)
+    public function index()
     {
-        return $supplier->render('admin.supplier.index', ['title' => trans('admin.supplier')]);
+        $suppliers = Supplier::withTrashed()->get();
+        return view('admin.supplier.index', ['title' => trans('admin.supplier'), 'suppliers'=>$suppliers]);
     }
 
 
@@ -53,7 +54,6 @@ class SupplierController extends Controller
      */
     public function create()
     {
-
         return view('admin.supplier.create', ['title' => trans('admin.create')]);
     }
 
