@@ -5,35 +5,27 @@ use Illuminate\Database\Eloquent\Model;
 // Auto Models By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.37]
 // Copyright Reserved  [it v 1.6.37]
-class BasicParentItem extends Model {
+class SubItem extends Model {
 
-protected $table    = 'basic_parent_items';
+protected $table    = 'sub_items';
 protected $fillable = [
 		'id',
-		'admin_id',
-        'name',
         'price',
-        'discount',
-        'date',
         'amount',
         'note',
-        'basic_id',
+        'parent_item_id',
 		'created_at',
 		'updated_at',
 	];
 
 	/**
-    * basic_id relation method
+    * parent_item_id relation method
     * @param void
     * @return object data
     */
-   public function basic_id(){
-      return $this->hasOne(\App\Models\BasicParent::class,'id','basic_id');
+   public function parent_item_id(){
+      return $this->belongsTo(\App\Models\BasicParentItem::class,'parent_item_id');
    }
-
-    public function item(){
-        return $this->hasMany(SubItem::class,'parent_item_id')->get();
-    }
 
  	/**
     * Static Boot method to delete or update or sort Data
@@ -43,8 +35,8 @@ protected $fillable = [
    protected static function boot() {
       parent::boot();
       // if you disable constraints should by run this static method to Delete children data
-         static::deleting(function($basicparentitem) {
-			//$basicparentitem->basic_id()->delete();
+         static::deleting(function($subitem) {
+			//$subitem->parent_item_id()->delete();
          });
    }
 

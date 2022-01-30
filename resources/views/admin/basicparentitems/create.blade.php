@@ -34,13 +34,13 @@
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         {!! Form::label('name',trans('admin.name'),['class'=>' control-label']) !!}
-                        {!! Form::text('name',old('name'),['class'=>'form-control name parentName','placeholder'=>trans('admin.name')]) !!}
+                        {!! Form::text('name',old('name'),['class'=>'form-control name','placeholder'=>trans('admin.name'), 'required']) !!}
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         {!! Form::label('discount',trans('admin.discount'),['class'=>' control-label']) !!}
-                        {!! Form::number('discount',old('discount'),['class'=>'form-control parentDiscount','step'=>'0.00000001','placeholder'=>trans('admin.discount')])!!}
+                        {!! Form::number('discount',old('discount'),['class'=>'form-control parentDiscount','step'=>'0.00000001','placeholder'=>trans('admin.discount'), 'oninput'=> 'refreshDiscount()','id'=>'discount_amount', 'required'])!!}
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
@@ -53,107 +53,40 @@
                                 <i class="far fa-calendar-alt"></i>
                             </span>
                             </div>
-                            {!! Form::text('date',old('date'),['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.date'),'readonly'=>'readonly']) !!}
+                            {!! Form::text('date',old('date'),['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.date'),'readonly'=>'readonly', 'required']) !!}
                         </div>
                         <!-- /.input group -->
                     </div>
                     <!-- /.form group -->
                 </div>
             </div>
-            {{--
-                        <div class="row">
-
-                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    {!! Form::label('name',trans('admin.name'),['class'=>' control-label']) !!}
-                                    {!! Form::text('name',old('name'),['class'=>'form-control','placeholder'=>trans('admin.name')]) !!}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    {!! Form::label('price',trans('admin.price'),['class'=>' control-label']) !!}
-                                    {!! Form::number('price',old('price'),['class'=>'form-control','step'=>'0.00000001','placeholder'=>trans('admin.price')])!!}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    {!! Form::label('discount',trans('admin.discount'),['class'=>' control-label']) !!}
-                                    {!! Form::number('discount',old('discount'),['class'=>'form-control','step'=>'0.00000001','placeholder'=>trans('admin.discount')])!!}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    {!! Form::label('amount',trans('admin.amount'),['class'=>' control-label']) !!}
-                                    {!! Form::number('amount',old('amount'),['class'=>'form-control','step'=>'0.00000001','placeholder'=>trans('admin.amount')])!!}
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                <!-- Date range -->
-                                <div class="form-group">
-                                    {!! Form::label('date',trans('admin.date')) !!}
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <i class="far fa-calendar-alt"></i>
-                            </span>
-                                        </div>
-                                        {!! Form::text('date',old('date'),['class'=>'form-control float-right datepicker','placeholder'=>trans('admin.date'),'readonly'=>'readonly']) !!}
-                                    </div>
-                                    <!-- /.input group -->
-                                </div>
-                                <!-- /.form group -->
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
-                                <div class="form-group">
-                                    {!! Form::label('note',trans('admin.note'),['class'=>' control-label']) !!}
-                                    {!! Form::text('note',old('note'),['class'=>'form-control','placeholder'=>trans('admin.note')]) !!}
-                                </div>
-                            </div>
-
-                        </div>
-            --}}
             <div class="row">
 
                 <table class="table table-head-fixed text-nowrap">
                     <thead>
                     <tr class="element">
-                        {{--                        <th>البيان</th>--}}
                         <th>السعر</th>
-                        @if($basicparent->item != '2')
-                            {{--                            <th>الخصم</th>--}}
-                            <th>الكمية</th>
-                        @endif
-                        {{--                        <th>التاريخ</th>--}}
+                        <th>الكمية</th>
                         <th>الملاحظات</th>
+                        <th>سعر الكمية</th>
                         <th>حذف</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="element">
-                        <td hidden>
-                            <input type="text" class="name" name="name[]" placeholder="البيان">
-                        </td>
                         <td>
-                            <input type="number" class="price" name="price[]" min="0" step="0.0000001"
+                            <input type="number" class="price" name="price[]" min="0" step="0.001"
                                    placeholder="السعر" oninput="changeAllPrice(this)">
                         </td>
-                        @if($basicparent->item != '2')
-
-                            <td hidden>
-                                <input type="number" class="discount" name="discount[]" step="0.0000001" min="0"
-                                       placeholder="المبلغ" required>
-                            </td>
-                            <td>
-                                <input type="number" class="amount" name="amount[]" step="0.0000001" min="0"
-                                       placeholder="الكمية" oninput="changeAllPrice(this)" required>
-                            </td>
-                        @endif
-                        <td hidden>
-                            <input type="date" class="date" name="date[]" placeholder="التاريخ" required>
+                        <td>
+                            <input type="number" class="amount" name="amount[]" step="0.001" min="0"
+                                   placeholder="الكمية" oninput="changeAllPrice(this)">
                         </td>
-
                         <td>
                             <input type="text" name="note[]" placeholder="الملاحظات">
+                        </td>
+                        <td>
+                            <label class="all_price font-weight-bolder" data-price="0">0.00 ₪</label>
                         </td>
                         <td>
                             <button type="button" name="add" class="btn btn-danger btn-flat"
@@ -165,14 +98,21 @@
                     </tbody>
                 </table>
 
-                <div class="col p-3">
+                <div class="col-md-2 p-3">
                     <button type="button" name="add" class="btn btn-success btn-flat" onclick="addNewDetails()">
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
-                <div class="col">
-                    <div class="bg-gradient-info p-3 float-right" id="all_total">المجموع: {{ShekelFormat(00)}}</div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2 bg-gradient-success">
+                    <span id="all_amount">المبلغ: {{ShekelFormat(0)}}</span>
+                    <span id="discount">الخصم: {{ShekelFormat(0)}}</span>
+                    <span id="all_total">المجموع: {{ShekelFormat(0)}}</span>
+                    {{--                    <div class="bg-gradient-info p-3 float-right" id="all_total">المجموع: {{ShekelFormat(00)}}</div>--}}
                 </div>
+                <div class="col-md-2"></div>
 
 
             </div>
@@ -180,17 +120,6 @@
             <!-- /.row -->
         </div>
         <!-- /.card-body -->
-        {{--
-                <div class="card-footer">
-                    <button type="submit" name="add" class="btn btn-primary btn-flat"><i
-                            class="fa fa-plus"></i> {{ trans('admin.add') }}
-                    </button>
-                    <button type="submit" name="add_back" class="btn btn-success btn-flat"><i
-                            class="fa fa-plus"></i> {{ trans('admin.add_back') }}
-                    </button>
-                    {!! Form::close() !!}
-                </div>
-        --}}
         <div class="card-footer">
             <button type="submit" name="add" class="btn btn-primary btn-flat"><i
                     class="fa fa-plus"></i> {{ trans('admin.save') }}</button>
@@ -201,8 +130,19 @@
 
 @push('js')
     <script>
+        function refreshDiscount() {
+            var sum = 0;
+            $('.all_price').each(function () {
+                sum += parseFloat($(this).data('price'));
+            });
+            var discount = $('#discount_amount').val();
 
-        function changeAllPrice(e) {
+            $('#all_amount').text('المبلغ: ₪ ' + parseFloat(sum).toFixed(2))
+            $('#discount').text('الخصم: ₪ ' + parseFloat(discount).toFixed(2))
+            $('#all_total').text('المجموع: ₪ ' + parseFloat(sum - discount).toFixed(2))
+        }
+
+        /*function changeAllPrice(e) {
 
             var sum = 0;
             var amount = 0;
@@ -211,19 +151,32 @@
                 sum += parseFloat($(this).val());
             });
             $('#all_total').text('المجموع: ₪ ' + parseFloat(sum).toFixed(2))
+        }*/
+        function changeAllPrice(e) {
+            var parent = $(e).parent().parent();
+            var amount = parent.find('input[name="amount[]"]').val() ?? 0;
+            var price = parent.find('input[name="price[]"]').val() ?? 0;
+
+            parent.find(".all_price").text('₪ ' + (amount * price).toFixed(2));
+            parent.find(".all_price").data('price', (amount * price).toFixed(2));
+
+            var sum = 0;
+            $('.all_price').each(function () {
+                sum += parseFloat($(this).data('price'));
+            });
+            $('#all_amount').text('المبلغ: ₪ ' + parseFloat(sum).toFixed(2))
+            var discount = $('#discount_amount').val();
+            $('#all_total').text('المجموع: ₪ ' + parseFloat(sum - discount).toFixed(2))
         }
+
 
         function addNewDetails() {
             $('.element').last().after(
                 '<tr class="element"> ' +
-                '<td hidden><input type="text" class="name" name="name[]" placeholder="البيان"></td>' +
                 '<td> <input type="number" class="price" name="price[]" min="0" step="0.0000001" placeholder="السعر" oninput="changeAllPrice(this)"> </td>' +
-                @if($basicparent->item != '2')
-                    '<td hidden> <input type="number" class="discount" name="discount[]" step="0.0000001" min="0" placeholder="المبلغ" required> </td>' +
-                '<td> <input type="number" class="amount" name="amount[]" step="0.0000001" min="0" placeholder="الكمية" oninput="changeAllPrice(this)" required> </td>' +
-                @endif
-                    '<td hidden> <input type="date" value="' + $(".datepicker").val() + '" name="date[]" class="date" placeholder="التاريخ" required> </td>' +
+                '<td> <input type="number" class="amount" name="amount[]" step="0.0000001" min="0" placeholder="الكمية" oninput="changeAllPrice(this)"> </td>' +
                 '<td> <input type="text" name="note[]" placeholder="الملاحظات"> </td>' +
+                '<td> <label class="all_price font-weight-bolder" data-price="0">0.00 ₪</label></td>' +
                 '<td>  <button type="button" name="add" class="btn btn-danger btn-flat" onclick="removeDetail(this)"> <i class="fa fa-minus"></i> </button></td>' +
                 '</tr>'
             )
@@ -235,65 +188,5 @@
         }
 
 
-        /*$(".source").last().focus(function (event) {
-            if ($('tr td .employeeSel').last().val()) {
-                event.preventDefault();
-                $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
-
-            }
-        });*/
-
-        /*$(".employeeSel").last().focus(function (event) {
-            if ($('tr td .source').last().val()) {
-                event.preventDefault();
-                $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
-
-            }
-        });*/
-
-        /*$('body').on('DOMNodeInserted', 'tr', function (event) {
-            $(".source").last().focus(function () {
-                if ($('.employeeSel').last().val()) {
-                    event.preventDefault();
-                    $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
-
-                }
-            });
-            $(".employeeSel").last().focus(function (event) {
-                if ($('tr td .source').last().val()) {
-                    event.preventDefault();
-                    $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
-
-                }
-            });
-        });*/
-
-
-
-        /*$(".test").click(function (event) {
-
-            if ($('.employeeSel').val()) {
-                event.preventDefault();
-                $('.card-body').attr('data-target', '.modal').attr('data-toggle', 'modal');
-            }
-
-
-        });
-        $(".ok").click(function () {
-            $('.card-body').removeAttr('data-target', '.modal').attr('data-toggle', 'modal');
-        });*/
-
-        $(".parentName").on("keyup", function () {
-            var value = $(this).val();
-            $(".name").val(value);
-        });
-        $(".parentDiscount").on("keyup", function () {
-            var value = $(this).val();
-            $(".discount").val(value);
-        });
-        $(".datepicker").on("change", function () {
-            var value = $(this).val();
-            $(".date").val(value);
-        });
     </script>
 @endpush
