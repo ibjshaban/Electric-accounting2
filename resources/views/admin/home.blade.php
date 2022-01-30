@@ -77,7 +77,19 @@
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <span class="info-box-icon"><i class="fa fa-money-check-alt"></i></span>
+                            <a href="{{ aurl('debt') }}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">الديون</span>
+                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{ aurl('startup') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">المصاريف الاساسية</span>
@@ -89,7 +101,7 @@
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{ aurl('heavy-expenses') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">المصاريف الثقيلة</span>
@@ -101,7 +113,7 @@
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{ aurl('rentals') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">دفتر الايجارات</span>
@@ -113,7 +125,7 @@
                     </div>
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{ aurl('other-notebooks') }}">
 
                                 <div class="info-box-content">
@@ -127,7 +139,7 @@
                     @if(admin()->user()->role("withdrawals_show"))
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{aurl('/withdrawals')}}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">مسحوبات شخصية</span>
@@ -141,7 +153,7 @@
                     @if(admin()->user()->role("payments_show"))
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
-                            <span class="info-box-icon"><i class="fa fa-sticky-note"></i></span>
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{aurl('/payments')}}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">دفعات التجار</span>

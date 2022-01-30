@@ -135,33 +135,6 @@ with font-awesome or any other icon font library -->
 @endif
 <!--stock_end_route-->
 
-<!--supplier_start_route-->
-@if(admin()->user()->role("supplier_show"))
-    <li class="nav-item {{active_link('supplier','menu-open')}} ">
-        <a href="#" class="nav-link {{active_link('supplier','active')}}">
-            <i class="nav-icon fa fa-users"></i>
-            <p>
-                {{trans('admin.supplier')}}
-                <i class="right fas fa-angle-left"></i>
-            </p>
-        </a>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{{aurl('supplier')}}" class="nav-link  {{active_link('supplier','active')}}">
-                    <i class="fa fa-users nav-icon"></i>
-                    <p>{{trans('admin.supplier')}} </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ aurl('supplier/create') }}" class="nav-link">
-                    <i class="fas fa-plus nav-icon"></i>
-                    <p>{{trans('admin.create')}} </p>
-                </a>
-            </li>
-        </ul>
-    </li>
-@endif
-<!--supplier_end_route-->
 
 <!--employeetype_start_route-->
 @if(admin()->user()->role("employeetype_show"))
@@ -278,63 +251,6 @@ with font-awesome or any other icon font library -->
         </ul>
     </li>
 @endif
-<!--debt_end_route-->
-
-<!--salary_start_route-->
-{{--@if(admin()->user()->role("salary_show"))--}}
-{{--<li class="nav-item {{active_link('salary','menu-open')}} ">--}}
-{{--  <a href="#" class="nav-link {{active_link('salary','active')}}">--}}
-{{--    <i class="nav-icon fa fa-money-bill-wave"></i>--}}
-{{--    <p>--}}
-{{--      {{trans('admin.salary')}}--}}
-{{--      <i class="right fas fa-angle-left"></i>--}}
-{{--    </p>--}}
-{{--  </a>--}}
-{{--  <ul class="nav nav-treeview">--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{aurl('salary')}}" class="nav-link  {{active_link('salary','active')}}">--}}
-{{--        <i class="fa fa-money-bill-wave nav-icon"></i>--}}
-{{--        <p>{{trans('admin.salary')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--   --}}{{-- <li class="nav-item">--}}
-{{--      <a href="{{ aurl('salary/create') }}" class="nav-link">--}}
-{{--        <i class="fas fa-plus nav-icon"></i>--}}
-{{--        <p>{{trans('admin.create')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--  </ul>--}}
-{{--</li>--}}
-{{--@endif--}}
-<!--salary_end_route-->
-
-<!--expenses_start_route-->
-{{--@if(admin()->user()->role("expenses_show"))--}}
-{{--<li class="nav-item {{active_link('expenses','menu-open')}} ">--}}
-{{--  <a href="#" class="nav-link {{active_link('expenses','active')}}">--}}
-{{--    <i class="nav-icon fa fa-money-bill-alt"></i>--}}
-{{--    <p>--}}
-{{--      {{trans('admin.expenses')}}--}}
-{{--      <i class="right fas fa-angle-left"></i>--}}
-{{--    </p>--}}
-{{--  </a>--}}
-{{--  <ul class="nav nav-treeview">--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{aurl('expenses')}}" class="nav-link  {{active_link('expenses','active')}}">--}}
-{{--        <i class="fa fa-money-bill-alt nav-icon"></i>--}}
-{{--        <p>{{trans('admin.expenses')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{ aurl('expenses/create') }}" class="nav-link">--}}
-{{--        <i class="fas fa-plus nav-icon"></i>--}}
-{{--        <p>{{trans('admin.create')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--  </ul>--}}
-{{--</li>--}}
-{{--@endif--}}
-<!--expenses_end_route-->
 
 
 
@@ -393,34 +309,6 @@ with font-awesome or any other icon font library -->
     </li>
 @endif
 <!--filling_end_route-->
-
-<!--revenuefule_start_route-->
-{{--@if(admin()->user()->role("revenuefule_show"))--}}
-{{--<li class="nav-item {{active_link('revenuefule','menu-open')}} ">--}}
-{{--  <a href="#" class="nav-link {{active_link('revenuefule','active')}}">--}}
-{{--    <i class="nav-icon fa fa-hand-holding-water"></i>--}}
-{{--    <p>--}}
-{{--      {{trans('admin.revenuefule')}}--}}
-{{--      <i class="right fas fa-angle-left"></i>--}}
-{{--    </p>--}}
-{{--  </a>--}}
-{{--  <ul class="nav nav-treeview">--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{aurl('revenuefule')}}" class="nav-link  {{active_link('revenuefule','active')}}">--}}
-{{--        <i class="fa fa-hand-holding-water nav-icon"></i>--}}
-{{--        <p>{{trans('admin.revenuefule')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--    <li class="nav-item">--}}
-{{--      <a href="{{ aurl('revenuefule/create') }}" class="nav-link">--}}
-{{--        <i class="fas fa-plus nav-icon"></i>--}}
-{{--        <p>{{trans('admin.create')}} </p>--}}
-{{--      </a>--}}
-{{--    </li>--}}
-{{--  </ul>--}}
-{{--</li>--}}
-{{--@endif--}}
-<!--revenuefule_end_route-->
 
 <!--payment_start_route-->
 @if(admin()->user()->role("payment_show"))
@@ -532,44 +420,6 @@ with font-awesome or any other icon font library -->
     </li>
 @endif
 <!--payments_end_route-->
-<!--startup_start_route-->
-    <li class="nav-item {{active_link('startup','menu-open')}} ">
-        <a href="#" class="nav-link {{active_link('startup','active')}}">
-            <i class="nav-icon fa fa-universal-access"></i>
-            <p>
-                {{trans('admin.startup')}}
-                <i class="right fas fa-angle-left"></i>
-            </p>
-        </a>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{{aurl('startup')}}" class="nav-link  {{active_link('startup','active')}}">
-                    <i class="fa fa-universal-access nav-icon"></i>
-                    <p>{{trans('admin.startup')}} </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{aurl('heavy-expenses')}}" class="nav-link  {{active_link('heavy-expenses','active')}}">
-                    <i class="fa fa-universal-access nav-icon"></i>
-                    <p>{{trans('admin.heavy-expenses')}} </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{aurl('rentals')}}" class="nav-link  {{active_link('rentals','active')}}">
-                    <i class="fa fa-universal-access nav-icon"></i>
-                    <p>{{trans('admin.rentals')}} </p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{aurl('other-notebooks')}}" class="nav-link  {{active_link('other-notebooks','active')}}">
-                    <i class="fa fa-universal-access nav-icon"></i>
-                    <p>{{trans('admin.other-notebooks')}} </p>
-                </a>
-            </li>
-
-        </ul>
-    </li>
-<!--startup_end_route-->
 @if(admin()->user()->role("notebooks_show"))
     <li class="nav-item {{active_link('notebooks','menu-open')}} ">
         <a href="#" class="nav-link {{active_link('notebooks','active')}}">

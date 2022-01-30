@@ -18,6 +18,9 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ aurl('lock/screen') }}?email={{ admin()->user()->email }}" class="nav-link"><i class="nav-icon fa fa-user-lock"></i> {{ trans('admin.lock_screen') }}</a>
       </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ aurl('supplier') }}" class="nav-link"><i class="nav-icon fa fa-users"></i> {{ trans('admin.supplier') }}</a>
+      </li>
       {{-- <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
       </li> --}}
