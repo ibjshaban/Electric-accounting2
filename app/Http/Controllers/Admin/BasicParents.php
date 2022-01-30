@@ -184,13 +184,15 @@ class BasicParents extends Controller
     }
 
     // -------------------- Startup basic -----------------------------------------//
-    public function indexStartup(BasicParentsDataTable $basicparents)
+    public function indexStartup()
     {
 
         $currentRoute = \Route::current()->uri;
         $item = CheckParentRoute($currentRoute);
         $title = CheckParentTitle($currentRoute);
-        return $basicparents->with('item', $item)->render('admin.basicparents.index', ['title' => $title]);
+        $basicparents = BasicParent::where('item', $item)->get();
+        return view('admin.basicparents.index', ['title' => $title, 'basicparents'=>$basicparents]);
+        //return $basicparents->with('item', $item)->render('admin.basicparents.index', ['title' => $title]);
     }
 
     public function createStartup()
