@@ -197,8 +197,11 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::post('payments/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_payments')->name('multi_delete_payments');
         ////////AdminRoutes/*End*///////////////
 
-        Route::resource('notebooks', 'Admin\notebooks');
-        Route::post('notebooks/multi_delete', 'Admin\notebooks@multi_delete');
+        Route::resource('Notebooks', 'Admin\Notebooks');
+        Route::post('Notebooks/multi_delete', 'Admin\Notebooks@multi_delete');
+
+        Route::resource('subItems', 'Admin\subItems');
+        Route::post('subItems/multi_delete', 'Admin\subItems@multi_delete');
     });
 
 });

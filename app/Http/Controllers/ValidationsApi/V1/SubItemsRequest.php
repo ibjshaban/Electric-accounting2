@@ -1,11 +1,11 @@
 <?php
-namespace App\Http\Controllers\Validations;
+namespace App\Http\Controllers\ValidationsApi\V1;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class BasicParentItemsRequest extends FormRequest {
+class SubItemsRequest extends FormRequest {
 
 	/**
 	 * Baboon Script By [it v 1.6.37]
@@ -25,25 +25,20 @@ class BasicParentItemsRequest extends FormRequest {
 	 */
 	protected function onCreate() {
 		return [
-             'name'=>'required|string',
-             'price'=>'nullable',
-             'discount'=>'nullable',
-             'date'=>'required',
-             'amount'=>'nullable',
-             'note'=>'nullable',
-             'basic_id'=>'integer',
+             'price'=>'required|numeric',
+             'amount'=>'required|integer',
+             'note'=>'nullable|string',
+             'parent_item_id'=>'required|integer',
 		];
 	}
 
+
 	protected function onUpdate() {
 		return [
-             'name'=>'required|string',
-             'price'=>'required',
-             'discount'=>'nullable',
-             'date'=>'required|string',
-             'amount'=>'nullable',
-             'note'=>'nullable',
-             'basic_id'=>'integer',
+             'price'=>'required|numeric',
+             'amount'=>'required|integer',
+             'note'=>'nullable|string',
+             'parent_item_id'=>'required|integer',
 		];
 	}
 
@@ -61,13 +56,10 @@ class BasicParentItemsRequest extends FormRequest {
 	 */
 	public function attributes() {
 		return [
-             'name'=>trans('admin.name'),
              'price'=>trans('admin.price'),
-             'discount'=>trans('admin.discount'),
-             'date'=>trans('admin.date'),
              'amount'=>trans('admin.amount'),
              'note'=>trans('admin.note'),
-             'basic_id'=>trans('admin.basic_id'),
+             'parent_item_id'=>trans('admin.parent_item_id'),
 		];
 	}
 

@@ -187,7 +187,7 @@ class BasicParentsDataTable extends DataTable
                 'searchable' => false,
                 'orderable' => false,
             ],
-            [
+           /* [
                 'name' => 'updated_at',
                 'data' => 'updated_at',
                 'title' => trans('admin.updated_at'),
@@ -195,7 +195,7 @@ class BasicParentsDataTable extends DataTable
                 'printable' => false,
                 'searchable' => false,
                 'orderable' => false,
-            ],
+            ],*/
             [
                 'name' => 'actions',
                 'data' => 'actions',

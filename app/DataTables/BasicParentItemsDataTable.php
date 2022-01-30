@@ -96,7 +96,7 @@ class BasicParentItemsDataTable extends DataTable
 
 
 
-            " . filterElement('1,2,3,4,5,6,7,8', 'input') . "
+            " . filterElement('1,2,3,4,5,6', 'input') . "
 
 
 
@@ -142,7 +142,6 @@ class BasicParentItemsDataTable extends DataTable
 
     protected function getColumns()
     {
-        if ($this->basicparents->item != '2') {
             return [
 
                 [
@@ -181,21 +180,21 @@ class BasicParentItemsDataTable extends DataTable
                     'data' => 'discount',
                     'title' => trans('admin.discount'),
                 ],
-                [
+                /*[
                     'name' => 'amount',
                     'data' => 'amount',
                     'title' => trans('admin.amount'),
-                ],
+                ],*/
                 [
                     'name' => 'date',
                     'data' => 'date',
                     'title' => trans('admin.date'),
                 ],
-                [
+                /*[
                     'name' => 'note',
                     'data' => 'note',
                     'title' => trans('admin.note'),
-                ],
+                ],*/
                 /*[
                  'name'=>'basic_id',
                  'data'=>'basic_id',
@@ -210,84 +209,7 @@ class BasicParentItemsDataTable extends DataTable
                     'searchable' => false,
                     'orderable' => false,
                 ],
-                [
-                    'name' => 'updated_at',
-                    'data' => 'updated_at',
-                    'title' => trans('admin.updated_at'),
-                    'exportable' => false,
-                    'printable' => false,
-                    'searchable' => false,
-                    'orderable' => false,
-                ],
-                [
-                    'name' => 'actions',
-                    'data' => 'actions',
-                    'title' => trans('admin.actions'),
-                    'exportable' => false,
-                    'printable' => false,
-                    'searchable' => false,
-                    'orderable' => false,
-                ],
-            ];
-        }else{
-            return [
-
-                [
-                    'name' => 'checkbox',
-                    'data' => 'checkbox',
-                    'title' => '<div  class="icheck-danger">
-                  <input type="checkbox" class="select-all" id="select-all"  onclick="select_all()" >
-                  <label for="select-all"></label>
-                </div>',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'exportable' => false,
-                    'printable' => false,
-                    'width' => '10px',
-                    'aaSorting' => 'none'
-                ],
-                [
-                    'name' => 'id',
-                    'data' => 'id',
-                    'title' => trans('admin.record_id'),
-                    'width' => '10px',
-                    'aaSorting' => 'none'
-                ],
-                [
-                    'name' => 'name',
-                    'data' => 'name',
-                    'title' => trans('admin.name'),
-                ],
-                [
-                    'name' => 'price',
-                    'data' => 'price',
-                    'title' => trans('admin.price'),
-                ],
-                [
-                    'name' => 'date',
-                    'data' => 'date',
-                    'title' => trans('admin.date'),
-                ],
-                [
-                    'name' => 'note',
-                    'data' => 'note',
-                    'title' => trans('admin.note'),
-                ],
                 /*[
-                 'name'=>'basic_id',
-                 'data'=>'basic_id',
-                 'title'=>trans('admin.basic_id'),
-            ],*/
-                [
-                    'name' => 'created_at',
-                    'data' => 'created_at',
-                    'title' => trans('admin.created_at'),
-                    'exportable' => false,
-                    'printable' => false,
-                    'searchable' => false,
-                    'orderable' => false,
-                ],
-                [
                     'name' => 'updated_at',
                     'data' => 'updated_at',
                     'title' => trans('admin.updated_at'),
@@ -295,7 +217,7 @@ class BasicParentItemsDataTable extends DataTable
                     'printable' => false,
                     'searchable' => false,
                     'orderable' => false,
-                ],
+                ],*/
                 [
                     'name' => 'actions',
                     'data' => 'actions',
@@ -307,7 +229,6 @@ class BasicParentItemsDataTable extends DataTable
                 ],
             ];
 
-        }
     }
 
     /**

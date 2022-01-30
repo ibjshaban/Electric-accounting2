@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\BasicParentItemsRequest;
 use App\Models\BasicParent;
 use App\Models\BasicParentItem;
+use App\Models\SubItem;
+use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.37]
@@ -62,10 +64,37 @@ class BasicParentItems extends Controller
      */
     public function store(BasicParentItemsRequest $request, $id)
     {
-        $parent = BasicParent::find($id);
         $data = $request->except("_token", "_method");
-        //$data['basic_id'] = $id;
-        for ($i = 0; $i < count($data['name'] ?? []); $i++) {
+        DB::beginTransaction();
+        $parentItem_price = 0;
+        try {
+            $parentItem = new BasicParentItem();
+            $parentItem->name = $data['name'];
+            $parentItem->date = $data['date'];
+            $parentItem->discount = $data['discount'];
+            $parentItem->price = 0;
+            $parentItem->amount = 0;
+            $parentItem->basic_id = $id;
+            $parentItem->save();
+
+            for ($i = 0; $i < count($data['price'] ?? []); $i++) {
+                SubItem::create([
+                    'price' => InsertLargeNumber($data['price'][$i]),
+                    'amount' => InsertLargeNumber($data['amount'][$i]),
+                    'note' => $data['note'][$i],
+                    'parent_item_id' => $parentItem->id,
+                ]);
+                $parentItem_price += ($data['price'][$i] * $data['amount'][$i]);
+            }
+            $parentItem->update(['price' => InsertLargeNumber(($parentItem_price- $parentItem->discount))]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return backWithError($e);
+
+        }
+/*        for ($i = 0; $i < count($data['name'] ?? []); $i++) {
             if ($parent->item != '2') {
                 BasicParentItem::create([
                     'name' => $data['name'][$i],
@@ -86,7 +115,7 @@ class BasicParentItems extends Controller
                 ]);
             }
 
-        }
+        }*/
         $redirect = isset($request["add_back"]) ? "/create" : "";
         return redirectWithSuccess(aurl('basicparents/' . $id . '' . $redirect), trans('admin.added'));
     }
@@ -97,13 +126,13 @@ class BasicParentItems extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, BasicParentItemsDataTable $basicparentitemsTable)
+    public function show($id)
     {
         $basicparentitems = BasicParentItem::find($id);
-        $parent_item = BasicParent::where('id', $basicparentitems->basic_id)->first();
+       //$parent_item = BasicParent::where('id', $basicparentitems->basic_id)->first();
         return is_null($basicparentitems) || empty($basicparentitems) ?
             backWithError(trans("admin.undefinedRecord"), aurl("basicparentitems")) :
-            $basicparentitemsTable->with(['basic_id'=>$basicparentitems->basic_id, 'parent_item'=>$parent_item->item])->render('admin.basicparents.show', ['title' => trans('admin.show'), 'basicparentitems' => $basicparentitems]);
+            view('admin.basicparentitems.show', ['title' => trans('admin.show'), 'basicparentitems' => $basicparentitems]);
     }
 
 
@@ -127,17 +156,38 @@ class BasicParentItems extends Controller
 
     public function update(BasicParentItemsRequest $request, $id)
     {
-        // Check Record Exists
-        $basicparentitems = BasicParentItem::find($id);
-        $basicparent = BasicParent::where('id', $basicparentitems->basic_id)->first();
-        //dd($basicparent->id);
-        if (is_null($basicparentitems) || empty($basicparentitems)) {
-            return backWithError(trans("admin.undefinedRecord"), aurl("basicparentitems"));
+        $parentItem = BasicParentItem::find($id);
+        $data = $request->except("_token", "_method");
+        DB::beginTransaction();
+        $parentItem_price = 0;
+        try {
+            $parentItem->name = $data['name'];
+            $parentItem->date = $data['date'];
+            $parentItem->discount = $data['discount'];
+//            $parentItem->price = 0;
+//            $parentItem->amount = 0;
+            $parentItem->save();
+            SubItem::where('parent_item_id', $parentItem->id)->delete();
+
+            for ($i = 0; $i < count($data['price'] ?? []); $i++) {
+                SubItem::create([
+                    'price' => InsertLargeNumber($data['price'][$i]),
+                    'amount' => InsertLargeNumber($data['amount'][$i]),
+                    'note' => $data['note'][$i],
+                    'parent_item_id' => $parentItem->id,
+                ]);
+                $parentItem_price += ($data['price'][$i] * $data['amount'][$i]);
+            }
+            $parentItem->update(['price' => InsertLargeNumber(($parentItem_price- $parentItem->discount))]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return backWithError($e);
+
         }
-        $data = $this->updateFillableColumns();
-        BasicParentItem::where('id', $id)->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
-        return redirectWithSuccess(aurl('basicparents/' . $basicparent->id . $redirect), trans('admin.updated'));
+        return redirectWithSuccess(aurl('basicparents/' . $parentItem->basic_id . $redirect), trans('admin.updated'));
     }
 
     /**
