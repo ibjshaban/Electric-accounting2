@@ -42,6 +42,18 @@ if (!function_exists('CheckParentRoute')) {
             case \Request::is('admin/other-notebooks/*'):
                 $item = '3';
                 break;
+            case 'admin/withdrawals':
+                $item = '4';
+                break;
+            case \Request::is('admin/withdrawals/*'):
+                $item = '4';
+                break;
+            case 'admin/payments':
+                $item = '5';
+                break;
+            case \Request::is('admin/payments/*'):
+                $item = '5';
+                break;
             default:
                 $item = '0';
         }
@@ -77,6 +89,18 @@ if (!function_exists('CheckParentTitle')) {
                 break;
             case \Request::is('admin/other-notebooks/*'):
                 $title = trans('admin.other-notebooks');
+                break;
+            case 'admin/withdrawals':
+                $title = trans('admin.withdrawals');
+                break;
+            case \Request::is('admin/withdrawals/*'):
+                $title = trans('admin.withdrawals');
+                break;
+            case 'admin/payments':
+                $title = trans('admin.payments');
+                break;
+            case \Request::is('admin/payments/*'):
+                $title = trans('admin.payments');
                 break;
             default:
                 $title = 'عنوان مجهول';

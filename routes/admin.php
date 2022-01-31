@@ -162,7 +162,6 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::post('other-notebooks/store', 'Admin\BasicParents@storeStartup');
         Route::get('other-notebooks/{id}/edit', 'Admin\BasicParents@editStartup');
         Route::put('other-notebooks/update/{id}', 'Admin\BasicParents@updateStartup');
-
 //Items
         Route::resource('basicparentitems', 'Admin\BasicParentItems');
         Route::post('basicparentitems/multi_delete', 'Admin\BasicParentItems@multi_delete');
@@ -175,27 +174,43 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::resource('generalrevenue', 'Admin\GeneralRevenueController');
         Route::post('generalrevenue/multi_delete', 'Admin\GeneralRevenueController@multi_delete');
 
-        Route::resource('withdrawalspayments', 'Admin\WithdrawalsPaymentsController')->except('create', 'destroy', 'show', 'index', 'edit');
 
-        Route::get('/withdrawals/{type}/create', 'Admin\WithdrawalsPaymentsController@create_withdrawals')->name('withdrawalspayments-withdrawals');
-        Route::get('/withdrawals', 'Admin\WithdrawalsPaymentsController@index_withdrawals');
-        Route::get('/withdrawals/{id}/edit', 'Admin\WithdrawalsPaymentsController@edit_withdrawals');
-        Route::delete('/withdrawals/{id}', 'Admin\WithdrawalsPaymentsController@destroy_withdrawals')->name('destroy_withdrawals');
-        Route::get('/withdrawals/{id}', 'Admin\WithdrawalsPaymentsController@show_withdrawals');
-        Route::put('/withdrawals/{id}', 'Admin\WithdrawalsPaymentsController@update_withdrawals');
-        Route::post('/withdrawals', 'Admin\WithdrawalsPaymentsController@store_withdrawals');
+        Route::resource('basicparents', 'Admin\BasicParents');
+        Route::post('basicparents/multi_delete', 'Admin\BasicParents@multi_delete');
+        //withdrawals-basicparent
+        Route::get('withdrawals', 'Admin\WithdrawalsPaymentsController@indexStartup')->middleware('AdminRole:withdrawals_show');
+        Route::get('/withdrawals/{id}', 'Admin\basicparents@show_withdrawalspayments')->middleware('AdminRole:withdrawals_show');
+        Route::get('withdrawals/create', 'Admin\WithdrawalsPaymentsController@createStartup')->middleware('AdminRole:withdrawals_add');
+        Route::post('withdrawals/store', 'Admin\WithdrawalsPaymentsController@storeStartup')->middleware('AdminRole:withdrawals_add');
+        Route::get('withdrawals/{id}/edit', 'Admin\WithdrawalsPaymentsController@editStartup')->middleware('AdminRole:withdrawals_edit');
+        Route::put('withdrawals/update/{id}', 'Admin\WithdrawalsPaymentsController@updateStartup')->middleware('AdminRole:withdrawals_edit');
+        //payments-basicparent
+        Route::get('payments', 'Admin\WithdrawalsPaymentsController@indexStartup')->middleware('AdminRole:payments_show');
+        Route::get('/payments/{id}', 'Admin\basicparents@show_withdrawalspayments')->middleware('AdminRole:payments_show');
+        Route::get('payments/create', 'Admin\WithdrawalsPaymentsController@createStartup')->middleware('AdminRole:payments_add');
+        Route::post('payments/store', 'Admin\WithdrawalsPaymentsController@storeStartup')->middleware('AdminRole:payments_add');
+        Route::get('payments/{id}/edit', 'Admin\WithdrawalsPaymentsController@editStartup')->middleware('AdminRole:payments_edit');
+        Route::put('payments/update/{id}', 'Admin\WithdrawalsPaymentsController@updateStartup')->middleware('AdminRole:payments_edit');
 
-        Route::get('/payments/{type}/create', 'Admin\WithdrawalsPaymentsController@create_payments')->name('withdrawalspayments-payments');
-        Route::get('/payments', 'Admin\WithdrawalsPaymentsController@index_payments');
-        Route::get('/payments/{id}/edit', 'Admin\WithdrawalsPaymentsController@edit_payments');
-        Route::delete('/payments/{id}', 'Admin\WithdrawalsPaymentsController@destroy_payments')->name('destroy_payments');
-        Route::get('/payments/{id}', 'Admin\WithdrawalsPaymentsController@show_payments');
-        Route::put('/payments/{id}', 'Admin\WithdrawalsPaymentsController@update_payments');
-        Route::post('/payments', 'Admin\WithdrawalsPaymentsController@store_payments');
 
-        Route::post('withdrawals/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_withdrawals')->name('multi_delete_withdrawals');
-        Route::post('payments/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_payments')->name('multi_delete_payments');
-        ////////AdminRoutes/*End*///////////////
+                Route::get('/basicparents/withdrawals/{parent_id}/create', 'Admin\WithdrawalsPaymentsController@create_withdrawals')->name('withdrawalspayments-withdrawals');
+                Route::get('/basicparents/withdrawals/{id}/edit', 'Admin\WithdrawalsPaymentsController@edit_withdrawals');
+                Route::delete('/basicparents/withdrawals/{id}', 'Admin\WithdrawalsPaymentsController@destroy_withdrawals')->name('destroy_withdrawals');
+                Route::get('/basicparents/withdrawals/{id}', 'Admin\WithdrawalsPaymentsController@show_withdrawals');
+                Route::put('/basicparents/withdrawals/{id}', 'Admin\WithdrawalsPaymentsController@update_withdrawals');
+                Route::post('/basicparents/withdrawals/{parent_id}', 'Admin\WithdrawalsPaymentsController@store_withdrawals');
+
+                Route::get('/basicparents/payments/{parent_id}/create', 'Admin\WithdrawalsPaymentsController@create_payments')->name('withdrawalspayments-payments');
+                Route::get('/basicparents/payments/{id}/edit', 'Admin\WithdrawalsPaymentsController@edit_payments');
+                Route::delete('/basicparents/payments/{id}', 'Admin\WithdrawalsPaymentsController@destroy_payments')->name('destroy_payments');
+                Route::get('/basicparents/payments/{id}', 'Admin\WithdrawalsPaymentsController@show_payments');
+                Route::put('/basicparents/payments/{id}', 'Admin\WithdrawalsPaymentsController@update_payments');
+                Route::post('/basicparents/payments/{parent_id}', 'Admin\WithdrawalsPaymentsController@store_payments');
+
+                Route::post('/basicparents/withdrawals/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_withdrawals')->name('multi_delete_withdrawals');
+                Route::post('/basicparents/payments/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_payments')->name('multi_delete_payments');
+
+              ////////AdminRoutes/*End*///////////////
 
         Route::resource('Notebooks', 'Admin\Notebooks');
         Route::post('Notebooks/multi_delete', 'Admin\Notebooks@multi_delete');

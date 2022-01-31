@@ -35,7 +35,7 @@ class WithdrawalsDataTable extends DataTable
      */
 	public function query()
     {
-        return WithdrawalsPayments::query()->where('type','0')->select("withdrawals_payments.*");
+        return WithdrawalsPayments::query()->where('parent_id', $this->parent_id)->select("withdrawals_payments.*");
 
     }
 
@@ -86,7 +86,7 @@ class WithdrawalsDataTable extends DataTable
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){
-                        	window.location.href =  " /admin/withdrawals/0/create";
+                        	window.location.href =  " /admin/basicparents/withdrawals/'.request()->route('id').'/create";
                         }',
                     ],
                 ],

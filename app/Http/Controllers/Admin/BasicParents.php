@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\BasicParentItemsDataTable;
 use App\DataTables\BasicParentsDataTable;
+use App\DataTables\PaymentsDataTable;
+use App\DataTables\WithdrawalsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\BasicParentsRequest;
 use App\Models\BasicParent;
 use App\Models\BasicParentItem;
+use Illuminate\Support\Facades\Route;
+use PhpParser\Node\Expr\Cast\Object_;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.37]
@@ -87,6 +91,21 @@ class BasicParents extends Controller
                 'title' => trans('admin.show'),
                 'basicparents' => $basicparents
             ]) */ $basicparentitemsTable->with(['basic_id'=>$id, 'basicparents'=>$basicparents])->render('admin.basicparents.show', ['title' => trans('admin.show'), 'basicparents' => $basicparents]);
+    }
+    public function show_withdrawalspayments($id)
+    {
+        $basicparents = BasicParent::find($id);
+        $datatable= collect();
+        if (\Request::is('admin/withdrawals/*')){
+            $datatable= new WithdrawalsDataTable();
+        }
+        else{
+            $datatable= new PaymentsDataTable();
+        }
+
+        return is_null($basicparents) || empty($basicparents) ?
+            backWithError(trans("admin.undefinedRecord"), aurl(\Request::is('admin/withdrawals/*') ? "withdrawals" : "payments")) :
+            $datatable->with(['parent_id'=>$id])->render('admin.basicparents.show', ['title' => trans('admin.show'), 'basicparents' => $basicparents]);
     }
 
 

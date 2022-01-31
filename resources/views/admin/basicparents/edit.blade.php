@@ -70,6 +70,10 @@
                 {!! Form::open(['url'=>aurl('/rentals/update/'.$basicparents->id),'method'=>'put','id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             @elseif(\Request::is('admin/other-notebooks/*'))
                 {!! Form::open(['url'=>aurl('/other-notebooks/update/'.$basicparents->id),'method'=>'put','id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+           @elseif(\Request::is('admin/withdrawals/*'))
+                {!! Form::open(['url'=>aurl('/withdrawals/update/'.$basicparents->id),'method'=>'put','id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+           @elseif(\Request::is('admin/payments/*'))
+                {!! Form::open(['url'=>aurl('/payments/update/'.$basicparents->id),'method'=>'put','id'=>'basicparents','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             @endif
             <div class="row">
 

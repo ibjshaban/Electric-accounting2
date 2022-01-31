@@ -10,12 +10,12 @@
 				<span class="sr-only"></span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-				<a href="{{aurl($withdrawalspayments->type == '0' ? 'withdrawals' : 'payments')}}" class="dropdown-item"  style="color:#343a40">
+				<a href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? 'withdrawals/'.$withdrawalspayments->parent_id : 'payments/'.$withdrawalspayments->parent_id)}}" class="dropdown-item"  style="color:#343a40">
 				<i class="fas fa-list"></i> {{trans('admin.show_all')}}</a>
-				<a class="dropdown-item"  style="color:#343a40" href="{{aurl($withdrawalspayments->type == '0' ? 'withdrawals' : 'payments').'/'.$withdrawalspayments->id.'/edit'}}">
+				<a class="dropdown-item"  style="color:#343a40" href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? '/basicparents/withdrawals' : '/basicparents/payments').'/'.$withdrawalspayments->id.'/edit'}}">
 					<i class="fas fa-edit"></i> {{trans('admin.edit')}}
 				</a>
-				<a class="dropdown-item"  style="color:#343a40" href="{{aurl($withdrawalspayments->type == '0' ? '/withdrawals/0/create' : 'payments/1/create')}}">
+				<a class="dropdown-item"  style="color:#343a40" href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? '/basicparents/withdrawals/'.$withdrawalspayments->parent_id .'/create' : 'basicparents/payments/'.$withdrawalspayments->parent_id .'/create')}}">
 					<i class="fas fa-plus"></i> {{trans('admin.create')}}
 				</a>
 				<div class="dropdown-divider"></div>
@@ -39,7 +39,7 @@
 					<div class="modal-footer">
 						{!! Form::open([
                'method' => 'DELETE',
-               'route' => [($withdrawalspayments->type == "0"? 'destroy_withdrawals':'destroy_payments'), $withdrawalspayments->id]
+               'route' => [(\Request::is('admin/basicparents/withdrawals/*') ? 'destroy_withdrawals':'destroy_payments'), $withdrawalspayments->id]
                ]) !!}
                 {!! Form::submit(trans('admin.approval'), ['class' => 'btn btn-danger btn-flat']) !!}
 						 <a class="btn btn-default" data-dismiss="modal">{{trans('admin.cancel')}}</a>
