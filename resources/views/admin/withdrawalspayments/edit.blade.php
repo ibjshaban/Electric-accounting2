@@ -10,11 +10,11 @@
 			<span class="sr-only"></span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-				<a href="{{aurl($withdrawalspayments->type == '0' ? 'withdrawals' : 'payments')}}" class="dropdown-item" style="color:#343a40">
+				<a href="{{aurl((\Request::is('admin/basicparents/withdrawals/*')) ? '/withdrawals/' : '/payments/').'/'.$withdrawalspayments->parent_id.'/show'}}" class="dropdown-item" style="color:#343a40">
 				<i class="fas fa-list"></i> {{trans('admin.show_all')}} </a>
-				<a href="{{aurl(($withdrawalspayments->type == '0' ? 'withdrawals' : 'payments').'/'.$withdrawalspayments->id)}}" class="dropdown-item" style="color:#343a40">
+				<a href="{{aurl(((\Request::is('admin/basicparents/withdrawals/*')) ? 'basicparents/withdrawals' : 'basicparents/payments').'/'.$withdrawalspayments->id)}}" class="dropdown-item" style="color:#343a40">
 				<i class="fa fa-eye"></i> {{trans('admin.show')}} </a>
-				<a class="dropdown-item" style="color:#343a40" href="{{aurl($withdrawalspayments->type == '0' ? '/withdrawals/0/create' : 'payments/1/create')}}">
+				<a class="dropdown-item" style="color:#343a40" href="{{aurl((\Request::is('admin/basicparents/withdrawals/*')) ? '/basicparents/withdrawals' : '/basicparents/payments').'/'.$withdrawalspayments->parent_id.'/create'}}">
 					<i class="fa fa-plus"></i> {{trans('admin.create')}}
 				</a>
 				<div class="dropdown-divider"></div>
@@ -56,7 +56,7 @@
 	<!-- /.card-header -->
 	<div class="card-body">
 
-{!! Form::open(['url'=>aurl(($withdrawalspayments->type == '0' ? 'withdrawals' : 'payments').'/'.$withdrawalspayments->id),'method'=>'put','id'=>'withdrawalspayments','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
+{!! Form::open(['url'=>aurl(((\Request::is('admin/basicparents/withdrawals/*')) ? 'basicparents/withdrawals' : 'basicparents/payments').'/'.$withdrawalspayments->id),'method'=>'put','id'=>'withdrawalspayments','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
 <div class="row">
 
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">

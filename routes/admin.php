@@ -179,15 +179,15 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::post('basicparents/multi_delete', 'Admin\BasicParents@multi_delete');
         //withdrawals-basicparent
         Route::get('withdrawals', 'Admin\WithdrawalsPaymentsController@indexStartup')->middleware('AdminRole:withdrawals_show');
-        Route::get('/withdrawals/{id}', 'Admin\basicparents@show_withdrawalspayments')->middleware('AdminRole:withdrawals_show');
+        Route::get('/withdrawals/{id}/show', 'Admin\basicparents@show_withdrawalspayments')->middleware('AdminRole:withdrawals_show');
         Route::get('withdrawals/create', 'Admin\WithdrawalsPaymentsController@createStartup')->middleware('AdminRole:withdrawals_add');
         Route::post('withdrawals/store', 'Admin\WithdrawalsPaymentsController@storeStartup')->middleware('AdminRole:withdrawals_add');
         Route::get('withdrawals/{id}/edit', 'Admin\WithdrawalsPaymentsController@editStartup')->middleware('AdminRole:withdrawals_edit');
         Route::put('withdrawals/update/{id}', 'Admin\WithdrawalsPaymentsController@updateStartup')->middleware('AdminRole:withdrawals_edit');
         //payments-basicparent
         Route::get('payments', 'Admin\WithdrawalsPaymentsController@indexStartup')->middleware('AdminRole:payments_show');
-        Route::get('/payments/{id}', 'Admin\basicparents@show_withdrawalspayments')->middleware('AdminRole:payments_show');
-        Route::get('payments/create', 'Admin\WithdrawalsPaymentsController@createStartup')->middleware('AdminRole:payments_add');
+        Route::get('/payments/{id}/show', 'Admin\basicparents@show_withdrawalspayments')->middleware('AdminRole:payments_show');
+        Route::get('/payments/create', 'Admin\WithdrawalsPaymentsController@createStartup')->middleware('AdminRole:payments_add');
         Route::post('payments/store', 'Admin\WithdrawalsPaymentsController@storeStartup')->middleware('AdminRole:payments_add');
         Route::get('payments/{id}/edit', 'Admin\WithdrawalsPaymentsController@editStartup')->middleware('AdminRole:payments_edit');
         Route::put('payments/update/{id}', 'Admin\WithdrawalsPaymentsController@updateStartup')->middleware('AdminRole:payments_edit');
@@ -207,8 +207,8 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
                 Route::put('/basicparents/payments/{id}', 'Admin\WithdrawalsPaymentsController@update_payments');
                 Route::post('/basicparents/payments/{parent_id}', 'Admin\WithdrawalsPaymentsController@store_payments');
 
-                Route::post('/basicparents/withdrawals/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_withdrawals')->name('multi_delete_withdrawals');
-                Route::post('/basicparents/payments/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_payments')->name('multi_delete_payments');
+                Route::post('/basicparents/withdrawal/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_withdrawals')->name('multi_delete_withdrawals');
+                Route::post('/basicparents/payment/multi_delete', 'Admin\WithdrawalsPaymentsController@multi_delete_payments')->name('multi_delete_payments');
 
               ////////AdminRoutes/*End*///////////////
 

@@ -201,7 +201,7 @@ class EmployeeController extends Controller
         $salaries = Salary::where('employee_id', $id)
             ->get(['total_amount', 'discount', 'salary', 'note', 'employee_id', 'payment_date', DB::raw("0 as type")])
             ->toBase();
-        //dd($salaries[0]->employee_id);
+
         $debts = Debt::where('employee_id', $id)
             ->get()->map(function ($q) {
                 $data = collect();
@@ -220,7 +220,7 @@ class EmployeeController extends Controller
         $salaries = Salary::where('employee_id', $id)
             ->get(['total_amount', 'discount', 'salary', 'note', 'payment_date', DB::raw("0 as type")])
             ->toBase();
-        //dd($salaries);
+
         $debts = Debt::where('employee_id', $id)
             ->get()->map(function ($q) {
                 $data = collect();
@@ -241,7 +241,7 @@ class EmployeeController extends Controller
         $salaries = Salary::where('employee_id', 12)
             ->get(['total_amount', 'discount', 'salary', 'note', 'payment_date', DB::raw("0 as type")])
             ->toBase();
-        //dd($salaries);
+
         $debts = Debt::where('employee_id', 12)
             ->get()->map(function ($q) {
                 $data = collect();

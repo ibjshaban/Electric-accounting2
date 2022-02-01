@@ -1,6 +1,12 @@
 @extends('admin.index')
 @section('content')
+    @if(\Request::is('admin/withdrawals/*'))
+{!! Form::open(["method" => "post","url" => [aurl('/basicparents/withdrawal/multi_delete')]]) !!}
+    @elseif(\Request::is('admin/payments/*'))
+{!! Form::open(["method" => "post","url" => [aurl('/basicparents/payment/multi_delete')]]) !!}
+    @else
 {!! Form::open(["method" => "post","url" => [aurl('/basicparentitems/multi_delete')]]) !!}
+@endif
 <div class="card card-dark">
 	<div class="card-header">
 		<h3 class="card-title">{{!empty($title)?$title:''}}</h3>
@@ -46,4 +52,3 @@
 {!! $dataTable->scripts() !!}
 @endpush
 		@endsection
-		

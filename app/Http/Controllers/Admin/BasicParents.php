@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\BasicParentsRequest;
 use App\Models\BasicParent;
 use App\Models\BasicParentItem;
+use App\Models\WithdrawalsPayments;
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Expr\Cast\Object_;
 
@@ -168,15 +169,28 @@ class BasicParents extends Controller
         if (is_null($basicparents) || empty($basicparents)) {
             return backWithSuccess(trans('admin.undefinedRecord'));
         }
-
         it()->delete('basicparent', $id);
+        $parent_id= $basicparents->parent_id;
+        if (url()->previous() == url('admin/payments') || url()->previous() == url('admin/withdrawals'))
+        {
+            $withdrawalsOrPayments= WithdrawalsPayments::where('parent_id',$basicparents->id)->count();
+            if ($withdrawalsOrPayments > 0){
+                return backWithError('يوجد عناصر داخل الدفتر ,يرجى حذفها لاتمام عملية حذف الدفتر');
+            }
+        }
+        else{
+            $BasicParentItem= BasicParentItem::where('basic_id',$basicparents->id)->count();
+            if ($BasicParentItem > 0){
+                return backWithError('يوجد عناصر داخل الدفتر ,يرجى حذفها لاتمام عملية حذف الدفتر');
+            }
+        }
         $basicparents->delete();
 
         return backWithSuccess( trans('admin.deleted'));
     }
 
 
-    public function multi_delete()
+   /* public function multi_delete()
     {
         $data = request('selected_data');
         if (is_array($data)) {
@@ -200,7 +214,7 @@ class BasicParents extends Controller
             $basicparents->delete();
             return backWithSuccess(trans('admin.deleted'));
         }
-    }
+    }*/
 
     // -------------------- Startup basic -----------------------------------------//
     public function indexStartup()
@@ -260,7 +274,7 @@ class BasicParents extends Controller
         $data['admin_id'] = admin()->id();
 
         $currentRoute = \Route::current()->uri;
-        //dd($currentRoute);
+
         $tokens = explode('/', $currentRoute);
         $path = $tokens[sizeof($tokens)-3];
 
