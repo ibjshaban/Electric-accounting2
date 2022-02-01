@@ -82,9 +82,11 @@
 				{!! $basicparents->description !!}
 			</div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                @if(!(\Request::is('admin/withdrawals/*') || \Request::is('admin/payments/*')))
 				<a class="btn btn-info" href="{{ aurl('startup-items/'.$basicparents->id.'/create') }}">
                     <span><i class="fa fa-plus"></i>  إضافة عناصر</span>
                 </a>
+                @endif
 			</div>
 
 		{{--	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -100,7 +102,13 @@
 	</div>
 </div>
 
-{!! Form::open(["method" => "post","url" => [aurl('/basicparentitems/multi_delete')]]) !!}
+@if(\Request::is('admin/withdrawals/*'))
+    {!! Form::open(["method" => "post","url" => [aurl('/basicparents/withdrawal/multi_delete')]]) !!}
+@elseif(\Request::is('admin/payments/*'))
+    {!! Form::open(["method" => "post","url" => [aurl('/basicparents/payment/multi_delete')]]) !!}
+@else
+    {!! Form::open(["method" => "post","url" => [aurl('/basicparentitems/multi_delete')]]) !!}
+@endif
 <div class="card card-dark">
     <div class="card-header">
         <h3 class="card-title">{{!empty($title)?$title:''}}</h3>

@@ -10,18 +10,19 @@
 				<span class="sr-only"></span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-				<a href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? 'withdrawals/'.$withdrawalspayments->parent_id : 'payments/'.$withdrawalspayments->parent_id)}}" class="dropdown-item"  style="color:#343a40">
-				<i class="fas fa-list"></i> {{trans('admin.show_all')}}</a>
-				<a class="dropdown-item"  style="color:#343a40" href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? '/basicparents/withdrawals' : '/basicparents/payments').'/'.$withdrawalspayments->id.'/edit'}}">
-					<i class="fas fa-edit"></i> {{trans('admin.edit')}}
-				</a>
-				<a class="dropdown-item"  style="color:#343a40" href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? '/basicparents/withdrawals/'.$withdrawalspayments->parent_id .'/create' : 'basicparents/payments/'.$withdrawalspayments->parent_id .'/create')}}">
-					<i class="fas fa-plus"></i> {{trans('admin.create')}}
-				</a>
-				<div class="dropdown-divider"></div>
-				<a data-toggle="modal" data-target="#deleteRecord{{$withdrawalspayments->id}}" class="dropdown-item"  style="color:#343a40" href="#">
-					<i class="fas fa-trash"></i> {{trans('admin.delete')}}
-				</a>
+
+                <a href="{{aurl((\Request::is('admin/basicparents/withdrawals/*')) ? '/withdrawals/' : '/payments/').'/'.$withdrawalspayments->parent_id.'/show'}}" class="dropdown-item" style="color:#343a40">
+                    <i class="fas fa-list"></i> {{trans('admin.show_all')}} </a>
+                <a class="dropdown-item"  style="color:#343a40" href="{{aurl(\Request::is('admin/basicparents/withdrawals/*') ? '/basicparents/withdrawals' : '/basicparents/payments').'/'.$withdrawalspayments->id.'/edit'}}">
+                    <i class="fas fa-edit"></i> {{trans('admin.edit')}}
+                </a>
+                <a class="dropdown-item" style="color:#343a40" href="{{aurl((\Request::is('admin/basicparents/withdrawals/*')) ? '/basicparents/withdrawals' : '/basicparents/payments').'/'.$withdrawalspayments->parent_id.'/create'}}">
+                    <i class="fa fa-plus"></i> {{trans('admin.create')}}
+                </a>
+                <div class="dropdown-divider"></div>
+                <a data-toggle="modal" data-target="#deleteRecord{{$withdrawalspayments->id}}" class="dropdown-item" style="color:#343a40" href="#">
+                    <i class="fa fa-trash"></i> {{trans('admin.delete')}}
+                </a>
 			</div>
 		</div>
 		</h3>

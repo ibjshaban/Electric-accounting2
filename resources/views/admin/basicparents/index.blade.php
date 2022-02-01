@@ -38,29 +38,32 @@
                         </button>
                         <div class="dropdown-menu" role="menu" style="">
                             @if (\Request::is('admin/startup'))
-                                <a href="{{ aurl('/startup/'.$basicparent->id.'/edit')}}" class="dropdown-item"><i
-                                        class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
-                                {{--		<a href="{{ aurl('/basicparentitems/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> {{trans('admin.add')}}</a>--}}
-                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}"
-                                   class="dropdown-item"><i class="fas fa-plus"></i> إضافة خاصية</a>
+                                <a href="{{ aurl('/startup/'.$basicparent->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> إضافة خاصية</a>
                             @elseif(\Request::is('admin/heavy-expenses'))
-                                <a href="{{ aurl('/heavy-expenses/'.$basicparent->id.'/edit')}}"
-                                   class="dropdown-item"><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
-                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}"
-                                   class="dropdown-item"><i class="fas fa-plus"></i> إضافة خاصية</a>
+                                <a href="{{ aurl('/heavy-expenses/'.$basicparent->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> إضافة خاصية</a>
                             @elseif(\Request::is('admin/rentals'))
-                                <a href="{{ aurl('/rentals/'.$basicparent->id.'/edit')}}" class="dropdown-item"><i
-                                        class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
-                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}"
-                                   class="dropdown-item"><i class="fas fa-plus"></i> إضافة خاصية</a>
+                                <a href="{{ aurl('/rentals/'.$basicparent->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> إضافة خاصية</a>
                             @elseif(\Request::is('admin/other-notebooks'))
-                                <a href="{{ aurl('/other-notebooks/'.$basicparent->id.'/edit')}}" class="dropdown-item"><i
-                                        class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
-                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}"
-                                   class="dropdown-item"><i class="fas fa-plus"></i> إضافة خاصية</a>
+                                <a href="{{ aurl('/other-notebooks/'.$basicparent->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                <a href="{{ aurl('startup-items/'.$basicparent->id.'/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> إضافة خاصية</a>
+                            @elseif(\Request::is('admin/withdrawals'))
+                                <a href="{{ aurl('/withdrawals/'.$basicparent->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                <a href="{{ aurl('/basicparents/withdrawals/'.$basicparent->id.'/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> إضافة عنصر بالدفتر</a>
+                            @elseif(\Request::is('admin/payments'))
+                                <a href="{{ aurl('/payments/'.$basicparent->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                <a href="{{ aurl('/basicparents/payments/'.$basicparent->id.'/create')}}" class="dropdown-item" ><i class="fas fa-plus"></i> إضافة عنصر بالدفتر</a>
                             @endif
-                            <a href="{{ aurl('/basicparents/'.$basicparent->id)}}" class="dropdown-item"><i
-                                    class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+
+                            @if(\Request::is('admin/withdrawals'))
+                                <a href="{{ aurl('/withdrawals/'.$basicparent->id.'/show')}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+                            @elseif(\Request::is('admin/payments'))
+                                <a href="{{ aurl('/payments/'.$basicparent->id.'/show')}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+                            @else
+                                <a href="{{ aurl('/basicparents/'.$basicparent->id)}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+                            @endif
                             <div class="dropdown-divider"></div>
                             <a data-toggle="modal" data-target="#delete_record{{$basicparent->id}}" href="#"
                                class="dropdown-item">

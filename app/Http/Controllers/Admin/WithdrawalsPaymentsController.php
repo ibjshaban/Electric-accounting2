@@ -89,7 +89,7 @@ class WithdrawalsPaymentsController extends Controller
                 $data['parent_id']= $request->route('parent_id');
 		  		$withdrawalspayments = WithdrawalsPayments::create($data);
 		  		$url= 'withdrawals/'.$request->parent_id;
-                $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url;
+                $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url.'/show';
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
             public function store_payments(WithdrawalsPaymentsRequest $request)
@@ -99,7 +99,7 @@ class WithdrawalsPaymentsController extends Controller
                 $data['parent_id']= $request->route('parent_id');
 		  		$withdrawalspayments = WithdrawalsPayments::create($data);
 		  		$url= 'payments/'.$request->parent_id;
-                $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url;
+                $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url.'/show';
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
             /**
@@ -185,11 +185,12 @@ class WithdrawalsPaymentsController extends Controller
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
               $withdrawalspayments->update($data);
-              $redirect = isset($request["save_back"])?"/withdrawals/".$id."/edit": 'withdrawals';
+              $redirect = isset($request["save_back"])?"/basicparents/withdrawals/".$id."/edit": 'withdrawals/'.$withdrawalspayments->parent_id.'/show';
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }
             public function update_payments(WithdrawalsPaymentsRequest $request,$id)
             {
+
               // Check Record Exists
               $withdrawalspayments =  WithdrawalsPayments::find($id);
               if(is_null($withdrawalspayments) || empty($withdrawalspayments)){
@@ -198,7 +199,7 @@ class WithdrawalsPaymentsController extends Controller
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
               $withdrawalspayments->update($data);
-              $redirect = isset($request["save_back"])?"/payments/".$id."/edit": 'payments';
+              $redirect = isset($request["save_back"])?"/basicparents/payments/".$id."/edit": 'payments/'.$withdrawalspayments->parent_id.'/show';
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }
 
@@ -217,7 +218,7 @@ class WithdrawalsPaymentsController extends Controller
                 $parent_id= $withdrawalspayments->parent_id;
                 it()->delete('withdrawalspayments',$id);
                 $withdrawalspayments->delete();
-                return redirectWithSuccess(aurl("withdrawals/".$parent_id),trans('admin.deleted'));
+                return redirectWithSuccess(aurl("withdrawals/".$parent_id."/show"),trans('admin.deleted'));
             }
             public function destroy_payments($id){
                 $withdrawalspayments = WithdrawalsPayments::find($id);
@@ -227,7 +228,7 @@ class WithdrawalsPaymentsController extends Controller
                 $parent_id= $withdrawalspayments->parent_id;
                 it()->delete('withdrawalspayments',$id);
                 $withdrawalspayments->delete();
-                return redirectWithSuccess(aurl("payments/".$parent_id),trans('admin.deleted'));
+                return redirectWithSuccess(aurl("payments/".$parent_id."/show"),trans('admin.deleted'));
             }
 
             public function multi_delete_withdrawals(){
@@ -240,9 +241,10 @@ class WithdrawalsPaymentsController extends Controller
                         }
 
                         it()->delete('withdrawalspayments',$id);
+                        $parent_id= $withdrawalspayments->parent_id;
                         $withdrawalspayments->delete();
                     }
-                    return redirectWithSuccess(aurl("withdrawals"),trans('admin.deleted'));
+                    return redirectWithSuccess(aurl("/withdrawals/".$parent_id."/show"),trans('admin.deleted'));
                 }else {
                     $withdrawalspayments = WithdrawalsPayments::find($data);
                     if(is_null($withdrawalspayments) || empty($withdrawalspayments)){
@@ -250,8 +252,9 @@ class WithdrawalsPaymentsController extends Controller
                     }
 
                     it()->delete('withdrawalspayments',$data);
+                    $parent_id= $withdrawalspayments->parent_id;
                     $withdrawalspayments->delete();
-                    return redirectWithSuccess(aurl("withdrawals"),trans('admin.deleted'));
+                    return redirectWithSuccess(aurl("/withdrawals/".$parent_id."/show"),trans('admin.deleted'));
                 }
             }
             public function multi_delete_payments(){
@@ -264,9 +267,10 @@ class WithdrawalsPaymentsController extends Controller
                         }
 
                         it()->delete('withdrawalspayments',$id);
+                        $parent_id= $withdrawalspayments->parent_id;
                         $withdrawalspayments->delete();
                     }
-                    return redirectWithSuccess(aurl("payments"),trans('admin.deleted'));
+                    return redirectWithSuccess(aurl("/payments/".$parent_id."/show"),trans('admin.deleted'));
                 }else {
                     $withdrawalspayments = WithdrawalsPayments::find($data);
                     if(is_null($withdrawalspayments) || empty($withdrawalspayments)){
@@ -274,20 +278,21 @@ class WithdrawalsPaymentsController extends Controller
                     }
 
                     it()->delete('withdrawalspayments',$data);
+                    $parent_id= $withdrawalspayments->parent_id;
                     $withdrawalspayments->delete();
-                    return redirectWithSuccess(aurl("payments"),trans('admin.deleted'));
+                    return redirectWithSuccess(aurl("/payments/".$parent_id."/show"),trans('admin.deleted'));
                 }
             }
 
     // -------------------- Startup basic -----------------------------------------//
-    public function indexStartup(BasicParentsDataTable $basicparents)
+    public function indexStartup()
     {
         $currentRoute = \Route::current()->uri;
         $item = CheckParentRoute($currentRoute);
         $title = CheckParentTitle($currentRoute);
-        return $basicparents->with('item', $item)->render('admin.basicparents.index', ['title' => $title]);
+        $basicparents = BasicParent::where('item', $item)->get();
+        return view('admin.basicparents.index', ['title' => $title, 'basicparents'=>$basicparents]);
     }
-
     public function createStartup()
     {
         $currentRoute = \Route::current()->uri;
@@ -332,9 +337,8 @@ class WithdrawalsPaymentsController extends Controller
         }
         $data = $this->updateFillableColumns();
         $data['admin_id'] = admin()->id();
-
+        $data['description'] = $request->description;
         $currentRoute = \Route::current()->uri;
-        //dd($currentRoute);
         $tokens = explode('/', $currentRoute);
         $path = $tokens[sizeof($tokens)-3];
 
