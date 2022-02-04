@@ -48,13 +48,33 @@
 <script>
         function change_status(id){
             var status =  $("#selectdata"+id).is(':checked');
-            $.post( "{{route("change_collection_status")}}", {id: id, status: status, _token: "{{csrf_token()}}"})
-                .done(function() {
-                    toastr.success('تم تغيير حالة التحصيل بنجاح')
-                })
-                .fail(function() {
-                    toastr.error('حدث خطأ في تغيير حالة التحصيل')
-                })
+
+            Swal.fire({
+                title: 'هل أنت متأكد؟!',
+                text: "هل تريد تغيير حالة التحصيل",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم, قم بالتغيير',
+                cancelButtonText: 'لا, إلغاء',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post( "{{route("change_collection_status")}}", {id: id, status: status, _token: "{{csrf_token()}}"})
+                        .done(function() {
+                            $("#selectdata"+id).prop('checked', status);
+                            toastr.success('تم تغيير حالة التحصيل بنجاح')
+                        })
+                        .fail(function() {
+                            $("#selectdata"+id).prop('checked', !status);
+                            toastr.error('حدث خطأ في تغيير حالة التحصيل')
+                        })
+                }
+                else {
+                    $("#selectdata"+id).prop('checked', !status);
+                }
+            })
+
         };
     </script>
 @endpush
