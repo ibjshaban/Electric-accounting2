@@ -212,9 +212,11 @@ class FillingController extends Controller
 		}
 
 		it()->delete('filling',$id);
+		$supplier_id= $filling->supplier_id;
 		foreach ($filling->fule() as $fule) { $fule->delete();}
 		$filling->delete();
-		return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
+        $redirect = "supplier/".$supplier_id;
+        return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
 	}
 
 
@@ -228,10 +230,13 @@ class FillingController extends Controller
 				}
 
 				it()->delete('filling',$id);
+				$supplier_id= $filling->supplier_id;
                 foreach ($filling->fule() as $fule) { $fule->delete();}
 				$filling->delete();
 			}
-			return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
+
+            $redirect = "supplier/".$supplier_id;
+            return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
 		}else {
 			$filling = Filling::find($data);
 			if(is_null($filling) || empty($filling)){
@@ -239,9 +244,12 @@ class FillingController extends Controller
 			}
 
 			it()->delete('filling',$data);
+			$supplier_id= $filling->supplier_id;
             foreach ($filling->fule() as $fule) { $fule->delete();}
 			$filling->delete();
-			return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
+
+            $redirect = "supplier/".$supplier_id;
+            return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
 		}
 	}
 

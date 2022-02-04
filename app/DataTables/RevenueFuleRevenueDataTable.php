@@ -21,7 +21,7 @@ class RevenueFuleRevenueDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
-            ->addColumn('actions', 'admin.revenuefule.revenuefule-revenue.buttons.actions')
+
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
             ->addColumn('total_price', '{{ $quantity*$price }}')
@@ -30,7 +30,7 @@ class RevenueFuleRevenueDataTable extends DataTable
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->editColumn('paid_amount', 'admin.revenuefule.revenuefule-revenue.buttons.style')
-            ->rawColumns(['checkbox', 'actions','paid_amount']);
+            ->rawColumns(['checkbox','paid_amount']);
     }
 
 
@@ -85,10 +85,10 @@ class RevenueFuleRevenueDataTable extends DataTable
                         'extend' => 'reload',
                         'className' => 'btn btn-outline',
                         'text' => '<i class="fa fa-sync-alt"></i> ' . trans('admin.reload')
-                    ], [
+                    ], /*[
                         'text' => '<i class="fa fa-trash"></i> ' . trans('admin.delete'),
                         'className' => 'btn btn-outline deleteBtn',
-                    ], /*[
+                    ], [
                         'text' => '<i class="fa fa-plus"></i> ' . trans('admin.add'),
                         'className' => 'btn btn-primary',
                         'action' => 'function(){
@@ -233,15 +233,6 @@ class RevenueFuleRevenueDataTable extends DataTable
                 'name' => 'updated_at',
                 'data' => 'updated_at',
                 'title' => trans('admin.updated_at'),
-                'exportable' => false,
-                'printable' => false,
-                'searchable' => false,
-                'orderable' => false,
-            ],
-            [
-                'name' => 'actions',
-                'data' => 'actions',
-                'title' => trans('admin.actions'),
                 'exportable' => false,
                 'printable' => false,
                 'searchable' => false,

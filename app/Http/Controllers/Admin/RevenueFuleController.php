@@ -188,7 +188,9 @@ class RevenueFuleController extends Controller
     public function revenueFuleRevenue(RevenueFuleRevenueDataTable $revenuefule, $id)
     {
         $revenue = revenue::find($id)->name;
-        return $revenuefule->with('id', $id)->render('admin.revenuefule.index', ['title' => trans('admin.revenuefule'). '/(' . $revenue . ')','id'=> $id]);
+        return $revenuefule->with('id', $id)
+            ->render('admin.revenuefule.index',
+                ['title' => trans('admin.revenuefule'). '/(' . $revenue . ')','id'=> $id]);
     }
     public function revenueFuleRevenuePartition($id)
     {
