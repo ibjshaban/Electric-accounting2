@@ -4,6 +4,11 @@
 <div class="card card-dark">
 	<div class="card-header">
 		<h3 class="card-title">{{!empty($title)?$title:''}}</h3>
+        <div class="mb-2">
+            <a class="btn btn-success" href="{{aurl("revenuefule-revenue/".$id."/partition")}}">
+                فصلة سولار
+            </a>
+        </div>
 		<div class="card-tools">
 			<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
 			<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
@@ -46,4 +51,3 @@
 {!! $dataTable->scripts() !!}
 @endpush
 		@endsection
-		

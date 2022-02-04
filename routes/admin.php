@@ -113,6 +113,8 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
 //**revenue-expenses**
         Route::get('revenuefule-revenue/{id}', 'Admin\RevenueFuleController@revenueFuleRevenue');
+        Route::get('revenuefule-revenue/{id}/partition', 'Admin\RevenueFuleController@revenueFuleRevenuePartition');
+        Route::post('revenuefule-revenue/{id}/partition', 'Admin\RevenueFuleController@revenueFuleRevenuePartitionSave');
         Route::get('revenuefule-revenue/{id}/create', 'Admin\RevenueFuleController@revenueFulCreate');
         Route::post('revenuefule-revenue/create/{id}', 'Admin\RevenueFuleController@revenueFulStore');
         Route::get('revenuefule-revenue/{id}/edit', 'Admin\RevenueFuleController@revenueFulEdit');
