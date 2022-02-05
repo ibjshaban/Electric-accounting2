@@ -213,8 +213,8 @@ class EmployeeController extends Controller
             });
         $debt_remainder= Debt::where('employee_id', $id)->sum('remainder');
         $data = $salaries->merge($debts)->sortBy('payment_date')->reverse();
-
-        return view('admin.employee.movement-show', compact('data', 'salaries','debt_remainder'));
+        $title= "الحركات المالية";
+        return view('admin.employee.movement-show', compact('title','data', 'salaries','debt_remainder'));
     }
 
     public function pdfview($id)
