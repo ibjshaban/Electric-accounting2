@@ -75,7 +75,7 @@ class Employee extends Model
      */
     public function debt()
     {
-        return \App\Models\Debt::where('employee_id', $this->id)->sum('amount') - \App\Models\Salary::where('employee_id', $this->id)->sum('discount');
+        return \App\Models\Debt::where('employee_id', $this->id)->sum('remainder');
     }
 
 }

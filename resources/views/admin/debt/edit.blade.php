@@ -68,8 +68,8 @@
     </div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">
     <div class="form-group">
-        {!! Form::label('amount',trans('admin.amount'),['class'=>'control-label']) !!}
-        {!! Form::number('amount', $debt->amount ,['class'=>'form-control','placeholder'=>trans('admin.amount')]) !!}
+        {!! Form::label('amount','المبلغ',['class'=>'control-label']) !!}
+        {!! Form::number('amount', $debt->amount ,['class'=>'form-control','placeholder'=> 'المبلغ']) !!}
     </div>
 </div>
 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">

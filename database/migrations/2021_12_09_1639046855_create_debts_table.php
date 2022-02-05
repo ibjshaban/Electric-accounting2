@@ -18,6 +18,7 @@ class CreateDebtsTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId("admin_id")->nullable()->constrained("admins")->onUpdate("cascade")->nullOnDelete();
             $table->double('amount');
+            $table->double('remainder');
             $table->string('note')->nullable();
             $table->foreignId("employee_id")->nullable()->constrained("employees")->references("id")->nullOnDelete();
 			$table->softDeletes();
