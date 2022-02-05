@@ -211,8 +211,10 @@ class EmployeeController extends Controller
                 $data->type = 1;
                 return $data;
             });
+        $debt_remainder= Debt::where('employee_id', $id)->sum('remainder');
         $data = $salaries->merge($debts)->sortBy('payment_date')->reverse();
-        return view('admin.employee.movement-show', compact('data', 'salaries'));
+
+        return view('admin.employee.movement-show', compact('data', 'salaries','debt_remainder'));
     }
 
     public function pdfview($id)

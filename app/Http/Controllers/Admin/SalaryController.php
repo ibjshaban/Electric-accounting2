@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\RevenueSalaryDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\SalaryDataTable;
+use App\Models\Debt;
 use App\Models\Employee;
 use App\Models\revenue;
 use Carbon\Carbon;
@@ -10,6 +11,8 @@ use App\Models\Salary;
 
 use App\Http\Controllers\Validations\SalaryRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use mysql_xdevapi\Exception;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -106,7 +109,7 @@ class SalaryController extends Controller
              * edit the form for creating a new resource.
              * @return \Illuminate\Http\Response
              */
-            public function edit($id)
+          /*  public function edit($id)
             {
         		$salary =  Salary::find($id);
                 $revenue = revenue::find($salary->revenue_id)->name;
@@ -116,7 +119,7 @@ class SalaryController extends Controller
 				  'title'=>trans('admin.edit').'/('.$revenue.')',
 				  'salary'=>$salary
         		]);
-            }
+            }*/
 
 
             /**
@@ -135,7 +138,7 @@ class SalaryController extends Controller
 				return $fillableCols;
 			}
 
-            public function update(SalaryRequest $request,$id)
+         /*   public function update(SalaryRequest $request,$id)
             {
               // Check Record Exists
               $salary =  Salary::find($id);
@@ -147,7 +150,7 @@ class SalaryController extends Controller
               Salary::where('id',$id)->update($data);
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
               return redirectWithSuccess(aurl('salary'.$redirect), trans('admin.updated'));
-            }
+            }*/
 
             /**
              * Baboon Script By [it v 1.6.36]
@@ -162,6 +165,7 @@ class SalaryController extends Controller
 		}
 
 		it()->delete('salary',$id);
+		$this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
 		$salary->delete();
 		return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
 	}
@@ -177,6 +181,7 @@ class SalaryController extends Controller
 				}
 
 				it()->delete('salary',$id);
+                $this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
 				$salary->delete();
 			}
 			return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
@@ -187,12 +192,14 @@ class SalaryController extends Controller
 			}
 
 			it()->delete('salary',$data);
+            $this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
 			$salary->delete();
 			return redirectWithSuccess( url()->previous(),trans('admin.deleted'));
 		}
 	}
 
 	public function deposit_salary(Request $request){
+
 	    $status =$this->createSalaryForEmployee($request->id,$request->revenue_id,$request->discount,
             $request->paid_date,$request->note);
 	    if ($status){
@@ -212,21 +219,70 @@ class SalaryController extends Controller
                 return false;
                 }
             }
+ 	        DB::beginTransaction();
+            try {
 
-            $salary =Salary::create([
-                'total_amount'=> $employee->salary,
-                'discount'=> $discount,
-                'salary'=> $employee->salary - $discount,
-                'note'=> $note,
-                'payment_date'=> $paid_date,
-                'employee_id'=> $employee->id,
-                'revenue_id'=> $revenue_id,
-                'admin_id'=> admin()->id()
-            ]);
-            if ($salary){$status= true;}
-
+                $salary =Salary::create([
+                    'total_amount'=> $employee->salary,
+                    'discount'=> $discount,
+                    'salary'=> $employee->salary - $discount,
+                    'note'=> $note,
+                    'payment_date'=> $paid_date,
+                    'employee_id'=> $employee->id,
+                    'revenue_id'=> $revenue_id,
+                    'admin_id'=> admin()->id()
+                ]);
+                foreach (Debt::where('employee_id', $employee->id)->where('remainder', '!=', 0)->get() as $item){
+                    if ($item->remainder >= $discount){
+                        $item->update(['remainder'=> ($item->remainder - $discount)]);
+                        break;
+                    }
+                    else{
+                        $discount= $discount - $item->remainder;
+                        $item->update(['remainder'=> 0]);
+                        if ($discount == 0){
+                            break;
+                        }
+                    }
+                }
+                DB::commit();
+                $status= true;
+            }
+            catch (Exception $e){
+                DB::rollBack();
+                dd($e);
+            }
         }
 	    return $status;
+    }
+
+    public function BackDebtDiscountForEmployee($employee_id,$discount){
+
+	    $employee = Employee::whereId($employee_id)->first();
+        $debts= Debt::where('employee_id', $employee_id)->orderByDesc('created_at')->get();
+
+        foreach ($debts as $item){
+            if ($item->remainder == $item->amount){
+
+                continue;
+            }
+
+            $debt_discount= $item->amount - $item->remainder;
+            if ($debt_discount >= $discount){
+                $item->update(['remainder'=> ($debt_discount)]);
+                break;
+            }
+            else{
+
+                $discount= $discount - $debt_discount;
+                $item->update(['remainder'=> ($debt_discount+$item->remainder)]);
+                if ($discount == 0){
+                    break;
+                }
+            }
+        }
+        return;
+
     }
 
 }
