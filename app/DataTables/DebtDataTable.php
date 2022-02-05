@@ -175,6 +175,10 @@ class DebtDataTable extends DataTable
                  'name'=>'amount',
                  'data'=>'amount',
                  'title'=>trans('admin.amount'),
+		    ],[
+                 'name'=>'remainder',
+                 'data'=>'remainder',
+                 'title'=>trans('admin.remainder'),
 		    ],
 				[
                  'name'=>'note',

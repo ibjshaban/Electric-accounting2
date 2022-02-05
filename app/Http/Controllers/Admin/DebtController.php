@@ -62,6 +62,7 @@ class DebtController extends Controller
             {
                 $data = $request->except("_token", "_method");
             	$data['admin_id'] = admin()->id();
+            	$data['remainder'] = $request->amount;
 		  		$debt = Debt::create($data);
                 $redirect = isset($request["add_back"])?"/create":"";
                 return redirectWithSuccess(aurl('debt'.$redirect), trans('admin.added')); }
@@ -121,10 +122,29 @@ class DebtController extends Controller
             {
               // Check Record Exists
               $debt =  Debt::find($id);
+
+              $remainder= $debt->remainder;
+              if ($request->amount != $debt->amount){
+                  $discount_amount= $debt->amount - $debt->remainder;
+                  if ($discount_amount == 0){
+                      $remainder = $request->amount;
+                  }
+                  else{
+                      if ($request->amount > $debt->amount){
+                          $remainder= $request->amount - $discount_amount ;
+                      }
+                      else{
+                          $remain= $request->amount - $discount_amount;
+                          $remainder= $remain > 0 ? $remain : 0;
+                      }
+                  }
+              }
+
               if(is_null($debt) || empty($debt)){
               	return backWithError(trans("admin.undefinedRecord"),aurl("debt"));
               }
               $data = $this->updateFillableColumns();
+              $data['remainder'] = $remainder;
               $data['admin_id'] = admin()->id();
               Debt::where('id',$id)->update($data);
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";

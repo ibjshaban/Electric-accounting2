@@ -76,8 +76,12 @@
                 @endif
             </div>
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-				<b>{{trans('admin.amount')}} :</b>
+				<b>المبلغ :</b>
 				{!! $debt->amount !!}
+			</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<b>{{trans('admin.remainder')}} :</b>
+				{!! $debt->remainder !!}
 			</div>
 
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
