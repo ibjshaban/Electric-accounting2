@@ -27,7 +27,6 @@
     </style>
 @endpush
 @section('content')
-    <h1>الحركات المالية</h1>
     <!-- /.card-header -->
     <div class="row">
 
