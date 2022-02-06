@@ -27,7 +27,6 @@
     </style>
 @endpush
 @section('content')
-    <h1>الحركات المالية</h1>
     <!-- /.card-header -->
     <div class="row">
 
@@ -86,7 +85,7 @@
                             <td></td>
                             <td><span class="tag tag-success"></span></td>
                             <td> الدين
-                                المتبقي: {{ShekelFormat($data->where('type',1)->sum('total_amount') - $data->where('type',0)->sum('discount'))}}</td>
+                                المتبقي: {{ShekelFormat($debt_remainder)}}</td>
                             <td></td>
                         </tr>
                         <tr>
