@@ -71,7 +71,8 @@ class PaymentController extends Controller
 
                 Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
                 $redirect = isset($request["add_back"])?"/create":"";
-                return redirectWithSuccess(aurl('payment'.$redirect), trans('admin.added')); }
+                return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.added'));
+            }
 
             /**
              * Display the specified resource.
@@ -137,7 +138,7 @@ class PaymentController extends Controller
 
               Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
-              return redirectWithSuccess(aurl('payment'.$redirect), trans('admin.updated'));
+              return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.updated'));
             }
 
             /**
@@ -155,7 +156,7 @@ class PaymentController extends Controller
 		it()->delete('payment',$id);
 		Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
 		$payment->delete();
-		return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
+		return backWithSuccess(trans('admin.deleted'));
 	}
 
 

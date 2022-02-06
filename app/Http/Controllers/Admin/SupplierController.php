@@ -74,7 +74,7 @@ class SupplierController extends Controller
         }
         $supplier = Supplier::create($data);
         $redirect = isset($request["add_back"]) ? "/create" : "";
-        return redirectWithSuccess(aurl('supplier' . $redirect), trans('admin.added'));
+        return backWithSuccess(aurl('supplier' . $redirect), trans('admin.added'));
     }
 
     /**
@@ -89,12 +89,15 @@ class SupplierController extends Controller
         $supplier = Supplier::find($id);
         $financial_difference= $supplier->FinancialDifferenceBetweenPaymentsAndFillings();
 
+        $payments = Payment::where('supplier_id', $id)->paginate(10);
+
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
             $filling->render('admin.supplier.show', [
                 'title' => trans('admin.show'),
                 'supplier' => $supplier,
                 'financial_difference' => $financial_difference,
+                'payments' => $payments,
             ]);
     }
 
