@@ -144,7 +144,94 @@
                 <div class="col-12"><hr></div>
                 <div class="col-12">
                     <b>جدول الدفعات :</b>
+                    <br>
+                    <a class="btn btn-info mt-3" href="{{ aurl('payment/create') }}"> إضافة</a>
 
+                    <div class="container mt-5">
+                        <table class="table table-bordered mb-5">
+                            <thead>
+                            <tr class="table-success">
+                                <th scope="col">رقم</th>
+                                <th scope="col">الكمية</th>
+                                <th scope="col">تاريخ الانشاء</th>
+                                <th scope="col">العملية</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($payments as $payment)
+                                <tr>
+                                    <th scope="row">{{ $payment->id }}</th>
+                                    <td>{{ $payment->amount }}</td>
+{{--                                    <td>{{ $payment->lastname }}</td>--}}
+                                    <td>{{ $payment->created_at }}</td>
+                                    <td><div class="btn-group">
+                                            <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> {{ trans('admin.actions') }}</button>
+                                            <span class="caret"></span>
+                                            <span class="sr-only"></span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu">
+                                                <a href="{{ aurl('/payment/'.$payment->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
+                                                <a href="{{ aurl('/payment/'.$payment->id)}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a data-toggle="modal" data-target="#delete_record{{$payment->id}}" href="#" class="dropdown-item">
+                                                    <i class="fas fa-trash"></i> {{trans('admin.delete')}}</a>
+                                            </div>
+                                        </div>
+                                        </td>
+                                </tr>
+                                <div class="modal fade" id="delete_record{{$payment->id}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">{{trans('admin.delete')}}</h4>
+                                                <button class="close" data-dismiss="modal">x</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <i class="fa fa-exclamation-triangle"></i> {{trans('admin.ask_del')}} {{trans('admin.id')}} ({{$payment->id}})
+                                            </div>
+                                            <div class="modal-footer">
+                                                {!! Form::open([
+                                                'method' => 'DELETE',
+                                                'route' => ['payment.destroy', $payment->id]
+                                                ]) !!}
+                                                {!! Form::submit(trans('admin.approval'), ['class' => 'btn btn-danger btn-flat']) !!}
+                                                <a class="btn btn-default btn-flat" data-dismiss="modal">{{trans('admin.cancel')}}</a>
+                                                {!! Form::close() !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            @endforeach
+                            </tbody>
+                        </table>
+                        {{-- Pagination --}}
+                        <div class="d-flex justify-content-center">
+                            {{ $payments->links() }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="delete_record{{$payment->id}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">{{trans('admin.delete')}}</h4>
+                                <button class="close" data-dismiss="modal">x</button>
+                            </div>
+                            <div class="modal-body">
+                                <i class="fa fa-exclamation-triangle"></i> {{trans('admin.ask_del')}} {{trans('admin.id')}} ({{$payment->id}})
+                            </div>
+                            <div class="modal-footer">
+                                {!! Form::open([
+                                'method' => 'DELETE',
+                                'route' => ['supplier.destroy', $payment->id]
+                                ]) !!}
+                                {!! Form::submit(trans('admin.approval'), ['class' => 'btn btn-danger btn-flat']) !!}
+                                <a class="btn btn-default btn-flat" data-dismiss="modal">{{trans('admin.cancel')}}</a>
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- /.row -->
