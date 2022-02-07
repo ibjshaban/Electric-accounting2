@@ -86,9 +86,6 @@ class RevenueController extends Controller
         $revenue = revenue::find($id);
         $title = $revenue->name;
 
-
-        $employee_id = Collection::select('employee_id')->get();
-
         ////
        /* $total_collections = DB::select('SELECT SUM(amount) AS amount FROM collections WHERE revenue_id = ' . $revenue->id . ' AND employee_id IN
                                                (SELECT id FROM employees WHERE type_id = 1)');
