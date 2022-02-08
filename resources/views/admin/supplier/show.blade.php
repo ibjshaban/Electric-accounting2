@@ -158,11 +158,11 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if(count($payments) > 0)
                             @foreach($payments as $payment)
                                 <tr>
                                     <th scope="row">{{ $payment->id }}</th>
                                     <td>{{ $payment->amount }}</td>
-{{--                                    <td>{{ $payment->lastname }}</td>--}}
                                     <td>{{ $payment->created_at }}</td>
                                     <td><div class="btn-group">
                                             <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> {{ trans('admin.actions') }}</button>
@@ -201,8 +201,8 @@
                                         </div>
                                     </div>
                                 </div>
-
                             @endforeach
+                            @endif
                             </tbody>
                         </table>
                         {{-- Pagination --}}
@@ -211,28 +211,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="delete_record{{$payment->id}}">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">{{trans('admin.delete')}}</h4>
-                                <button class="close" data-dismiss="modal">x</button>
-                            </div>
-                            <div class="modal-body">
-                                <i class="fa fa-exclamation-triangle"></i> {{trans('admin.ask_del')}} {{trans('admin.id')}} ({{$payment->id}})
-                            </div>
-                            <div class="modal-footer">
-                                {!! Form::open([
-                                'method' => 'DELETE',
-                                'route' => ['supplier.destroy', $payment->id]
-                                ]) !!}
-                                {!! Form::submit(trans('admin.approval'), ['class' => 'btn btn-danger btn-flat']) !!}
-                                <a class="btn btn-default btn-flat" data-dismiss="modal">{{trans('admin.cancel')}}</a>
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- /.row -->
             </div>

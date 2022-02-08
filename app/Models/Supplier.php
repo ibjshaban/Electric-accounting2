@@ -59,19 +59,31 @@ class Supplier extends Model
 
     public function PayFillingsAutoFromPayments(){
         $sum_payments_amount= Payment::where('supplier_id', $this->id)->sum('amount');
-        $sum_paid_fules_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))->where('paid_amount','!=', 0)->sum('paid_amount');;
-        $revenueFuleNotPaid=collect(DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
-                                  (SELECT id FROM fillings WHERE supplier_id = '.$this->id.')
-                                   AND price * quantity != paid_amount ORDER BY price * quantity , created_at ASC'));
+        $sum_paid_fules_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
+            ->where('paid_amount','!=', 0)
+            ->sum('paid_amount');
 
+        /*$revenueFuleNotPaid= collect(DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
+                                  (SELECT id FROM fillings WHERE supplier_id = '.$this->id.')
+                                   AND price * quantity != paid_amount'));*/
+
+        $revenueFuleNotPaid= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
+            ->fuleNotPaid()
+            ->get();
+        $revenueFuleNotPaid->map(function ($query){
+            $query->filling_date= Filling::whereId($query->filling_id)->first()->filling_date;
+            $query->total_price= $query->total_price;
+        })
+        ->sortBy('filling_date');
+        dd($revenueFuleNotPaid);
         if (count($revenueFuleNotPaid) > 0){
             $remaining_amount= $sum_payments_amount - $sum_paid_fules_amount;
-            if ($remaining_amount > 0){
                 foreach ($revenueFuleNotPaid as $revenueFule){
                     $amount= ($revenueFule->price* $revenueFule->quantity) - $revenueFule->paid_amount;
+                    dd($remaining_amount, $amount,$this->FinancialDifferenceBetweenPaymentsAndFillings(),$sum_payments_amount , $sum_paid_fules_amount);
                     if ($remaining_amount >= $amount){
-                        DB::table('revenue_fules')
-                            ->where('id', $revenueFule->id)  // find your user by their email
+                        dd('2');
+                        RevenueFule::where('id', $revenueFule->id)  // find your user by their email
                             ->limit(1)  // optional - to ensure only one record is updated.
                             ->update(array('paid_amount' => InsertLargeNumber($revenueFule->paid_amount + ($amount))));
                         $remaining_amount -= $amount;
@@ -80,14 +92,13 @@ class Supplier extends Model
                         }
                     }
                     if ($remaining_amount < $amount){
-                        DB::table('revenue_fules')
-                            ->where('id', $revenueFule->id)  // find your user by their email
+                        dd('3');
+                        RevenueFule::where('id', $revenueFule->id)  // find your user by their email
                             ->limit(1)  // optional - to ensure only one record is updated.
                             ->update(array('paid_amount' => InsertLargeNumber($revenueFule->paid_amount + ($remaining_amount))));
                         break;
                     }
                 }
-            }
             return;
         };
     }
@@ -100,30 +111,33 @@ class Supplier extends Model
             $deleted_price -= $remain_price;
         }
         if ($deleted_price > 0){
-            $revenueFulePaid=collect(DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
+            $revenueFulePaid= collect(DB::select('SELECT * FROM revenue_fules WHERE filling_id IN
                                   (SELECT id FROM fillings WHERE supplier_id = '.$this->id.')
-                                   AND paid_amount != 0 ORDER BY created_at DESC'));
+                                   AND paid_amount != 0'));
+            $revenueFulePaid->map(function ($query){
+                $query->filling_date= Filling::whereId($query->filling_id)->first()->filling_date;
+            })
+            ->sortByDesc('filling_date');
+
             foreach ($revenueFulePaid as $fule){
-                if ($deleted_price == 0){
-                    break;
-                }
                 if ($deleted_price >= $fule->paid_amount){
                     $deleted_price -= $fule->paid_amount;
-                    DB::table('revenue_fules')
-                        ->where('id', $fule->id)  // find your user by their email
+                    RevenueFule::where('id', $fule->id)  // find your user by their email
                         ->limit(1)  // optional - to ensure only one record is updated.
                         ->update(array('paid_amount' => InsertLargeNumber(0)));
                 }
                 else{
-                    DB::table('revenue_fules')
-                        ->where('id', $fule->id)  // find your user by their email
+                    RevenueFule::where('id', $fule->id)  // find your user by their email
                         ->limit(1)  // optional - to ensure only one record is updated.
                         ->update(array('paid_amount' => InsertLargeNumber($fule->paid_amount - $deleted_price)));
                     $deleted_price= 0;
                 }
+                if ($deleted_price == 0){
+                    break;
+                }
             }
         }
-
+        //$this->PayFillingsAutoFromPayments();
         return;
     }
 
