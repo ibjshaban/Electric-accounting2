@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Copyright Reserved  [it v 1.6.36]
 class revenue extends Model {
 
-	use SoftDeletes;
+	//use SoftDeletes;
 	protected $dates = ['deleted_at'];
 
 protected $table    = 'revenues';
@@ -58,6 +58,21 @@ protected $fillable = [
          static::deleting(function($revenue) {
 			//$revenue->city_id()->delete();
          });
+   }
+
+   public function profit(){
+
+       $total_collection= Collection::where(['revenue_id'=>$this->id])->sum('amount');
+       //////
+       $total_fules = RevenueFule::where('revenue_id', $this->id)->sum('paid_amount');
+       $total_salary = Salary::where('revenue_id', $this->id)->sum('total_amount');
+       $total_expenses = Expenses::where('revenue_id', $this->id)->sum('price');
+       $total_other_operation = OtherOperation::where('revenue_id', $this->id)->sum('price');
+       $total_all = $total_fules + $total_salary + $total_expenses + $total_other_operation;
+       ////
+       $net_profit = $total_collection  - $total_all;
+       $net_profit= $net_profit > 0 ? $net_profit : 0;
+       return $net_profit;
    }
 
 }
