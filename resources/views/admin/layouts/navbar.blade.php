@@ -41,42 +41,43 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav mr-auto-navbav">
-      @if(count(L::all()) > 0)
-       <!-- Language Dropdown Menu -->
-      <li class="nav-item  dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-language"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg  languages {{ app('l') == 'ar'?'dropdown-menu-right':'dropdown-menu-left' }}">
-          @foreach(L::all() as $l)
-            <a href="{{aurl('lang/'.$l)}}" class="dropdown-item">
-            <i class="fas fa-language"></i> {{trans('admin.'.$l)}} </a>
-        @endforeach
-        </div>
-      </li>
-      <!-- Language Dropdown Menu End-->
-      @endif
+
       <!-- Messages Dropdown Menu -->
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="fa fa-box-open fa-lg"></i>
-          <span class="badge badge-warning navbar-badge" style="width: 100%; font-size: 14px; top: -7px;">₪0.00</span>
+          <span class="badge badge-warning navbar-badge" style="width: 100%; font-size: 14px; top: -7px;">{{ShekelFormat($box_total)}}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg notifications {{ app('l') == 'ar'?'dropdown-menu-right':'dropdown-menu-left' }}">
-          <span class="dropdown-item dropdown-header"> <i class="fa fa-box-open fa-lg pl-2"></i>المجموع: ₪0.00</span>
+          <span class="dropdown-item dropdown-header"> <i class="fa fa-box-open fa-lg pl-2"></i>المجموع: {{ShekelFormat($box_total)}}</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> تفاصيل دفتر 1
+          <a href="{{aurl('debt')}}" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> الديون: {{ShekelFormat($debts_total)}}
+          </a><div class="dropdown-divider"></div>
+          <a href="{{aurl('startup')}}" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i>المصاريف التشغيلية: {{ShekelFormat($operating_expenses_total)}}
           </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i>  تفاصيل دفتر 2
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i>  تفاصيل دفتر 3
-          </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{aurl('heavy-expenses')}}" class="dropdown-item">
+                <i class="fas fa-file mr-2"></i> المصاريف الثقيلة:  {{ShekelFormat($heavy_expenses_total)}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{aurl('rentals')}}" class="dropdown-item">
+                <i class="fas fa-file mr-2"></i> دفتر الإيجارات: {{ShekelFormat($rent_book_total)}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{aurl('other-notebooks')}}" class="dropdown-item">
+                <i class="fas fa-file mr-2"></i> دفاتر أخرى: {{ShekelFormat($other_book_total)}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{aurl('withdrawals')}}" class="dropdown-item">
+                <i class="fas fa-file mr-2"></i> مسحوبات شخصية: {{ShekelFormat($withdrawals_totals)}}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{aurl('payments')}}" class="dropdown-item">
+                <i class="fas fa-file mr-2"></i> دفعات التجار: {{ShekelFormat($payments_totals)}}
+            </a>
         </div>
       </li>
       <li class="nav-item">

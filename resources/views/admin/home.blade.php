@@ -74,122 +74,44 @@
                                 <a href="{{aurl('generalrevenue')}}" style="color: #ffffff;">
                                     <div class="info-box-content">
                                         <span class="info-box-text">{{trans('admin.generalrevenue')}}</span>
-                                        <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                        <span class="info-box-number">{{ShekelFormat($general_revenue)}}</span>
                                     </div>
                                 </a>
                                 <!-- /.info-box-content -->
                             </div>
                         </div>
                     @endif
-{{--
-                    <div class="col-lg-6 col-6 m-auto pb-5">
-                        <div class="info-box bg-gradient-info">
-                            <span class="info-box-icon"><i class="fa fa-city"></i></span>
-                            <a href="#" style="color: #ffffff;">
-                                <div class="info-box-content">
-                                    <span class="info-box-text">المنطقة</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
-                                </div>
-                            </a>
-                            <!-- /.info-box-content -->
-                        </div>
-                    </div>
---}}
+                    <hr>
                     <div class="col-lg-10 col-10 m-auto pb-5" style="overflow-y: scroll; height: 672px;">
                         <div class="info-box bg-gradient-info">
                             <span class="info-box-icon"><i class="fa fa-city"></i></span>
                             <ul id="myUL">
-                                <li><span class="caret">المناطق</span>
-
+                                <li><span class="caret">{{"المناطق - ".ShekelFormat($cities->sum("profit"))}}</span>
                                             <ul class="nested">
-                                                <li><span class="caret">منطقة 1</span>
+                                                @foreach($cities as $city)
+                                                    <li><span class="caret">{{$city->name." - ".ShekelFormat($city->profit)}}</span>
                                                     <ul class="nested">
-                                                        <li><span class="caret">سنة 1</span>
+                                                        @foreach($city->revenue as $key=> $year)
+                                                            <li><span class="caret">{{$key}}</span>
                                                             <ul class="nested">
-                                                                <li>ايرادة 1</li>
-                                                                <li>ايرادة 2</li>
-                                                                <li>ايرادة 3</li>
-                                                                <li>ايرادة 4</li>
-                                                                <li>ايرادة 5</li>
+                                                                @foreach($year as $revenue)
+                                                                    <li>
+                                                                        <a href="{{aurl("/revenue/".$revenue->id)}}" style="color: white">
+                                                                            {{$revenue->name." - ".ShekelFormat($revenue->profit)}}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
                                                             </ul>
                                                         </li>
-
+                                                        @endforeach
                                                     </ul>
                                                 </li>
-                                                <li><span class="caret">منطقة 2</span>
-                                                    <ul class="nested">
-                                                        <li><span class="caret">سنة 2</span>
-                                                        <ul class="nested">
-                                                            <li>ايرادة 1</li>
-                                                            <li>ايرادة 2</li>
-                                                            <li>ايرادة 3</li>
-                                                            <li>ايرادة 4</li>
-                                                            <li>ايرادة 5</li>
-                                                        </ul>
-                                                        </li>
-
-                                                    </ul>
-                                                </li>
-                                                <li><span class="caret">منطقة 2</span>
-                                                    <ul class="nested">
-                                                        <li><span class="caret">سنة 2</span>
-                                                        <ul class="nested">
-                                                            <li>ايرادة 1</li>
-                                                            <li>ايرادة 2</li>
-                                                            <li>ايرادة 3</li>
-                                                            <li>ايرادة 4</li>
-                                                            <li>ايرادة 5</li>
-                                                        </ul>
-                                                        </li>
-
-                                                    </ul>
-                                                </li>
-                                                <li><span class="caret">منطقة 2</span>
-                                                    <ul class="nested">
-                                                        <li><span class="caret">سنة 2</span>
-                                                        <ul class="nested">
-                                                            <li>ايرادة 1</li>
-                                                            <li>ايرادة 2</li>
-                                                            <li>ايرادة 3</li>
-                                                            <li>ايرادة 4</li>
-                                                            <li>ايرادة 5</li>
-                                                        </ul>
-                                                        </li>
-
-                                                    </ul>
-                                                </li>
-                                                <li><span class="caret">منطقة 2</span>
-                                                    <ul class="nested">
-                                                        <li><span class="caret">سنة 2</span>
-                                                        <ul class="nested">
-                                                            <li>ايرادة 1</li>
-                                                            <li>ايرادة 2</li>
-                                                            <li>ايرادة 3</li>
-                                                            <li>ايرادة 4</li>
-                                                            <li>ايرادة 5</li>
-                                                        </ul>
-                                                        </li>
-
-                                                    </ul>
-                                                </li>
-                                                <li><span class="caret">منطقة 2</span>
-                                                    <ul class="nested">
-                                                        <li><span class="caret">سنة 2</span>
-                                                        <ul class="nested">
-                                                            <li>ايرادة 1</li>
-                                                            <li>ايرادة 2</li>
-                                                            <li>ايرادة 3</li>
-                                                            <li>ايرادة 4</li>
-                                                            <li>ايرادة 5</li>
-                                                        </ul>
-                                                        </li>
-
+                                                @endforeach
                                                     </ul>
                                                 </li>
                                             </ul>
                                         </li>
                                     </ul>
-
                             <!-- /.info-box-content -->
                         </div>
                     </div>
@@ -199,7 +121,7 @@
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">المجموع</span>
-                                <span class="info-box-number">{{ ShekelFormat(0) }}</span>
+                                <span class="info-box-number">{{ ShekelFormat($box_total) }}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -212,31 +134,33 @@
                             <a href="#" style="color: #ffffff;">
                                 <div class="info-box-content">
                                     <span class="info-box-text">الصندوق</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                    <span class="info-box-number">{{ ShekelFormat($box_total) }}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
+                    <hr>
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-money-check-alt"></i></span>
                             <a href="{{ aurl('debt') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">الديون</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                    <span class="info-box-number">{{ShekelFormat($debts_total)}}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
+
                     <div class="col-lg-6 col-6 m-auto">
                         <div class="info-box bg-info">
                             <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
                             <a href="{{ aurl('startup') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">المصاريف الاساسية</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                    <span class="info-box-number">{{ShekelFormat($operating_expenses_total)}}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -248,7 +172,7 @@
                             <a href="{{ aurl('heavy-expenses') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">المصاريف الثقيلة</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                    <span class="info-box-number">{{ShekelFormat($heavy_expenses_total)}}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -260,7 +184,7 @@
                             <a href="{{ aurl('rentals') }}">
                                 <div class="info-box-content">
                                     <span class="info-box-text">دفتر الايجارات</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                    <span class="info-box-number">{{ShekelFormat($rent_book_total)}}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -273,47 +197,44 @@
 
                                 <div class="info-box-content">
                                     <span class="info-box-text">دفاتر أخرى</span>
-                                    <span class="info-box-number">{{ShekelFormat(0)}}</span>
+                                    <span class="info-box-number">{{ShekelFormat($other_book_total)}}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
                         </div>
                     </div>
-                    @if(admin()->user()->role("withdrawals_show"))
-                        <div class="col-lg-6 col-6 m-auto">
-                            <div class="info-box bg-info">
-                                <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
-                                <a href="{{aurl('/withdrawals')}}">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">مسحوبات شخصية</span>
-                                        <span class="info-box-number">{{ShekelFormat(0)}}</span>
-                                    </div>
-                                </a>
-                                <!-- /.info-box-content -->
-                            </div>
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
+                            <a href="{{aurl('/withdrawals')}}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">مسحوبات شخصية</span>
+                                    <span class="info-box-number">{{ShekelFormat($withdrawals_totals)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
                         </div>
-                    @endif
-                    @if(admin()->user()->role("payments_show"))
-                        <div class="col-lg-6 col-6 m-auto">
-                            <div class="info-box bg-info">
-                                <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
-                                <a href="{{aurl('/payments')}}">
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">دفعات التجار</span>
-                                        <span class="info-box-number">{{ShekelFormat(0)}}</span>
-                                    </div>
-                                </a>
-                                <!-- /.info-box-content -->
-                            </div>
+                    </div>
+
+                    <div class="col-lg-6 col-6 m-auto">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="fa fa-book-open"></i></span>
+                            <a href="{{aurl('/payments')}}">
+                                <div class="info-box-content">
+                                    <span class="info-box-text">دفعات التجار</span>
+                                    <span class="info-box-number">{{ShekelFormat($payments_totals)}}</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
                         </div>
-                    @endif
+                    </div>
 
                     <div class="col-lg-6 col-md-6 m-auto pt-3">
                         <div class="info-box bg-gradient-navy">
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">المجموع</span>
-                                <span class="info-box-number">{{ ShekelFormat(0) }}</span>
+                                <span class="info-box-number">{{ ShekelFormat($total_alls) }}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
