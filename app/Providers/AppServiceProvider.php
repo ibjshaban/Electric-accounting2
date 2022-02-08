@@ -2,6 +2,7 @@
 namespace App\Providers;
 
 use App\Models\BasicParent;
+use App\Models\BasicParentItem;
 use App\Models\City;
 use App\Models\Debt;
 use App\Models\GeneralRevenue;
@@ -41,13 +42,14 @@ class AppServiceProvider extends ServiceProvider {
         $box_total= $cities->sum('profit') + $general_revenue;
         /******************* Left Side *************/
         $debts_total= Debt::all()->sum("remainder");
-        $operating_expenses_total= 0;
-        $heavy_expenses_total= 0;
-        $rent_book_total= 0;
-        $other_book_total= 0;
-        $withdrawals_totals= WithdrawalsPayments::whereIn('parent_id',BasicParent::where('item','4')->get()->pluck('id'))->sum("price");
-        $payments_totals= WithdrawalsPayments::whereIn('parent_id',BasicParent::where('item','5')->get()->pluck('id'))->sum("price");
-        $total_alls= $box_total - ($debts_total+$withdrawals_totals+$payments_totals);
+        $operating_expenses_total= BasicParentItem::whereIn('basic_id',BasicParent::where('item','0')->pluck('id'))->sum('price');
+        $heavy_expenses_total= BasicParentItem::whereIn('basic_id',BasicParent::where('item','1')->pluck('id'))->sum('price');
+        $rent_book_total= BasicParentItem::whereIn('basic_id',BasicParent::where('item','2')->pluck('id'))->sum('price');
+        $other_book_total= BasicParentItem::whereIn('basic_id',BasicParent::where('item','3')->pluck('id'))->sum('price');
+        $withdrawals_totals= WithdrawalsPayments::whereIn('parent_id',BasicParent::where('item','4')->pluck('id'))->sum("price");
+        $payments_totals= WithdrawalsPayments::whereIn('parent_id',BasicParent::where('item','5')->pluck('id'))->sum("price");
+        $total_alls= $box_total - ($debts_total+$operating_expenses_total+$heavy_expenses_total+$rent_book_total
+                +$other_book_total+$withdrawals_totals+$payments_totals);
         /******************* End *************/
         view()->share('operating_expenses_total',$operating_expenses_total);
         view()->share('heavy_expenses_total',$heavy_expenses_total);
