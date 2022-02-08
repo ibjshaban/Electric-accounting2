@@ -160,7 +160,7 @@
                             <tbody>
                             @foreach($payments as $payment)
                                 <tr>
-                                    <th scope="row">{{ $payment->id }}</th>
+                                    <th scope="row">{{ $loop->index+1 }}</th>
                                     <td>{{ $payment->amount }}</td>
 {{--                                    <td>{{ $payment->lastname }}</td>--}}
                                     <td>{{ $payment->created_at }}</td>
