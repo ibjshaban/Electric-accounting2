@@ -2,7 +2,7 @@
 if (!function_exists('ShekelFormat')) {
     function ShekelFormat($amount)
     {
-        return '₪' . number_format($amount, 2);
+        return '₪' . number_format($amount, 0);
     }
 }
 

@@ -130,13 +130,7 @@ class DebtController extends Controller
                       $remainder = $request->amount;
                   }
                   else{
-                      if ($request->amount > $debt->amount){
-                          $remainder= $request->amount - $discount_amount ;
-                      }
-                      else{
-                          $remain= $request->amount - $discount_amount;
-                          $remainder= $remain > 0 ? $remain : 0;
-                      }
+                      $remainder= $request->amount - $discount_amount ;
                   }
               }
 

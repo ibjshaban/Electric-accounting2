@@ -98,7 +98,7 @@ class FillingController extends Controller
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
 
                 }
-                Supplier::withoutTrashed()->whereId($supplier_id)->first()->PayFillingsAutoFromPayments();
+                //Supplier::withoutTrashed()->whereId($supplier_id)->first()->PayFillingsAutoFromPayments();
                 $redirect = isset($request["add_back"]) ?"filling/create":"supplier/".$supplier_id;
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
@@ -194,7 +194,7 @@ class FillingController extends Controller
                     DB::rollBack();
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
                 }
-              Supplier::withoutTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
+              //Supplier::withoutTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
               $redirect = isset($request["save_back"])?"filling/".$id."/edit":"supplier/".$filling->supplier_id;
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }
