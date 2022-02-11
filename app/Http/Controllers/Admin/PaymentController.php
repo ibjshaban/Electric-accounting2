@@ -69,7 +69,7 @@ class PaymentController extends Controller
             	$data['admin_id'] = admin()->id();
 		  		$payment = Payment::create($data);
 
-                Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
+                //Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
                 $redirect = isset($request["add_back"])?"/create":"";
                 return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.added'));
             }
@@ -136,7 +136,7 @@ class PaymentController extends Controller
               $data['admin_id'] = admin()->id();
               Payment::where('id',$id)->update($data);
 
-              Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
+              //Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
               return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.updated'));
             }

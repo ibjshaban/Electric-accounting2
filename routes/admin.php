@@ -214,8 +214,8 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
               ////////AdminRoutes/*End*///////////////
 
-        Route::resource('Notebooks', 'Admin\Notebooks');
-        Route::post('Notebooks/multi_delete', 'Admin\Notebooks@multi_delete');
+        Route::resource('notebooks', 'Admin\Notebooks');
+        Route::post('notebooks/multi_delete', 'Admin\Notebooks@multi_delete');
 
         Route::resource('subItems', 'Admin\subItems');
         Route::post('subItems/multi_delete', 'Admin\subItems@multi_delete');

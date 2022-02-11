@@ -134,7 +134,7 @@
                             <a href="#" style="color: #ffffff;">
                                 <div class="info-box-content">
                                     <span class="info-box-text">الصندوق</span>
-                                    <span class="info-box-number">{{ ShekelFormat($box_total) }}</span>
+                                    <span class="info-box-number">{{ ShekelFormat($total_alls) }}</span>
                                 </div>
                             </a>
                             <!-- /.info-box-content -->
@@ -234,7 +234,7 @@
                             <span class="info-box-icon"><i class="fas fa-object-group"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">المجموع</span>
-                                <span class="info-box-number">{{ ShekelFormat($total_alls) }}</span>
+                                <span class="info-box-number">{{ ShekelFormat($box_total) }}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>

@@ -89,7 +89,7 @@ class SupplierController extends Controller
         $supplier = Supplier::find($id);
         $financial_difference= $supplier->FinancialDifferenceBetweenPaymentsAndFillings();
 
-        $payments = Payment::where('supplier_id', $id)->paginate(10);
+        $payments = Payment::where('supplier_id', $id)->orderBy('created_at','DESC')->paginate(10);
 
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
