@@ -78,6 +78,7 @@ class FillingController extends Controller
                     $filling->filling_date= $data['filling_date'];
                     $filling->note= $data['filling_note'];
                     $filling->save();
+                    $supplier= Supplier::withTrashed()->whereId($supplier_id)->first();
 
                     for ($i=0; $i < count($data['amount']??[]); $i++){
                         RevenueFule::create([
@@ -91,14 +92,17 @@ class FillingController extends Controller
                             'filling_id'=> $filling->id,
                         ]);
                     }
+                    $supplier->AddFillingsForSupplier(($data['quantity'] * $data['price']));
+
                     DB::commit();
                 }
                 catch (\Exception $e){
                     DB::rollBack();
+
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
 
                 }
-                //Supplier::withoutTrashed()->whereId($supplier_id)->first()->PayFillingsAutoFromPayments();
+                //Supplier::withTrashed()->whereId($supplier_id)->first()->PayFillingsAutoFromPayments();
                 $redirect = isset($request["add_back"]) ?"filling/create":"supplier/".$supplier_id;
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
@@ -154,7 +158,6 @@ class FillingController extends Controller
 				}
 				return $fillableCols;
 			}
-
             public function update(FillingRequest $request,$id)
             {
               // Check Record Exists
@@ -166,6 +169,10 @@ class FillingController extends Controller
 
                 DB::beginTransaction();
                 try {
+
+                    $supplier= Supplier::withTrashed()->whereId($filling->supplier_id)->first();
+                    $balance= ($supplier->balance + ($filling->quantity * $filling->price)) - ($data['quantity'] * $data['price']);
+                    $supplier->update(['balance'=>  InsertLargeNumber($balance)]);
 
                     $filling->name= $data['name'];
                     $filling->quantity= $data['quantity'];
@@ -194,7 +201,7 @@ class FillingController extends Controller
                     DB::rollBack();
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
                 }
-              //Supplier::withoutTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
+              //Supplier::withTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
               $redirect = isset($request["save_back"])?"filling/".$id."/edit":"supplier/".$filling->supplier_id;
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }

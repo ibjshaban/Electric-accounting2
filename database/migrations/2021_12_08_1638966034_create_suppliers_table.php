@@ -22,6 +22,7 @@ class CreateSuppliersTable extends Migration
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('photo_profile')->nullable();
+            $table->double('balance')->default(0);
             $table->softDeletes();
 
             $table->timestamps();
