@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RevenueFule extends Model {
 
 protected $table    = 'revenue_fules';
-protected $appends=['total_price'];
+protected $appends=['filling_date'];
 protected $fillable = [
 		'id',
 		'admin_id',
@@ -16,10 +16,10 @@ protected $fillable = [
         'price',
         'paid_amount',
         'filling_id',
-        'total_price',
         'stock_id',
         'revenue_id',
         'city_id',
+        'is_paid',
         'note',
 		'created_at',
 		'updated_at',
@@ -30,8 +30,8 @@ protected $fillable = [
     * @param void
     * @return object data
     */
-	public function getTotalPriceAttribute(){
-	    return  ($this->price * $this->quantity);
+	public function getFillingDateAttribute(){
+	    return  $this->filling_id()->first()->filling_date;
     }
    public function filling_id(){
       return $this->hasOne(\App\Models\Filling::class,'id','filling_id');
@@ -69,9 +69,7 @@ protected $fillable = [
     * @param void
     * @return void
     */
- 	public function scopeFuleNotPaid(){
- 	    return $this->where('paid_amount','!=', ($this->price * $this->quantity));
-    }
+
    protected static function boot() {
       parent::boot();
       // if you disable constraints should by run this static method to Delete children data

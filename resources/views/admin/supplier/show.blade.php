@@ -41,9 +41,9 @@
                             </div>
                             <div class="modal-footer">
                                 {!! Form::open([
-                       'method' => 'DELETE',
-                       'route' => ['supplier.destroy', $supplier->id]
-                       ]) !!}
+                                   'method' => 'DELETE',
+                                   'route' => ['supplier.destroy', $supplier->id]
+                                   ]) !!}
                                 {!! Form::submit(trans('admin.approval'), ['class' => 'btn btn-danger btn-flat']) !!}
                                 <a class="btn btn-default" data-dismiss="modal">{{trans('admin.cancel')}}</a>
                                 {!! Form::close() !!}
@@ -86,10 +86,10 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <b>الفرق المالي بين الدفعات و التعبئات للمورد :</b>
-                    @if($financial_difference > 0)
-                        لك : {{ShekelFormat($financial_difference)}}
+                    @if($supplier->balance > 0)
+                        لك : {{ShekelFormat($supplier->balance)}}
                     @else
-                        له : {{ShekelFormat($financial_difference)}}
+                        له : {{ShekelFormat(abs($supplier->balance))}}
                     @endif
                 </div>
                 <div class="col-md-6 col-lg-6 col-xs-6">

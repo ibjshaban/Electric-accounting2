@@ -302,7 +302,7 @@ class RevenueFuleController extends Controller
 
                 if (!in_array($filling->suplier_id,$supplier_array)){
                     array_push($supplier_array,$filling->supplier_id);
-                    //Supplier::withoutTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
+                    //Supplier::withTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
                 }
 
                 $sum= RevenueFule::where('filling_id',$filling_id)->sum( 'quantity');
@@ -331,6 +331,7 @@ class RevenueFuleController extends Controller
 
     //Store expenses by one revenue
     public function revenueFulStore(Request $request, $id){
+
         $data = $request->except("_token", "_method");
         $data['revenue_id'] = $id;
         $revenue = revenue::find($data['revenue_id']);

@@ -40,7 +40,10 @@ class FillingSingleSupplierDataTable extends DataTable
      */
     public function query()
     {
-        return Filling::query()->where('supplier_id',request()->route('supplier'))->select("fillings.*");
+        return Filling::query()
+            ->where('supplier_id',request()->route('supplier'))
+            ->orderByDesc('filling_date')
+            ->select("fillings.*");
     }
 
 

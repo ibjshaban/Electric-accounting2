@@ -67,11 +67,22 @@ class PaymentController extends Controller
             {
                 $data = $request->except("_token", "_method");
             	$data['admin_id'] = admin()->id();
-		  		$payment = Payment::create($data);
 
-                //Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
-                $redirect = isset($request["add_back"])?"/create":"";
-                return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.added'));
+                try {
+                    DB::beginTransaction();
+                    $supplier= Supplier::withTrashed()->whereId($data['supplier_id'])->first();
+                    $payment = Payment::create($data);
+                    $supplier->PayFillingsFromPayments($data['amount']);
+                    DB::commit();
+                    $redirect = isset($request["add_back"])?"/create":"";
+                    return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.added'));
+
+                }
+                catch (\Exception $e){
+                    DB::rollBack();
+
+                    return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+                }
             }
 
             /**
@@ -132,13 +143,33 @@ class PaymentController extends Controller
               if(is_null($payment) || empty($payment)){
               	return backWithError(trans("admin.undefinedRecord"),aurl("payment"));
               }
-              $data = $this->updateFillableColumns();
-              $data['admin_id'] = admin()->id();
-              Payment::where('id',$id)->update($data);
+                try {
+                    DB::beginTransaction();
+                    if ($payment->amount != $request->amount){
 
-              //Supplier::withoutTrashed()->whereId($data['supplier_id'])->first()->PayFillingsAutoFromPayments();
-              $redirect = isset($request["save_back"])?"/".$id."/edit":"";
-              return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.updated'));
+                        $data = $this->updateFillableColumns();
+                        $data['admin_id'] = admin()->id();
+                        $data['supplier_id'] = $payment->supplier_id;
+                        $supplier= Supplier::withTrashed()->whereId($data['supplier_id'])->first();
+                        if ($payment->amount > $data['amount']){
+                            $supplier->DeletePaymentsFromFule($payment->amount - $data['amount']);
+                        }
+                        else{
+                            $supplier->PayFillingsFromPayments($data['amount'] - $payment->amount);
+                        }
+
+                        Payment::where('id',$id)->update($data);
+
+                    }
+                    $redirect = isset($request["save_back"])?"/".$id."/edit":"";
+                    DB::commit();
+                    return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.updated'));
+
+                }
+                catch (\Exception $e){
+                    DB::rollBack();
+                    return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+                }
             }
 
             /**
@@ -154,37 +185,67 @@ class PaymentController extends Controller
 		}
 
 		it()->delete('payment',$id);
-		Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
-		$payment->delete();
-		return backWithSuccess(trans('admin.deleted'));
+        try {
+		    DB::beginTransaction();
+            Supplier::withTrashed()->whereId($payment->supplier_id)->first()->DeletePaymentsFromFule($payment->amount);
+            $payment->delete();
+            DB::commit();
+            return backWithSuccess(trans('admin.deleted'));
+
+        }
+		catch (\Exception $e){
+		    DB::rollBack();
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+        }
+
 	}
 
 
 	public function multi_delete(){
 		$data = request('selected_data');
 		if(is_array($data)){
-			foreach($data as $id){
-				$payment = Payment::find($id);
-				if(is_null($payment) || empty($payment)){
-					return backWithError(trans('admin.undefinedRecord'),aurl("payment"));
-				}
+            try {
+                DB::beginTransaction();
+                foreach($data as $id){
+                    $payment = Payment::find($id);
+                    if(is_null($payment) || empty($payment)){
+                        return backWithError(trans('admin.undefinedRecord'),aurl("payment"));
+                    }
 
-				it()->delete('payment',$id);
-                Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
-                $payment->delete();
-			}
-			return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
+                    it()->delete('payment',$id);
+                    Supplier::withTrashed()->whereId($payment->supplier_id)->first()->DeletePaymentsFromFule($payment->amount);
+                    $payment->delete();
+                }
+                DB::commit();
+                return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
+
+            }
+            catch (\Exception $e){
+                DB::rollBack();
+                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+            }
+
 		}else {
+
 			$payment = Payment::find($data);
 			if(is_null($payment) || empty($payment)){
 				return backWithError(trans('admin.undefinedRecord'),aurl("payment"));
 			}
 
 			it()->delete('payment',$data);
-            Supplier::withoutTrashed()->whereId($payment->supplier_id)->first()->DeletePiadPriceFromFillingWhenDeletePayment($payment->amount);
 
-            $payment->delete();
-			return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
+            try {
+                DB::beginTransaction();
+                Supplier::withTrashed()->whereId($payment->supplier_id)->first()->DeletePaymentsFromFule($payment->amount);
+                $payment->delete();
+                DB::commit();
+                return redirectWithSuccess(aurl("payment"),trans('admin.deleted'));
+
+            }
+            catch (\Exception $e){
+                DB::rollBack();
+                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+            }
 		}
 	}
 

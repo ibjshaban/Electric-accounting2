@@ -86,8 +86,7 @@ class SupplierController extends Controller
     public function show(FillingSingleSupplierDataTable $filling,$id)
     {
 
-        $supplier = Supplier::find($id);
-        $financial_difference= $supplier->FinancialDifferenceBetweenPaymentsAndFillings();
+        $supplier = Supplier::withTrashed()->find($id);
 
         $payments = Payment::where('supplier_id', $id)->orderBy('created_at','DESC')->paginate(10);
 
@@ -96,7 +95,6 @@ class SupplierController extends Controller
             $filling->render('admin.supplier.show', [
                 'title' => trans('admin.show'),
                 'supplier' => $supplier,
-                'financial_difference' => $financial_difference,
                 'payments' => $payments,
             ]);
     }
@@ -109,7 +107,7 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::withTrashed()->find($id);
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
             view('admin.supplier.edit', [
@@ -121,7 +119,7 @@ class SupplierController extends Controller
     public function update(SupplierRequest $request, $id)
     {
         // Check Record Exists
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::withTrashed()->find($id);
         if (is_null($supplier) || empty($supplier)) {
             return backWithError(trans("admin.undefinedRecord"), aurl("supplier"));
         }
@@ -131,7 +129,7 @@ class SupplierController extends Controller
             it()->delete($supplier->photo_profile);
             $data['photo_profile'] = it()->upload('photo_profile', 'admins');
         }
-        Supplier::where('id', $id)->update($data);
+        Supplier::withTrashed()->where('id', $id)->update($data);
         $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
         return redirectWithSuccess(aurl('supplier' . $redirect), trans('admin.updated'));
     }
@@ -159,9 +157,11 @@ class SupplierController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         $supplier = Supplier::find($id);
+
         if (is_null($supplier) || empty($supplier)) {
             return backWithSuccess(trans('admin.undefinedRecord'), aurl("supplier"));
         }
@@ -171,8 +171,7 @@ class SupplierController extends Controller
         return redirectWithSuccess(aurl("supplier"), trans('admin.deleted'));
     }
 
-
-    public function multi_delete()
+    /*public function multi_delete()
     {
         $data = request('selected_data');
         if (is_array($data)) {
@@ -196,7 +195,7 @@ class SupplierController extends Controller
             $supplier->delete();
             return redirectWithSuccess(aurl("supplier"), trans('admin.deleted'));
         }
-    }
+    }*/
 
 
 }

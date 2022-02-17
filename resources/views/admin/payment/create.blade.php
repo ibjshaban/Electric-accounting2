@@ -41,7 +41,7 @@
 	<div class="form-group">
 				<label for="supplier_id">{{trans('admin.supplier_id')}}</label>
 							<select id="supplier_id" name="supplier_id" class="form-control select2" placeholder="{{trans('admin.supplier_id')}}" >
-    @foreach(App\Models\Supplier::get(['name','id']) as $supplier_id)
+    @foreach(App\Models\Supplier::withTrashed()->get(['name','id']) as $supplier_id)
       <option value="{{ $supplier_id->id }}" {{old('supplier_id') == $supplier_id->id?'selected':''}}>{{ $supplier_id->name }}</option>
     @endforeach
    </select>

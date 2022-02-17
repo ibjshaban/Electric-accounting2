@@ -19,6 +19,7 @@ class CreateRevenueFulesTable extends Migration
             $table->double('quantity');
             $table->double('price');
             $table->double('paid_amount')->nullable();
+            $table->boolean('is_paid')->default(0);
             $table->foreignId("filling_id")->nullable()->constrained("fillings")->references("id")->nullOnDelete();
             $table->foreignId("stock_id")->nullable()->constrained("stocks")->references("id")->nullOnDelete();
             $table->foreignId("revenue_id")->nullable()->constrained("revenues")->references("id")->nullOnDelete();
