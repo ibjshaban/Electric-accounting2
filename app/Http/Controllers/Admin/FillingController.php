@@ -217,47 +217,72 @@ class FillingController extends Controller
 		if(is_null($filling) || empty($filling)){
 			return backWithSuccess(trans('admin.undefinedRecord'),url()->previous());
 		}
+        it()->delete('filling',$id);
+        try {
+            DB::beginTransaction();
+            $supplier_id= $filling->supplier_id;
+            $paid_price_amount= 0;
+            foreach ($filling->fule() as $fule) { $paid_price_amount += $fule->paid_amount; $fule->delete();}
+            Supplier::withTrashed()->where('id', $supplier_id)->first()->DeleteFillingFromSupplier($paid_price_amount , ($filling->quantity * $filling->price));
+            $filling->delete();
+            DB::commit();
+            $redirect = "supplier/".$supplier_id;
+            return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+        }
 
-		it()->delete('filling',$id);
-		$supplier_id= $filling->supplier_id;
-		foreach ($filling->fule() as $fule) { $fule->delete();}
-		$filling->delete();
-        $redirect = "supplier/".$supplier_id;
-        return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
+
 	}
 
 
 	public function multi_delete(){
-		$data = request('selected_data');
-		if(is_array($data)){
-			foreach($data as $id){
-				$filling = Filling::find($id);
-				if(is_null($filling) || empty($filling)){
-					return backWithError(trans('admin.undefinedRecord'),url()->previous());
-				}
 
-				it()->delete('filling',$id);
-				$supplier_id= $filling->supplier_id;
-                foreach ($filling->fule() as $fule) { $fule->delete();}
-				$filling->delete();
-			}
 
-            $redirect = "supplier/".$supplier_id;
-            return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
-		}else {
-			$filling = Filling::find($data);
-			if(is_null($filling) || empty($filling)){
-				return backWithError(trans('admin.undefinedRecord'),url()->previous());
-			}
+        try {
+            DB::beginTransaction();
+            $data = request('selected_data');
+            if(is_array($data)){
+                foreach($data as $id){
+                    $filling = Filling::find($id);
+                    if(is_null($filling) || empty($filling)){
+                        return backWithError(trans('admin.undefinedRecord'),url()->previous());
+                    }
 
-			it()->delete('filling',$data);
-			$supplier_id= $filling->supplier_id;
-            foreach ($filling->fule() as $fule) { $fule->delete();}
-			$filling->delete();
+                    it()->delete('filling',$id);
+                    $supplier_id= $filling->supplier_id;
+                    $paid_price_amount= 0;
+                    foreach ($filling->fule() as $fule) { $paid_price_amount += $fule->paid_amount; $fule->delete();}
+                    Supplier::withTrashed()->where('id', $supplier_id)->first()->DeleteFillingFromSupplier($paid_price_amount , ($filling->quantity * $filling->price));
+                    $filling->delete();
+                }
+                DB::commit();
+                $redirect = "supplier/".$supplier_id;
+                return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
+            }
+            else {
+                $filling = Filling::find($data);
+                if(is_null($filling) || empty($filling)){
+                    return backWithError(trans('admin.undefinedRecord'),url()->previous());
+                }
 
-            $redirect = "supplier/".$supplier_id;
-            return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
-		}
+                it()->delete('filling',$data);
+                $supplier_id= $filling->supplier_id;
+                $paid_price_amount= 0;
+                foreach ($filling->fule() as $fule) { $paid_price_amount += $fule->paid_amount; $fule->delete();}
+                Supplier::withTrashed()->where('id', $supplier_id)->first()->DeleteFillingFromSupplier($paid_price_amount , ($filling->quantity * $filling->price));
+                $filling->delete();
+                DB::commit();
+                $redirect = "supplier/".$supplier_id;
+                return redirectWithSuccess(aurl($redirect), trans('admin.deleted'));
+            }
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+        }
 	}
 
 
