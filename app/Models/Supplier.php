@@ -54,7 +54,7 @@ class Supplier extends Model
         return $this->hasOne(\App\Models\Admin::class, 'id', 'admin_id');
     }
 
-    public function PayFillingsFromPayments($amount_p){
+    public function AddPayments($amount_p){
 
         $amount= $amount_p;
         $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
@@ -173,6 +173,47 @@ class Supplier extends Model
         Supplier::withTrashed()->where('id',$this->id)->update(
             [
                 'balance'=> InsertLargeNumber($this->balance - $price)
+            ]);
+        return;
+    }
+    public function DeleteFillingFromSupplier($amount_p, $filling_amount){
+
+        $fuel_amount= 0;
+        $amount= $amount_p;
+        $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
+            ->where('is_paid','0')
+            ->orderBy('quantity')
+            ->get()
+            ->map(function ($q){ $q->filling_date= $q->filling_date; return $q;})
+            ->sortBy('filling_date');
+        if (count($fules) > 0){
+            foreach ($fules as $revenueFule){
+                $fule_price_amount= ($revenueFule->price* $revenueFule->quantity) - $revenueFule->paid_amount;
+                if ($amount >= $fule_price_amount){
+                    RevenueFule::whereId($revenueFule->id)->first()->update(
+                        ['paid_amount' => InsertLargeNumber($revenueFule->paid_amount + ($fule_price_amount)),
+                            'is_paid'=> '1'
+                        ]);
+                    $amount -= $fule_price_amount;
+                    $fuel_amount+= $fule_price_amount;
+                    if ($amount == 0){
+                        break;
+                    }
+                }
+                else{
+                    RevenueFule::whereId($revenueFule->id)->first()->update(
+                        ['paid_amount' => InsertLargeNumber($revenueFule->paid_amount + ($amount))]);
+                    $fuel_amount+= $amount;
+                    $amount-= $amount;
+                    break;
+                }
+            }
+
+        };
+
+        Supplier::withTrashed()->where('id',$this->id)->update(
+            [
+                'balance'=> InsertLargeNumber($this->balance + ($filling_amount - $amount_p +$amount) + $fuel_amount)
             ]);
         return;
     }

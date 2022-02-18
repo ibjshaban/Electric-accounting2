@@ -72,7 +72,7 @@ class PaymentController extends Controller
                     DB::beginTransaction();
                     $supplier= Supplier::withTrashed()->whereId($data['supplier_id'])->first();
                     $payment = Payment::create($data);
-                    $supplier->PayFillingsFromPayments($data['amount']);
+                    $supplier->AddPayments($data['amount']);
                     DB::commit();
                     $redirect = isset($request["add_back"])?"/create":"";
                     return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.added'));
@@ -155,7 +155,7 @@ class PaymentController extends Controller
                             $supplier->DeletePaymentsFromFule($payment->amount - $data['amount']);
                         }
                         else{
-                            $supplier->PayFillingsFromPayments($data['amount'] - $payment->amount);
+                            $supplier->AddPayments($data['amount'] - $payment->amount);
                         }
 
                         Payment::where('id',$id)->update($data);
