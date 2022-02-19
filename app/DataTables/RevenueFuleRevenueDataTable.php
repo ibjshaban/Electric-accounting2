@@ -153,27 +153,10 @@ class RevenueFuleRevenueDataTable extends DataTable
     protected function getColumns()
     {
         return [
-
             [
-                'name' => 'checkbox',
-                'data' => 'checkbox',
-                'title' => '<div  class="icheck-danger">
-                  <input type="checkbox" class="select-all" id="select-all"  onclick="select_all()" >
-                  <label for="select-all"></label>
-                </div>',
-                'orderable' => false,
-                'searchable' => false,
-                'exportable' => false,
-                'printable' => false,
-                'width' => '10px',
-                'aaSorting' => 'none'
-            ],
-            [
-                'name' => 'id',
-                'data' => 'id',
-                'title' => trans('admin.record_id'),
-                'width' => '10px',
-                'aaSorting' => 'none'
+                'name' => 'stock_id.name',
+                'data' => 'stock_id.name',
+                'title' => trans('admin.stock_id'),
             ],
             [
                 'name' => 'quantity',
@@ -201,42 +184,14 @@ class RevenueFuleRevenueDataTable extends DataTable
                 'title' => trans('admin.filling_id'),
             ],
             [
-                'name' => 'stock_id.name',
-                'data' => 'stock_id.name',
-                'title' => trans('admin.stock_id'),
-            ],
-            [
-                'name' => 'revenue_id.name',
-                'data' => 'revenue_id.name',
-                'title' => trans('admin.revenue_id'),
-            ],
-            [
-                'name' => 'city_id.name',
-                'data' => 'city_id.name',
-                'title' => trans('admin.city_id'),
+                'name' => 'filling_id.filling_date',
+                'data' => 'filling_id.filling_date',
+                'title' => trans('admin.filling_date'),
             ],
             [
                 'name' => 'note',
                 'data' => 'note',
                 'title' => trans('admin.note'),
-            ],
-            [
-                'name' => 'created_at',
-                'data' => 'created_at',
-                'title' => trans('admin.created_at'),
-                'exportable' => false,
-                'printable' => false,
-                'searchable' => false,
-                'orderable' => false,
-            ],
-            [
-                'name' => 'updated_at',
-                'data' => 'updated_at',
-                'title' => trans('admin.updated_at'),
-                'exportable' => false,
-                'printable' => false,
-                'searchable' => false,
-                'orderable' => false,
             ],
         ];
     }

@@ -136,11 +136,8 @@ class Supplier extends Model
         return;
     }
     public function AddFillingsForSupplier($amount_price){
-
         $price = $amount_price;
-
         $minus_price = $this->balance > 0 ? $this->balance : 0;
-
         if ($minus_price > 0){
             $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
                 ->where('is_paid','0')
@@ -169,14 +166,12 @@ class Supplier extends Model
                 }
             }
         }
-
         Supplier::withTrashed()->where('id',$this->id)->update(
             [
                 'balance'=> InsertLargeNumber($this->balance - $price)
             ]);
         return;
     }
-
     public function DeleteFillingFromSupplier($amount_p, $filling_amount){
 
         $fuel_amount= 0;

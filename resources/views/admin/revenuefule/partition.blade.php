@@ -11,7 +11,8 @@
                     </a>
                 </div>
             </h3>
-            <div class="card-tools">
+            <div class="card-tools row">
+                <div class="col">كمية سولار المخزن : {{$stock_fuel_amount}}</div>
                 <div class="col">
                     <div class="form-group">
                         <select name="stock" class="form-control"  onchange="changeStock(this)">
@@ -24,6 +25,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="col row">
+                    <div class="form-group col">
+                         <input type="text" class="form-control"  placeholder="كمية الفصلة" id="partition_input">
+                    </div>
+                </div>
+                <div class="col row">
+                    <div class="form-group col">
+                        <button onclick="fuel_distribution()" id="fuel_distribution_button" class="btn btn-success">افصل</button>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /.card-header -->
@@ -32,7 +43,7 @@
             {!! Form::open(['url'=>aurl('/revenuefule-revenue/'.$revenue_id.'/partition'),'method'=>'post','id'=>'MainForm','files'=>true,'class'=>'form-horizontal form-row-seperated']) !!}
             <input type="hidden" value="{{request()->stock}}" name="stock_id">
             <div class="row col-12">
-                <div class="row row-cols-5 col-12 mb-5 element">
+                <div class="row row-cols-5 col-12 mb-5">
                     <div class="col">الايرادة</div>
                     <div class="col">الكمية</div>
                     <div class="col">ملاحظات</div>
@@ -40,7 +51,7 @@
                 </div>
                 @if($revenueFules)
                     @foreach($revenueFules as $fule)
-                    <div class="row row-cols-5 col-12 mb-5 detail element" >
+                    <div class="row row-cols-5 col-12 mb-5 detail element" data-filling_date="{{$fule->filling_date}}" data-quantity="{{$fule->quantity}}" data-id="{{$fule->id}}">
                         <div class="col">
                             <div class="form-group">
                                 <select name="revenue[]"  class="form-control" required>
@@ -52,27 +63,20 @@
                             </div>
                         </div>
                         <div class="col">
-                            <input required type="number" step="0.001" min="0" class="form-control " name="amount[]" value="{{$fule->quantity}}" placeholder="الكمية (لتر)" oninput="changeAllPrice(this)">
+                            <input required id="quantity{{$fule->id}}" type="number" step="0.001" min="0" class="form-control " name="amount[]" value="{{$fule->quantity}}" placeholder="الكمية (لتر)" oninput="changeAllPrice(this)">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control " value="{{$fule->note}}" name="note[]" placeholder="ملاحظات">
                         </div>
                         <div class="col">
-                            {{--<button type="button" class="btn btn-primary btn-flat" onclick="removeDetail(this)">
-                                <i class="fa fa-minus"></i>
-                            </button>--}}
-                            <p>{{$fule->filling->name}}</p>
+                            <p>{{$fule->filling_name}}</p>
+                        </div>
+                        <div class="col">
+                            <p>{{$fule->filling_date}}</p>
                         </div>
                     </div>
                  @endforeach
-                {{--<div class="row row-cols-5 col-12 mb-5" >
-                    <div class="col"></div>
-                    <div class="col"></div>
-                    <div class="col"></div>
-                    <div class="col"></div>
-                    <div class="col bg-success" id="all_total">المجموع: {{ShekelFormat(0)}}</div>
-                    <div class="col"></div>
-                </div>--}}
+
                 <div class="d-flex flex-row-reverse  mx-3 mb-3">
                     <button type="button" class="btn btn-primary btn-flat" onclick="addNewDetails()">
                         <i class="fa fa-plus"></i>
@@ -143,6 +147,64 @@
         }
         function removeDetail(e){
             $(e).parent().parent().remove();
+        }
+        function fuel_distribution(){
+            var partition_input= parseFloat($('#partition_input').val());
+
+            if (partition_input > 0){
+                var elements = $('.element').sort(function(a,b){
+                    return (
+                        (new Date($(a).data("filling_date"))) <
+                        (new Date($(b).data("filling_date")))) ? 1 : -1;
+                });
+                for (let $el of elements){
+                     var el_quantity= parseFloat($($el).data('quantity'));
+                    if (partition_input >= el_quantity){
+                        add_new_div(el_quantity);
+                        partition_input= partition_input - el_quantity;
+                        $($el).remove();
+                        if (partition_input == 0){
+                            break;
+                        }
+                    }
+                    else{
+                        add_new_div(partition_input);
+                        $($el).find('#quantity'+$($el).data('id')).val(el_quantity- partition_input);
+                        $($el).data('quantity', el_quantity-partition_input);
+                        break;
+                    }
+                }
+                $('#fuel_distribution_button').prop('disabled', true);
+                $('#partition_input').attr('disabled','disabled');
+            }
+        }
+
+        function add_new_div($quantity){
+            $('.element').last().after(
+                '<div class="row row-cols-5 col-12 mb-5 detail element" >' +
+                '<div class="col">' +
+                '<div class="form-group">' +
+                '<select name="revenue[]"  class="form-control" required>' +
+                '<option class="revenue_first_item" disabled>الإيرادة</option>' +
+                @foreach(\App\Models\revenue::where('city_id',$city_id)->where('status',1)->orderByDesc('created_at')->get() as $revenue)
+                    '<option class="revenue_item" value="{{$revenue->id}}" >{{$revenue->name}}</option>'+
+                @endforeach
+                    '</select>'+
+                '</div>'+
+                '</div>'+
+                '<div class="col">'+
+                '<input required type="number" value="'+$quantity+'" step="0.001" min="0" class="form-control " name="amount[]"  placeholder="الكمية (لتر)" oninput="changeAllPrice(this)">'+
+                '</div>'+
+                '<div class="col">'+
+                '<input type="text" class="form-control "  name="note[]" placeholder="ملاحظات">'+
+                '</div>'+
+                '<div class="col">'+
+                '<button type="button" class="btn btn-primary btn-flat" onclick="removeDetail(this)">'+
+                '<i class="fa fa-minus"></i>'+
+                '</button>'+
+                '</div>'+
+                '</div>'
+            )
         }
     </script>
 @endpush
