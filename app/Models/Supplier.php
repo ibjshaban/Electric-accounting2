@@ -95,10 +95,10 @@ class Supplier extends Model
 
         $deleted_price = $dPrice;
 
-        $minus_price = $this->balance > 0 ? abs($this->balance - $deleted_price) : abs($deleted_price);
+        $minus_price = $this->balance > 0 ? $this->balance - $deleted_price : -$deleted_price;
 
-        if ($minus_price > 0){
-
+        if ($minus_price < 0){
+            $minus_price= abs($minus_price);
             $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
                 ->where('paid_amount','!=',0)
                 ->orderByDesc('quantity')
@@ -176,6 +176,7 @@ class Supplier extends Model
             ]);
         return;
     }
+
     public function DeleteFillingFromSupplier($amount_p, $filling_amount){
 
         $fuel_amount= 0;

@@ -129,7 +129,7 @@ class FillingController extends Controller
              * edit the form for creating a new resource.
              * @return \Illuminate\Http\Response
              */
-            public function edit($id)
+           /* public function edit($id)
             {
         		$filling =  Filling::find($id);
                 $stocks= Stock::all()->sortBy('name');
@@ -140,8 +140,7 @@ class FillingController extends Controller
 				  'filling'=>$filling,
                     'stocks'=> $stocks
         		]);
-            }
-
+            }*/
 
             /**
              * Baboon Script By [it v 1.6.36]
@@ -158,7 +157,7 @@ class FillingController extends Controller
 				}
 				return $fillableCols;
 			}
-            public function update(FillingRequest $request,$id)
+           /* public function update(FillingRequest $request,$id)
             {
               // Check Record Exists
               $filling =  Filling::find($id);
@@ -170,10 +169,6 @@ class FillingController extends Controller
                 DB::beginTransaction();
                 try {
 
-                    $supplier= Supplier::withTrashed()->whereId($filling->supplier_id)->first();
-                    $balance= ($supplier->balance + ($filling->quantity * $filling->price)) - ($data['quantity'] * $data['price']);
-                    $supplier->update(['balance'=>  InsertLargeNumber($balance)]);
-
                     $filling->name= $data['name'];
                     $filling->quantity= $data['quantity'];
                     $filling->price= $data['price'];
@@ -181,30 +176,45 @@ class FillingController extends Controller
                     $filling->note= $data['filling_note'];
                     $filling->save();
 
-                    $paid_price=[];
-                    foreach ($filling->fule() as $fule) { $fule->delete();}
+                    $paid_price_amount= 0;
+                    foreach ($filling->fule() as $fule) { $paid_price_amount += $fule->paid_amount; $fule->delete();}
                     for ($i=0; $i < count($data['amount']??[]); $i++){
-                        RevenueFule::create([
-                            'quantity'=> InsertLargeNumber($data['amount'][$i]),
-                            'price'=> InsertLargeNumber($data['price']),
-                            'paid_amount'=> 0,
-                            'stock_id'=> $data['stock'][$i],
-                            'revenue_id'=> $data['revenue'][$i],
-                            'city_id'=> Stock::whereId($data['stock'][$i])->first()->city_id,
-                            'note'=> $data['note'][$i],
-                            'filling_id'=> $filling->id,
-                        ]);
+                        $revenue_fuel= new RevenueFule();
+                        $revenue_fuel->quantity= InsertLargeNumber($data['amount'][$i]);
+                        $revenue_fuel->price= InsertLargeNumber($data['price']);
+                        $revenue_fuel->paid_amount= 0;
+                        $revenue_fuel->stock_id= $data['stock'][$i];
+                        $revenue_fuel->revenue_id= $data['revenue'][$i];
+                        $revenue_fuel->city_id= Stock::whereId($data['stock'][$i])->first()->city_id;
+                        $revenue_fuel->note= $data['note'][$i];
+                        $revenue_fuel->filling_id= $filling->id;
+                        $revenue_fuel->save();
+                        if ($paid_price_amount){
+                            $fule_price_amount= ($revenue_fuel->price* $revenue_fuel->quantity);
+                            if ($paid_price_amount >= $fule_price_amount){
+                                $revenue_fuel->update(
+                                    ['paid_amount' => InsertLargeNumber($revenue_fuel->paid_amount + ($fule_price_amount)),
+                                        'is_paid'=> '1'
+                                    ]);
+                                $paid_price_amount -= $fule_price_amount;
+                            }
+                            else{
+                                $revenue_fuel->update(
+                                    ['paid_amount' => InsertLargeNumber($revenue_fuel->paid_amount + ($paid_price_amount))]);
+                                $paid_price_amount=0;
+                            }
+                        }
                     }
+
                     DB::commit();
+                    $redirect = isset($request["save_back"])?"filling/".$id."/edit":"supplier/".$filling->supplier_id;
+                    return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
                 }
                 catch (\Exception $e){
                     DB::rollBack();
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
                 }
-              //Supplier::withTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
-              $redirect = isset($request["save_back"])?"filling/".$id."/edit":"supplier/".$filling->supplier_id;
-              return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
-            }
+            }*/
 
             /**
              * Baboon Script By [it v 1.6.36]

@@ -101,7 +101,7 @@ class FillingSingleSupplierDataTable extends DataTable
 
 
 
-            " . filterElement('1,2,1,3,1,5,1,6', 'input') . "
+            " . filterElement('1,2,4,3,7,5,8,6', 'input') . "
 
                         //supplier_idquantity,price,supplier_id,filling_date,note4
 	            }",
@@ -166,6 +166,13 @@ class FillingSingleSupplierDataTable extends DataTable
                 'name' => 'id',
                 'data' => 'id',
                 'title' => trans('admin.record_id'),
+                'width' => '10px',
+                'aaSorting' => 'none'
+            ],
+            [
+                'name' => 'name',
+                'data' => 'name',
+                'title' => 'البيان',
                 'width' => '10px',
                 'aaSorting' => 'none'
             ],

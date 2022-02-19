@@ -102,13 +102,13 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::put('revenue-collection/edit/{id}', 'Admin\CollectionController@revenueCollectionUpdate');
 //************
 
-        Route::resource('filling', 'Admin\FillingController')->except('create','index');
+        Route::resource('filling', 'Admin\FillingController')->except('create','index','update','edit');
         Route::post('filling/multi_delete', 'Admin\FillingController@multi_delete');
         Route::get('/filling/{supplier_id}/create', 'Admin\FillingController@create');
         Route::post('/getrevenue/city', 'Admin\RevenueController@getRevenueByCity')->name('getRevenueByCity');
 
-        Route::resource('revenuefule', 'Admin\RevenueFuleController');
-        Route::post('revenuefule/multi_delete', 'Admin\RevenueFuleController@multi_delete');
+        //Route::resource('revenuefule', 'Admin\RevenueFuleController');
+        //Route::post('revenuefule/multi_delete', 'Admin\RevenueFuleController@multi_delete');
 
 
 //**revenue-expenses**
@@ -125,8 +125,8 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::get('revenue-fule-revenue/create', 'Admin\RevenueFuleController@revenueFuleRevenueCreate');
 
 
-        Route::resource('payment', 'Admin\PaymentController');
-        Route::post('payment/multi_delete', 'Admin\PaymentController@multi_delete');
+        Route::resource('payment', 'Admin\PaymentController')->except('edit','update');
+        //Route::post('payment/multi_delete', 'Admin\PaymentController@multi_delete');
 
         //PDFlaravel-snappy
         Route::get('generate-pdf/{id}', 'Admin\EmployeeController@pdfview')->name('generate-pdf');

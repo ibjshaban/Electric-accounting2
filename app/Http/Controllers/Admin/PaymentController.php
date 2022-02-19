@@ -74,8 +74,8 @@ class PaymentController extends Controller
                     $payment = Payment::create($data);
                     $supplier->AddPayments($data['amount']);
                     DB::commit();
-                    $redirect = isset($request["add_back"])?"/create":"";
-                    return redirectWithSuccess(aurl('supplier/'.$payment->supplier_id.$redirect), trans('admin.added'));
+                    $redirect = isset($request["add_back"])?"/payment/create": 'supplier/'.$payment->supplier_id;
+                    return redirectWithSuccess(aurl($redirect), trans('admin.added'));
 
                 }
                 catch (\Exception $e){

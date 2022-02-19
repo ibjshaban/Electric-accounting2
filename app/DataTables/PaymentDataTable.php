@@ -8,7 +8,7 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class PaymentDataTable extends DataTable
 {
-    	
+
 
      /**
      * dataTable to render Columns.
@@ -19,13 +19,14 @@ class PaymentDataTable extends DataTable
     {
         return datatables($query)
             ->addColumn('actions', 'admin.payment.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -37,7 +38,7 @@ class PaymentDataTable extends DataTable
         return Payment::query()->with(['supplier_id',])->select("payments.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -78,10 +79,7 @@ class PaymentDataTable extends DataTable
 					'extend' => 'reload',
 					'className' => 'btn btn-outline',
 					'text' => '<i class="fa fa-sync-alt"></i> '.trans('admin.reload')
-					],	[
-						'text' => '<i class="fa fa-trash"></i> '.trans('admin.delete'),
-						'className'    => 'btn btn-outline deleteBtn',
-                    ], 	[
+					],[
                         'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
                         'className'    => 'btn btn-primary',
                         'action'    => 'function(){
@@ -92,11 +90,11 @@ class PaymentDataTable extends DataTable
                 'initComplete' => "function () {
 
 
-            
+
             ". filterElement('1,2', 'input') . "
 
                         //supplier_idamount,supplier_id3
-            ". filterElement('3', 'select', \App\Models\Supplier::pluck("name","name")) . "
+            ". filterElement('3', 'select', \App\Models\Supplier::withTrashed()->pluck("name","name")) . "
 
 
 	            }",
@@ -132,7 +130,7 @@ class PaymentDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -143,7 +141,7 @@ class PaymentDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -168,13 +166,13 @@ class PaymentDataTable extends DataTable
 				[
                  'name'=>'amount',
                  'data'=>'amount',
-                 'title'=>trans('admin.amount'),
+                 'title'=> 'المبلغ',
 		    ],
-				[
+				/*[
                  'name'=>'supplier_id.name',
                  'data'=>'supplier_id.name',
                  'title'=>trans('admin.supplier_id'),
-		    ],
+		    ],*/
             [
 	                'name' => 'created_at',
 	                'data' => 'created_at',
@@ -214,5 +212,5 @@ class PaymentDataTable extends DataTable
 	    {
 	        return 'payment_' . time();
 	    }
-    	
+
 }
