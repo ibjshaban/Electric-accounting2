@@ -99,6 +99,9 @@
                 <div class="col-12"><hr></div>
                 <div class="col-12">
                     <b>جدول التعبئات :</b>
+                    <p>  مجموع مبالغ السولار : {{ShekelFormat($filling_amount)}} </p>
+                    <p>  مجموع المبالغ المدفوعة : {{ShekelFormat($filling_paid_amount)}} </p>
+
                     {!! Form::open(["method" => "post","url" => [aurl('/filling/multi_delete')]]) !!}
                     <div class="card card-dark">
                         <div class="card-header">
@@ -144,6 +147,7 @@
                 <div class="col-12"><hr></div>
                 <div class="col-12">
                     <b>جدول الدفعات :</b>
+                    <p>  مجموع الدفعات : {{ShekelFormat($payments_amount)}} </p>
                     <br>
                     <a class="btn btn-info mt-3" href="{{ aurl('payment/create') }}"> إضافة</a>
 
@@ -170,8 +174,7 @@
                                             <span class="sr-only"></span>
                                             </button>
                                             <div class="dropdown-menu" role="menu">
-                                                <a href="{{ aurl('/payment/'.$payment->id.'/edit')}}" class="dropdown-item" ><i class="fas fa-edit"></i> {{trans('admin.edit')}}</a>
-                                                <a href="{{ aurl('/payment/'.$payment->id)}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
+                                                 <a href="{{ aurl('/payment/'.$payment->id)}}" class="dropdown-item" ><i class="fa fa-eye"></i> {{trans('admin.show')}}</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a data-toggle="modal" data-target="#delete_record{{$payment->id}}" href="#" class="dropdown-item">
                                                     <i class="fas fa-trash"></i> {{trans('admin.delete')}}</a>

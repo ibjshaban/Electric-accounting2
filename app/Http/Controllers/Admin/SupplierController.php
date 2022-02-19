@@ -10,6 +10,7 @@ use App\Models\Filling;
 use App\Models\Payment;
 use App\Models\RevenueFule;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
@@ -85,17 +86,22 @@ class SupplierController extends Controller
      */
     public function show(FillingSingleSupplierDataTable $filling,$id)
     {
-
         $supplier = Supplier::withTrashed()->find($id);
-
         $payments = Payment::where('supplier_id', $id)->orderBy('created_at','DESC')->paginate(10);
-
+        $filling_paid_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $id)->pluck('id'))
+            ->sum('paid_amount');
+        $filling_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $id)->pluck('id'))
+        ->sum(DB::raw('quantity * price'));
+        $payments_amount = Payment::where('supplier_id', $id)->sum('amount');
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
             $filling->render('admin.supplier.show', [
                 'title' => trans('admin.show'),
                 'supplier' => $supplier,
                 'payments' => $payments,
+                'filling_paid_amount'=> $filling_paid_amount,
+                'filling_amount'=> $filling_amount,
+                'payments_amount'=> $payments_amount,
             ]);
     }
 
