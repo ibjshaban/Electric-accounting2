@@ -204,19 +204,20 @@ class RevenueFuleController extends Controller
             $q->name= Stock::whereId($q->id)->first()->name;
             return $q;
         });
-
+        $stock_fuel_amount= 0;
         if (\request()->stock){
-            $revenue_fule= RevenueFule::where('revenue_id', $id)->where('stock_id', \request()->stock)
+            $revenue_fule= RevenueFule::where('revenue_id', $id)
+                ->where('stock_id', \request()->stock)
                 ->get()
-                ->map(function ($q){$q->filling = Filling::whereId($q->filling_id)->first(); return $q;});
+                ->map(function ($q){ $q->filling_date= $q->filling_date; return $q;})
+                ->sortByDesc('filling_date');
+            $stock_fuel_amount= $revenue_fule->sum('quantity');
         }
         return view('admin.revenuefule.partition', ['title' => 'فصلة سولار لـ '.$revenue->name,'stocks'=> $stocks,
-            'revenueFules'=> $revenue_fule,'revenue_id'=> $id,'city_id'=> $city_id]);
+            'revenueFules'=> $revenue_fule,'revenue_id'=> $id,'city_id'=> $city_id,'stock_fuel_amount'=> $stock_fuel_amount]);
     }
     public function revenueFuleRevenuePartitionSave(Request $request,$id)
     {
-       // $revenue = revenue::find($id);
-
 
         DB::beginTransaction();
         try {
@@ -228,7 +229,6 @@ class RevenueFuleController extends Controller
                 $item->amount= floatval($request->amount[$i]);
                 $item->note= $request->note[$i];
                 $request_array->push($item);
-
             }
 
             $stock_id= $request->stock_id;
@@ -237,76 +237,76 @@ class RevenueFuleController extends Controller
                 ->orderByDesc('quantity')
                 ->get();
             $filling_array= $revenue_fule->unique('filling_id')->pluck('filling_id');
-            foreach ($revenue_fule->pluck('filling_id') as $rev){
-                Filling::whereId($rev)->first();
-            }
             foreach ($revenue_fule as $k=>$fule){
                foreach ($request_array as $key=>$item){
                    if ($fule->revenue_id == intval($item->revenue) && $fule->quantity == floatval($item->amount)){
                        $revenue_fule->forget($k);
                        $request_array->forget($key);
-                       break;
+                       //break;
+                   }
+                   elseif ($fule->quantity == floatval($item->amount)){
+                       $fule->update([
+                           'revenue_id'=> intval($item->revenue),
+                           'note'=> $item->note
+                       ]);
+                       $revenue_fule->forget($k);
+                       $request_array->forget($key);
+                       //break;
                    }
                }
             }
-            foreach ($revenue_fule as $k=>$fule){
-                foreach ($request_array as $key=>$item){
-                    if ($fule->quantity == floatval($item->amount)){
-                        $fule->update([
-                            'revenue_id'=> intval($item->revenue),
-                            'note'=> $item->note
-                        ]);
-                        $revenue_fule->forget($k);
-                        $request_array->forget($key);
-                        break;
-                    }
-                }
-            }
-
+            $supplier_data= collect();
             $request_array= $request_array->sortByDesc('amount');
-
-            $index=0;
             while(count($revenue_fule) > 0){
                 $max=$revenue_fule->max('quantity');
                 $fule= $revenue_fule->where('quantity',$max)->first();
-
+                /********/
+                $new_supplier_data= collect();
+                $new_supplier_data->supplier_id= Filling::whereId($fule->filling_id)->first()->supplier_id;
+                $new_supplier_data->total_price= $fule->price * $fule->quantity;
+                $new_supplier_data->paid_amount= $fule->paid_amount;
+                $supplier_data->push($new_supplier_data);
+                /********/
                 foreach ($request_array as $key=>$item){
-
                     if ($fule->quantity >= $item->amount){
 
-                        RevenueFule::create([
-                            'quantity'=> $item->amount,
-                            'price'=> $fule->price,
-                            'paid_amount'=> 0,
-                            'filling_id'=> $fule->filling_id,
-                            'stock_id'=> $fule->stock_id,
-                            'revenue_id'=> $item->revenue,
-                            'city_id'=> $fule->city_id,
-                            'note'=> $item->note,
-                        ]);
+                        $NewRevenueFuel= new RevenueFule();
+                        $NewRevenueFuel->quantity= $item->amount;
+                        $NewRevenueFuel->price= $fule->price;
+                        $NewRevenueFuel->paid_amount= 0;
+                        $NewRevenueFuel->filling_id= $fule->filling_id;
+                        $NewRevenueFuel->stock_id= $fule->stock_id;
+                        $NewRevenueFuel->revenue_id= $item->revenue;
+                        $NewRevenueFuel->city_id= $fule->city_id;
+                        $NewRevenueFuel->note= $item->note;
 
-                        $revenue_fule->where('id',$fule->id)->first()->quantity -= $item->amount;
+                        $revenue_fule_item= $revenue_fule->where('id',$fule->id)->first();
+                        $revenue_fule_item->quantity -= $item->amount;
+
+                        if ($revenue_fule_item->paid_amount >= ($item->amount * $revenue_fule_item->price) && $revenue_fule_item->paid_amount != 0){
+                            $NewRevenueFuel->paid_amount= $item->amount * $revenue_fule_item->price;
+                            $revenue_fule_item->paid_amount -= ($item->amount * $revenue_fule_item->price);
+                        }
+                        else{
+                            $NewRevenueFuel->paid_amount= $revenue_fule_item->paid_amount;
+                            $revenue_fule_item->paid_amount = 0;
+                        }
+                        $NewRevenueFuel->save();
                         $request_array->forget($key);
-                        if($fule->quantity == 0){
+                        if(floatval($fule->quantity) == 0){
+                            $revenue_fule= $revenue_fule->where('id', $fule->id)->reject();
                             $fule->delete();
-                            $revenue_fule->forget($index);
                         }
                     }
                 }
-                $index++;
-            }
-
-            $supplier_array= [];
+             }
             foreach ($filling_array as $filling_id){
                 $filling = Filling::whereId($filling_id)->first();
-
-                if (!in_array($filling->suplier_id,$supplier_array)){
-                    array_push($supplier_array,$filling->supplier_id);
-                    //Supplier::withTrashed()->whereId($filling->supplier_id)->first()->PayFillingsAutoFromPayments();
-                }
-
-                $sum= RevenueFule::where('filling_id',$filling_id)->sum( 'quantity');
+                $sum= RevenueFule::where('filling_id',$filling_id)->sum('quantity');
                 $filling->update(['quantity'=> $sum]);
+            }
+            foreach ($supplier_data->groupBy('supplier_id') as $supplier_id=> $group){
+                $supplier= Supplier::withTrashed()->where('id', $supplier_id)->first();
             }
 
             DB::commit();
@@ -314,7 +314,7 @@ class RevenueFuleController extends Controller
         }
         catch (\Exception $e){
                 DB::rollBack();
-                dd($e);
+
                 return redirectWithError(aurl('/revenuefule-revenue/'.$id.'/partition?stock='.$request->stock_id ),'لم تتم العملية حدث خطأ ما');
         }
     }

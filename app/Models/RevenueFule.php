@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RevenueFule extends Model {
 
 protected $table    = 'revenue_fules';
-protected $appends=['filling_date'];
+protected $appends=['filling_date','filling_name'];
 protected $fillable = [
 		'id',
 		'admin_id',
@@ -32,6 +32,9 @@ protected $fillable = [
     */
 	public function getFillingDateAttribute(){
 	    return  $this->filling_id()->first()->filling_date;
+    }
+    public function getFillingNameAttribute(){
+	    return  $this->filling_id()->first()->name;
     }
    public function filling_id(){
       return $this->hasOne(\App\Models\Filling::class,'id','filling_id');
