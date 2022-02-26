@@ -13,6 +13,7 @@ class AdminGroupRole extends Model {
 		'add',
 		'edit',
 		'delete',
+        'log',
 		'admin_groups_id',
 	];
 

@@ -108,4 +108,19 @@ if (!function_exists('CheckParentTitle')) {
         return $title;
     }
 }
+
+if (!function_exists('AddNewLog') ){
+    function AddNewLog($name,$queries,$admin_id,$operation,$table,$item_id,$new_date)
+    {
+        \App\Models\ActivityLog::create([
+            'name'=> $name,
+            'query'=> json_encode($queries),
+            'information'=> json_encode(['admin_id'=> $admin_id,'operation'=> $operation, 'table'=> $table,
+                'item_id'=> $item_id,'new_data'=> $new_date])
+        ]);
+        return true;
+    }
+}
+
+
 ?>

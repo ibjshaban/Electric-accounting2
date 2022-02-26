@@ -34,11 +34,15 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::any('logout', 'Admin\AdminAuthenticated@logout');
         Route::get('account', 'Admin\AdminAuthenticated@account');
         Route::post('account', 'Admin\AdminAuthenticated@account_post');
-        Route::resource('settings', 'Admin\Settings');
+        //Route::resource('settings', 'Admin\Settings');
         Route::resource('admingroups', 'Admin\AdminGroups');
         Route::post('admingroups/multi_delete', 'Admin\AdminGroups@multi_delete');
         Route::resource('admins', 'Admin\Admins');
         Route::post('admins/multi_delete', 'Admin\Admins@multi_delete');
+        Route::get('/log', 'Admin\Settings@log')->name('log');
+        Route::get('/log/{id}/details', 'Admin\Settings@logDetails')->name('log_details');
+        Route::get('/log/{id}/accept', 'Admin\Settings@log_accept')->name('log_accept');
+        Route::get('/log/{id}/cancel', 'Admin\Settings@log_cancel')->name('log_cancel');
         Route::resource('city', 'Admin\Citys');
         Route::post('city/multi_delete', 'Admin\Citys@multi_delete');
 
