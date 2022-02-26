@@ -79,10 +79,10 @@ class SalaryDataTable extends DataTable
 					'extend' => 'reload',
 					'className' => 'btn btn-outline',
 					'text' => '<i class="fa fa-sync-alt"></i> '.trans('admin.reload')
-					],	[
+					],	/*[
 						'text' => '<i class="fa fa-trash"></i> '.trans('admin.delete'),
 						'className'    => 'btn btn-outline deleteBtn',
-                    ],
+                    ],*/
                 ],
                 'initComplete' => "function () {
 

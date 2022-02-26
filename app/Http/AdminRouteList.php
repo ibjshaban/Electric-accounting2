@@ -19,7 +19,7 @@ return [
 	"generalrevenue"=>["create","read","update","delete"],
 	"payment"=>["create","read","delete"],
 	"employee"=>["create","read","update","delete"],
-	"salary"=>["create","read","update","delete"],
+	"salary"=>["create","read","update","delete","log"],
 	"filling"=>["create","read","delete"],
 	"collection"=>["create","read","update","delete"],
 	"otheroperation"=>["create","read","update","delete"],
