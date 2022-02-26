@@ -17,6 +17,16 @@ with font-awesome or any other icon font library -->
         </p>
     </a>
 </li>
+@if(admin()->user()->role('log_edit'))
+    <li class="nav-item">
+        <a href="{{ aurl('log') }}" class="nav-link  {{ active_link('log','active') }}">
+            <i class="nav-icon fas fa-cogs"></i>
+            <p>
+                {{ trans('admin.log') }}
+            </p>
+        </a>
+    </li>
+@endif
 <li class="nav-item {{ active_link('admins','menu-open') }}">
     <a href="#" class="nav-link  {{ active_link('admins','active') }}">
         <i class="nav-icon fas fa-layer-group"></i>
@@ -26,17 +36,6 @@ with font-awesome or any other icon font library -->
         </p>
     </a>
     <ul class="nav nav-treeview">
-
-        @if(admin()->user()->role('settings_show'))
-            <li class="nav-item">
-                <a href="{{ aurl('settings') }}" class="nav-link  {{ active_link('settings','active') }}">
-                    <i class="nav-icon fas fa-cogs"></i>
-                    <p>
-                        {{ trans('admin.settings') }}
-                    </p>
-                </a>
-            </li>
-        @endif
         @if(admin()->user()->role("admins_show"))
             <li class="nav-item {{ active_link('admins','menu-open') }}">
                 <a href="#" class="nav-link  {{ active_link('admins','active') }}">

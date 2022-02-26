@@ -27,6 +27,7 @@ class CreateAdminGroupRolesTable extends Migration {
 				$table->enum('add', ['yes', 'no'])->default('no');
 				$table->enum('edit', ['yes', 'no'])->default('no');
 				$table->enum('delete', ['yes', 'no'])->default('no');
+				$table->enum('log', ['yes', 'no'])->default('no');
 				$table->timestamps();
 			});
 	}

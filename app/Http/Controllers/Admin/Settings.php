@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Settings extends Controller {
 
@@ -14,6 +16,10 @@ class Settings extends Controller {
 		]);
 		$this->middleware('AdminRole:settings_edit', [
 			'only' => ['store'],
+		]);
+
+		$this->middleware('AdminRole:log_edit', [
+			'only' => ['log','update_log'],
 		]);
 
 	}
@@ -66,5 +72,44 @@ class Settings extends Controller {
 		return redirect(aurl('settings'));
 
 	}
+
+	public function log(){
+	    $logs= ActivityLog::paginate();
+        return view('admin.log', ['title' => trans('admin.log'),'logs'=> $logs]);
+    }
+
+    public function logDetails($id){
+	    $log= ActivityLog::whereId($id)->first();
+	    $info= json_decode($log->information);
+        return view('admin.log_details', ['title' => trans('admin.log_details'),'log'=> $log,'info'=> $info]);
+    }
+    public function log_accept($id){
+
+        try {
+            DB::beginTransaction();
+            $log= ActivityLog::whereId($id)->first();
+            if ($log){
+                $queries = json_decode($log->query);
+                foreach ($queries as $index=>$query){
+                    DB::statement($query);
+                }
+            }
+            $log->delete();
+            DB::commit();
+            return redirectWithSuccess(aurl('log'), "تم تنفيذ العملية بنجاح");
+
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+        }
+	}
+
+    public function log_cancel($id){
+
+	    $log= ActivityLog::whereId($id)->first();
+	    if ($log) $log->delete();
+        return redirect()->route('log');
+    }
 
 }

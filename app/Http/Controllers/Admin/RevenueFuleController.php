@@ -23,16 +23,16 @@ class RevenueFuleController extends Controller
     public function __construct()
     {
 
-        $this->middleware('AdminRole:revenuefule_show', [
+        $this->middleware('AdminRole:filling_show', [
             'only' => ['index', 'show'],
         ]);
-        $this->middleware('AdminRole:revenuefule_add', [
+        $this->middleware('AdminRole:filling_add', [
             'only' => ['create', 'store'],
         ]);
-        $this->middleware('AdminRole:revenuefule_edit', [
+        $this->middleware('AdminRole:filling_edit', [
             'only' => ['edit', 'update'],
         ]);
-        $this->middleware('AdminRole:revenuefule_delete', [
+        $this->middleware('AdminRole:filling_delete', [
             'only' => ['destroy', 'multi_delete'],
         ]);
     }
