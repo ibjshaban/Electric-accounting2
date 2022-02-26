@@ -143,22 +143,52 @@ class Admins extends Controller {
 	}
 
 	public function update(AdminsRequest $request, $id) {
-		// Check Record Exists
-		$admins = Admin::find($id);
-		if (is_null($admins) || empty($admins)) {
-			return backWithError(trans("admin.undefinedRecord"));
-		}
-		$data = $this->updateFillableColumns();
-		if (!empty(request('password'))) {
-			$data['password'] = bcrypt(request('password'));
-		}
 
-		if (request()->hasFile('photo_profile')) {
-			it()->delete($admins->photo_profile);
-			$data['photo_profile'] = it()->upload('photo_profile', 'admins');
-		}
-		Admin::where('id', $id)->update($data);
-		return redirectWithSuccess(aurl('admins'), trans('admin.updated'));
+        try {
+            DB::beginTransaction();
+            DB::enableQueryLog();
+            // code
+            $admins = Admin::find($id);
+            if (is_null($admins) || empty($admins)) {
+                return backWithError(trans("admin.undefinedRecord"));
+            }
+            $data = $this->updateFillableColumns();
+            if (!empty(request('password'))) {
+                $data['password'] = bcrypt(request('password'));
+            }
+
+            if (request()->hasFile('photo_profile')) {
+                it()->delete($admins->photo_profile);
+                $data['photo_profile'] = it()->upload('photo_profile', 'admins');
+            }
+            Admin::where('id', $id)->update($data);
+            // code
+            if (!admin()->user()->role('admins_log')){
+                $queries= DB::getQueryLog();
+                foreach ($queries as $index=>$query){
+                    $t =vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
+                        $binding = addslashes($binding);
+                        return is_numeric($binding) ? $binding : "'{$binding}'";
+                    })->toArray());
+                    $queries[$index] = $t;
+                }
+                DB::rollBack();
+                $status= AddNewLog('تعديل مسؤول',$queries,admin()->id(),'update','admins',$id,$data);
+                if ($status){
+                    DB::commit();
+                    return redirectWithSuccess(aurl('admins'), trans('admin.logged'));
+                }
+                DB::rollBack();
+                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+            }
+            DB::commit();
+            return redirectWithSuccess(aurl('admins'), trans('admin.updated'));
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
+        }
+
 	}
 
 	/**
@@ -208,10 +238,9 @@ class Admins extends Controller {
             DB::rollBack();
             return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
         }
-
 	}
 
-	public function multi_delete() {
+	/*public function multi_delete() {
 
 
 
@@ -243,6 +272,6 @@ class Admins extends Controller {
 			$admins->delete();
 			return backWithSuccess(trans('admin.deleted'));
 		}
-	}
+	}*/
 
 }

@@ -139,12 +139,12 @@
             if (paid_date && status){
                 var data= {"revenue_id" : {{request()->route('id')}},"id": id,"discount": discount, "note" : note, "paid_date": paid_date, "_token": "{{csrf_token()}}"};
                 $.post( "{{route("deposit_salary")}}", data)
-                    .done(function() {
+                    .done(function(response) {
                         $('#employee-'+id).remove();
-                        toastr.success('تمت عملية إضافة الراتب للموظف بنجاح')
+                        toastr.success(response);
 
                     })
-                    .fail(function() {
+                    .fail(function(error) {
                         toastr.error('حدث خطأ في حفظ الراتب, يرجى مراجعة المدخلات')
                     })
             }

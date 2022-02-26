@@ -50,9 +50,6 @@ class AdminsDataTable extends DataTable {
 					['extend' => 'csv', 'className' => 'btn purple btn-outline', 'text' => '<i class="fa fa-file-excel"> </i> ' . trans('admin.export_csv')],
 					['extend' => 'reload', 'className' => 'btn blue btn-outline', 'text' => '<i class="fa fa-sync-alt"></i> ' . trans('admin.reload')],
 					[
-						'text' => '<i class="fa fa-trash"></i> ' . trans('admin.delete'),
-						'className' => 'btn red btn-outline deleteBtn',
-					], [
 						'text' => '<i class="fa fa-plus"></i> ' . trans('admin.add'),
 						'className' => 'btn btn-primary',
 						'action' => 'function(){

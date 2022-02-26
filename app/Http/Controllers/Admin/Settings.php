@@ -109,7 +109,7 @@ class Settings extends Controller {
 
 	    $log= ActivityLog::whereId($id)->first();
 	    if ($log) $log->delete();
-        return redirect()->route('log');
+        return redirectWithError(aurl('log'), "تم إلغاء العملية بنجاح");
     }
 
 }
