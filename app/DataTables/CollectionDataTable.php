@@ -9,6 +9,12 @@ use Yajra\DataTables\Services\DataTable;
 class CollectionDataTable extends DataTable
 {
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.collection');
+
+    }
 
      /**
      * dataTable to render Columns.
@@ -18,6 +24,7 @@ class CollectionDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+        ->addIndexColumn()
             ->addColumn('actions', 'admin.collection.buttons.actions')
 
    		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
@@ -163,7 +170,7 @@ class CollectionDataTable extends DataTable
             ],
 [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width'          => '10px',
                 'aaSorting'      => 'none'

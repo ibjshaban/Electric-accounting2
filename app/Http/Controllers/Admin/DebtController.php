@@ -6,6 +6,10 @@ use Carbon\Carbon;
 use App\Models\Debt;
 
 use App\Http\Controllers\Validations\DebtRequest;
+use App\Models\Employee;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request as HttpRequest;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -35,8 +39,27 @@ class DebtController extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(DebtDataTable $debt)
+            public function index(DebtDataTable $debt, HttpRequest $request)
             {
+                if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                    if ($request->from_date != null && $request->to_date != null) {
+                        $debts = Debt::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                    } else {
+                        $debts = Debt::get();
+                    }
+                    return datatables($debts)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.debt.buttons.actions')
+                    ->addColumn('employee_name',function(Debt $debt){
+                        return Employee::where('id',$debt->employee_id)->first()->name ?? '';
+                    })
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                          <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                          <label for="selectdata{{ $id }}"></label>
+                        </div>')
+                    ->rawColumns(['checkbox', 'actions',])
+                        ->make(true);
+                }
                return $debt->render('admin.debt.index',['title'=>trans('admin.debt')]);
             }
 

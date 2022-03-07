@@ -12,7 +12,12 @@ use Yajra\DataTables\Services\DataTable;
 class BasicParentsDataTable extends DataTable
 {
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.admins');
 
+    }
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.37]
@@ -21,6 +26,7 @@ class BasicParentsDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+            ->addIndexColumn()
             ->addColumn('actions', 'admin.basicparents.buttons.actions')
             ->addColumn('item', '{{ trans("admin.".$item) }}')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
@@ -163,7 +169,7 @@ class BasicParentsDataTable extends DataTable
             ],
             [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width' => '10px',
                 'aaSorting' => 'none'

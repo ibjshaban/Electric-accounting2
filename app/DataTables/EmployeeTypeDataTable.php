@@ -8,8 +8,14 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class EmployeeTypeDataTable extends DataTable
 {
-    	
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.employeetype');
+
+    }
+    
      /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.36]
@@ -18,14 +24,16 @@ class EmployeeTypeDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+        ->addIndexColumn()
             ->addColumn('actions', 'admin.employeetype.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -37,7 +45,7 @@ class EmployeeTypeDataTable extends DataTable
         return EmployeeType::query()->select("employee_types.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -92,10 +100,10 @@ class EmployeeTypeDataTable extends DataTable
                 'initComplete' => "function () {
 
 
-            
+
             ". filterElement('1,2', 'input') . "
 
-            
+
 
 	            }",
                 'order' => [[1, 'desc']],
@@ -130,7 +138,7 @@ class EmployeeTypeDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -141,7 +149,7 @@ class EmployeeTypeDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -158,7 +166,7 @@ class EmployeeTypeDataTable extends DataTable
             ],
 [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width'          => '10px',
                 'aaSorting'      => 'none'
@@ -207,5 +215,5 @@ class EmployeeTypeDataTable extends DataTable
 	    {
 	        return 'employeetype_' . time();
 	    }
-    	
+
 }

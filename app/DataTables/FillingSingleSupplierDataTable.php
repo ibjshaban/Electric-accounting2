@@ -11,8 +11,12 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class FillingSingleSupplierDataTable extends DataTable
 {
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.show');
 
-
+    }   
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.36]
@@ -21,6 +25,7 @@ class FillingSingleSupplierDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+            ->addIndexColumn()
             ->addColumn('actions', 'admin.filling.buttons.actions')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
@@ -164,7 +169,7 @@ class FillingSingleSupplierDataTable extends DataTable
             ],
             [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width' => '10px',
                 'aaSorting' => 'none'

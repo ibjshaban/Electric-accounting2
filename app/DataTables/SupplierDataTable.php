@@ -11,7 +11,12 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class SupplierDataTable extends DataTable
 {
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.admins');
 
+    }
 
     /**
      * dataTable to render Columns.
@@ -21,6 +26,7 @@ class SupplierDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+        ->addIndexColumn()
             ->addColumn('actions', 'admin.supplier.buttons.actions')
             ->addColumn('name', 'admin.supplier.buttons.style')
             ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
@@ -164,7 +170,7 @@ class SupplierDataTable extends DataTable
             ],
             [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width' => '10px',
                 'aaSorting' => 'none'

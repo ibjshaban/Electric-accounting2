@@ -9,8 +9,16 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved
 class AdminsDataTable extends DataTable {
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.admins');
+
+    }
+    
 	public function dataTable(DataTables $dataTables, $query) {
 		return datatables($query)
+            ->addIndexColumn()
 			->addColumn('actions', 'admin.admins.buttons.actions')
 			->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
 			->addColumn('checkbox', '<div  class="icheck-danger">
@@ -119,8 +127,8 @@ class AdminsDataTable extends DataTable {
 				'aaSorting' => 'none',
 			], [
 				'name' => 'id',
-				'data' => 'id',
-				'title' => trans('admin.record_id'),
+				'data' => 'DT_Row_Index',
+                'title' => trans('admin.record_id'),
 				'width' => '10px',
 				'aaSorting' => 'none',
 			],

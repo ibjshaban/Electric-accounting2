@@ -12,7 +12,12 @@ use Yajra\DataTables\Services\DataTable;
 class RevenueExpensesDataTable extends DataTable
 {
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.expenses');
 
+    }
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.36]
