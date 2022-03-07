@@ -7,7 +7,9 @@ use App\DataTables\RevenueCollectionDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\CollectionRequest;
 use App\Models\Collection;
+use App\Models\Employee;
 use App\Models\revenue;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -40,8 +42,32 @@ class CollectionController extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(CollectionDataTable $collection)
+    public function index(CollectionDataTable $collection, Request $request)
     {
+        if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+            if ($request->from_date != null && $request->to_date != null) {
+                $debts = Collection::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+            } else {
+                $debts = Collection::get();
+            }
+            return datatables($debts)
+                ->addIndexColumn()
+                ->addColumn('actions', 'admin.collection.buttons.actions')
+                ->addColumn('employee_id', function (Collection $collection) {
+                    return Employee::where('id', $collection->employee_id)->first()->name ?? '';
+                })
+                ->addColumn('revenue_id', function (Collection $collection) {
+                    return revenue::where('id', $collection->revenue_id)->first()->name ?? '';
+                })
+                ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+                ->addColumn('checkbox', '<div  class="icheck-success">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" onclick="change_status({{$id}})" {{$status  ? "checked" : ""}}>
+                  <label for="selectdata{{ $id }}"></label>
+                </div>')
+                ->rawColumns(['checkbox', 'actions',])
+                ->make(true);
+        }
         return $collection->render('admin.collection.index', ['title' => trans('admin.collection')]);
     }
 

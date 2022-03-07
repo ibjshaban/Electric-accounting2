@@ -9,6 +9,13 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved
 class AdminGroupsDataTable extends DataTable {
 
+
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.admingroups');
+
+    }
 	public function dataTable(DataTables $dataTables, $query) {
 		return datatables($query)
 			->addColumn('actions', 'admin.admingroups.buttons.actions')

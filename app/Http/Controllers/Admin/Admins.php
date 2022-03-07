@@ -4,6 +4,9 @@ use App\DataTables\AdminsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\AdminsRequest;
 use App\Models\Admin;
+use App\Models\AdminGroup;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
@@ -32,8 +35,29 @@ class Admins extends Controller {
 	 * Display a listing of the resource.
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(AdminsDataTable $admins) {
-		return $admins->render('admin.admins.index', ['title' => trans('admin.admins')]);
+	public function index(Request $request) {
+        if($request->from_date != null && $request->to_date != null || $request->reload != null){
+            if($request->from_date != null && $request->to_date != null){
+                $admins = Admin::where('created_at','>=',$request->from_date)->where('created_at','<=',Carbon::parse($request->to_date)->addDay(1))->get();
+            }else{
+                $admins = Admin::get();
+            }
+            return datatables($admins)
+                    ->addIndexColumn()
+                    ->addColumn('group_name',function(Admin $admin){
+                        return AdminGroup::where('id',$admin->group_id)->first()->group_name;
+                    })
+                    ->addColumn('actions', 'admin.admins.buttons.actions')
+                    ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                        <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata" value="{{ $id }}" >
+                        <label for="selectdata"></label>
+                        </div>')
+                    ->rawColumns(['checkbox', 'actions', 'photo_profile'])
+                    ->make(true);
+        }
+        $admins = new AdminsDataTable();
+        return $admins->with(['printTitle' => trans('admin.admins')])->render('admin.admins.index', ['title' => trans('admin.admins')]);
 	}
 
 	/**

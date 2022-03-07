@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\Payment;
 
 use App\Http\Controllers\Validations\PaymentRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
@@ -40,8 +41,27 @@ class PaymentController extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(PaymentDataTable $payment)
+            public function index(PaymentDataTable $payment , Request $request)
             {
+                if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                    if ($request->from_date != null && $request->to_date != null) {
+                        $payments = Payment::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                    } else {
+                        $payments = Payment::get();
+                    }
+                    return datatables($payments)
+                        ->addIndexColumn()
+                        ->addColumn('actions', 'admin.payment.buttons.actions')
+                        ->addColumn('supplier_id',function(Payment $payment){
+                            return Supplier::where('id',$payment->supplier_id)->first()->name ?? '';
+                        })
+                        ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                                    <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                                    <label for="selectdata{{ $id }}"></label>
+                                    </div>')
+                        ->rawColumns(['checkbox', 'actions',])
+                        ->make(true);
+                }
                return $payment->render('admin.payment.index',['title'=>trans('admin.payment')]);
             }
 

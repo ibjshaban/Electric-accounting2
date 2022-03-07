@@ -12,7 +12,12 @@ use Yajra\DataTables\Services\DataTable;
 class RevenueOtherOperationDataTable extends DataTable
 {
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.admins');
 
+    }
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.36]
@@ -21,6 +26,7 @@ class RevenueOtherOperationDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+        ->addIndexColumn()
             ->addColumn('actions', 'admin.otheroperation.revenue-otheroperation.buttons.actions')
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
@@ -162,7 +168,7 @@ class RevenueOtherOperationDataTable extends DataTable
             ],
             [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width' => '10px',
                 'aaSorting' => 'none'

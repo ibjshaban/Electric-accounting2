@@ -9,6 +9,7 @@ use App\Http\Controllers\Validations\ExpensesRequest;
 use App\Models\Expenses;
 use App\Models\ExpensesItem;
 use App\Models\revenue;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -188,9 +189,28 @@ class ExpensesController extends Controller
     }
 
     //Show expenses for one revenue
-    public function revenueExpenses(RevenueExpensesDataTable $expenses, $id)
+    public function revenueExpenses(RevenueExpensesDataTable $expenses,Request $request, $id)
     {
         $revenue = revenue::find($id)->name;
+        if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+            if ($request->from_date != null && $request->to_date != null) {
+                $expenses = Expenses::where('revenue_id', $id)->whereBetween('created_at', [$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+            } else {
+                $expenses = Expenses::where('revenue_id', $id)->get();
+            }
+            return datatables($expenses)
+            ->addIndexColumn()
+            ->addColumn('revenue_id',function(Expenses $expenses){
+                return Expenses::where('id',$expenses->revenue_id)->first()->name ?? '';
+            })
+            ->addColumn('actions', 'admin.expenses.revenue-expenses.buttons.actions')
+            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                  <label for="selectdata{{ $id }}"></label>
+                </div>')
+            ->rawColumns(['checkbox', 'actions',])
+                ->make(true);
+        }
         return $expenses->with('id', $id)->render('admin.expenses.index', ['title' => trans('admin.expenses') . '/(' . $revenue . ')']);
     }
 

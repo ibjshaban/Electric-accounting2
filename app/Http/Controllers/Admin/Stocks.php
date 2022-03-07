@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use App\Models\Stock;
 
 use App\Http\Controllers\Validations\StockRequest;
+use App\Models\City;
+use Illuminate\Http\Request;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -35,8 +38,27 @@ class Stocks extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(StockDataTable $stock)
+            public function index(StockDataTable $stock ,Request $request)
             {
+                if($request->from_date != null && $request->to_date != null || $request->reload != null){
+                    if($request->from_date != null && $request->to_date != null){
+                        $stocks = Stock::whereBetween('created_at',[$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+                    }else{
+                        $stocks = Stock::get();
+                    }
+                    return datatables($stocks)
+                            ->addIndexColumn()
+                            ->addColumn('actions', 'admin.stock.buttons.actions')
+                            ->addColumn('city_name',function(Stock $stock){
+                                return City::where('id',$stock->city_id)->first()->name;
+                            })
+                            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+                                <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                                <label for="selectdata{{ $id }}"></label>
+                                </div>')
+                            ->rawColumns(['checkbox','actions',])
+                            ->make(true);
+                }
                return $stock->render('admin.stock.index',['title'=>trans('admin.stock')]);
             }
 

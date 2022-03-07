@@ -1,6 +1,6 @@
 @extends('admin.index')
 @section('content')
-{!! Form::open(["method" => "post","url" => [aurl('/employee/multi_delete')]]) !!}
+{!! Form::open(["method" => "post","url" => [aurl('/expenses/multi_delete')]]) !!}
 <div class="card card-dark">
 	<div class="card-header">
 		<h3 class="card-title">{{!empty($title)?$title:''}}</h3>
@@ -9,6 +9,7 @@
 			<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
 		</div>
 	</div>
+	<!-- /.card-header -->
 
     <div class="card-body">
         <div class="row">
@@ -47,7 +48,6 @@
         </div>
 
     </div>
-	<!-- /.card-header -->
 	<div class="card-body">
 		<div class="row">
 			<div class="table-responsive">
@@ -83,6 +83,7 @@
 @push('js')
 {!! $dataTable->scripts() !!}
 
+
 <script>
     $(document).ready(function() {
         $('#filter').click(function() {
@@ -96,7 +97,7 @@
                     dom: 'Blfrtip',
                     lengthMenu : [[10, 25, 50, 100, -1], [10, 25, 50, 100, '{{ trans('admin.all_records') }}']],
                     ajax: {
-                        url: '{{ route('employee.index') }}',
+                        url: '{{ $id }}',
                         data: {
                             from_date: from_date,
                             to_date: to_date
@@ -120,7 +121,7 @@
                                 },
                                 {
                                     name: 'id',
-                                    data: 'DT_Row_Index',
+                                    data: 'id',
                                     title: '{{ trans('admin.record_id') }}',
                                     width : '10px',
                                     aaSorting : 'none'
@@ -131,43 +132,42 @@
                                     title: '{{ trans('admin.name') }}'
                                 },
                                 {
-                                    name: 'id_number',
-                                    data: 'id_number',
-                                    title: '{{ trans('admin.id_number') }}'
+                                    name: 'discount',
+                                    data: 'discount',
+                                    title: 'الخصم'
                                 },
                                 {
-                                    name: 'salary',
-                                    data: 'salary',
-                                    title: '{{ trans('admin.salary') }}'
+                                    name: 'price',
+                                    data: 'price',
+                                    title: '{{ trans('admin.price') }}'
                                 },
                                 {
-                                    name: 'phone',
-                                    data: 'phone',
-                                    title: '{{ trans('admin.phone') }}'
+                                    name: 'date',
+                                    data: 'date',
+                                    title: '{{ trans('admin.date') }}'
                                 },
                                 {
-                                    name: 'photo_profile',
-                                    data: 'photo_profile',
-                                    title: '{{ trans('admin.photo_profile') }}'
-                                },
-                                {
-                                    name: 'type_name',
-                                    data: 'type_name',
-                                    title: '{{ trans('admin.type_id') }}'
-                                },
-                                {
-                                    name: 'city_name',
-                                    data: 'city_name',
-                                    title: '{{ trans('admin.city_id') }}'
+                                    name: 'revenue_id',
+                                    data: 'revenue_id',
+                                    title: '{{ trans('admin.revenue_id') }}'
                                 },
                                 {
                                     name: 'created_at',
                                     data: 'created_at',
                                     title: '{{ trans('admin.created_at') }}',
-                                    exportable: true,
-                                    printable: true,
-                                    searchable: true,
-                                    orderable: true
+                                    exportable: false,
+                                    printable: false,
+                                    searchable: false,
+                                    orderable: false
+                                },
+                                {
+                                    name: 'updated_at',
+                                    data: 'updated_at',
+                                    title: '{{ trans('admin.updated_at') }}',
+                                    exportable: false,
+                                    printable: false,
+                                    searchable: false,
+                                    orderable: false
                                 },
                                 {
                                     name: 'actions',
@@ -208,27 +208,27 @@
                                     extend : 'print',
                                     className : 'btn dark btn-outline',
                                     text : '<i class="fa fa-print"></i>طباعة',
-                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                                },
+                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                                },
                                 {
                                     extend : 'excel',
                                     className : 'btn green btn-outline',
                                     text : '<i class="fa fa-file-excel"> </i> {{ trans('admin.export_excel') }}',
-                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                                },
+                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                                },
                                 {
                                     extend : 'pdf',
                                     className : 'btn red btn-outline',
                                     text : '<i class="fa fa-file-pdf"> </i> {{ trans('admin.export_pdf') }}',
-                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                                },
+                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                                },
                                 {
                                     extend : 'csv',
                                     className : 'btn purple btn-outline',
                                     text : '<i class="fa fa-file-excel"> </i> {{ trans('admin.export_csv') }}',
-                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                                },
+                                    exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                                },
                                 {
-                                        extend : 'reload',
-                                        className : 'btn blue btn-outline',
-                                        text : '<i class="fa fa-sync-alt"></i> {{ trans('admin.reload') }}'
-                                    },
+                                extend : 'reload',
+                                className : 'btn blue btn-outline',
+                                text : '<i class="fa fa-sync-alt"></i> {{ trans('admin.reload') }}'
+                            },
                                 {
                                     text : '<i class="fa fa-trash"></i> {{ trans('admin.delete') }}',
                                     className : 'btn red btn-outline deleteBtn'
@@ -254,7 +254,7 @@
                 dom: 'Blfrtip',
                 lengthMenu : [[10, 25, 50, 100, -1], [10, 25, 50, 100, '{{ trans('admin.all_records') }}']],
                 ajax: {
-                    url: '{{ route('employee.index') }}',
+                    url: '{{ $id }}',
                     data: {
                         reload: 'ture',
                     },
@@ -277,7 +277,7 @@
                                 },
                                 {
                                     name: 'id',
-                                    data: 'DT_Row_Index',
+                                    data: 'id',
                                     title: '{{ trans('admin.record_id') }}',
                                     width : '10px',
                                     aaSorting : 'none'
@@ -288,43 +288,42 @@
                                     title: '{{ trans('admin.name') }}'
                                 },
                                 {
-                                    name: 'id_number',
-                                    data: 'id_number',
-                                    title: '{{ trans('admin.id_number') }}'
+                                    name: 'discount',
+                                    data: 'discount',
+                                    title: 'الخصم'
                                 },
                                 {
-                                    name: 'salary',
-                                    data: 'salary',
-                                    title: '{{ trans('admin.salary') }}'
+                                    name: 'price',
+                                    data: 'price',
+                                    title: '{{ trans('admin.price') }}'
                                 },
                                 {
-                                    name: 'phone',
-                                    data: 'phone',
-                                    title: '{{ trans('admin.phone') }}'
+                                    name: 'date',
+                                    data: 'date',
+                                    title: '{{ trans('admin.date') }}'
                                 },
                                 {
-                                    name: 'photo_profile',
-                                    data: 'photo_profile',
-                                    title: '{{ trans('admin.photo_profile') }}'
-                                },
-                                {
-                                    name: 'type_name',
-                                    data: 'type_name',
-                                    title: '{{ trans('admin.type_id') }}'
-                                },
-                                {
-                                    name: 'city_name',
-                                    data: 'city_name',
-                                    title: '{{ trans('admin.city_id') }}'
+                                    name: 'revenue_id',
+                                    data: 'revenue_id',
+                                    title: '{{ trans('admin.revenue_id') }}'
                                 },
                                 {
                                     name: 'created_at',
                                     data: 'created_at',
                                     title: '{{ trans('admin.created_at') }}',
-                                    exportable: true,
-                                    printable: true,
-                                    searchable: true,
-                                    orderable: true
+                                    exportable: false,
+                                    printable: false,
+                                    searchable: false,
+                                    orderable: false
+                                },
+                                {
+                                    name: 'updated_at',
+                                    data: 'updated_at',
+                                    title: '{{ trans('admin.updated_at') }}',
+                                    exportable: false,
+                                    printable: false,
+                                    searchable: false,
+                                    orderable: false
                                 },
                                 {
                                     name: 'actions',
@@ -365,22 +364,22 @@
                                 extend : 'print',
                                 className : 'btn dark btn-outline',
                                 text : '<i class="fa fa-print"></i>طباعة',
-                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                            },
+                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                            },
                             {
                                 extend : 'excel',
                                 className : 'btn green btn-outline',
                                 text : '<i class="fa fa-file-excel"> </i> {{ trans('admin.export_excel') }}',
-                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                            },
+                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                            },
                             {
                                 extend : 'pdf',
                                 className : 'btn red btn-outline',
                                 text : '<i class="fa fa-file-pdf"> </i> {{ trans('admin.export_pdf') }}',
-                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                            },
+                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                            },
                             {
                                 extend : 'csv',
                                 className : 'btn purple btn-outline',
                                 text : '<i class="fa fa-file-excel"> </i> {{ trans('admin.export_csv') }}',
-                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8,9]},                            },
+                                exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},                            },
                             {
                                 extend : 'reload',
                                 className : 'btn blue btn-outline',

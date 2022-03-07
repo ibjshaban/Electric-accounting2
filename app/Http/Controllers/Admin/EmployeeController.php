@@ -6,9 +6,13 @@ use App\DataTables\EmployeeDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\EmployeeRequest;
 use App\Http\Requests;
+use App\Models\City;
 use App\Models\Debt;
 use App\Models\Employee;
+use App\Models\EmployeeType;
 use App\Models\Salary;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
 
@@ -41,8 +45,35 @@ class EmployeeController extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(EmployeeDataTable $employee)
+    public function index(EmployeeDataTable $employee, Request $request)
     {
+        if($request->from_date != null && $request->to_date != null || $request->reload != null){
+
+            if($request->from_date != null && $request->to_date != null){
+                $employees = Employee::where('created_at','<=',$request->to_date)->where('created_at','>=',Carbon::parse($request->to_date)->addDay(1))->get();
+            }else{
+                $employees = Employee::get();
+            }
+            return datatables($employees)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.employee.buttons.actions')
+                    ->addColumn('name', 'admin.employee.buttons.style')
+                    ->addColumn('type_name',function (Employee $employee){
+                        return EmployeeType::where('id',$employee->type_id)->first()->name ?? '';
+                    })
+                    ->addColumn('city_name',function (Employee $employee){
+                        return City::where('id',$employee->city_id)->first()->name ?? '';
+                    })
+                    ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                    ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                        <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                        <label for="selectdata{{ $id }}"></label>
+                        </div>')
+                    ->rawColumns(['checkbox','actions', 'photo_profile', 'name'])
+                    ->make(true);
+        }
         return $employee->render('admin.employee.index', ['title' => trans('admin.employee')]);
     }
 

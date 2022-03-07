@@ -8,8 +8,13 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.37]
 class SubItemsDataTable extends DataTable
 {
-    	
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.subitems');
+
+    }
      /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.37]
@@ -18,14 +23,16 @@ class SubItemsDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+        ->addIndexColumn()
             ->addColumn('actions', 'admin.subitems.buttons.actions')
-   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
+
+   		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
                   <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
                   <label for="selectdata{{ $id }}"></label>
                 </div>')
             ->rawColumns(['checkbox','actions',]);
     }
-  
+
 
      /**
      * Get the query object to be processed by dataTables.
@@ -37,7 +44,7 @@ class SubItemsDataTable extends DataTable
         return SubItem::query()->select("sub_items.*");
 
     }
-    	
+
 
     	 /**
 	     * Optional method if you want to use html builder.
@@ -92,10 +99,10 @@ class SubItemsDataTable extends DataTable
                 'initComplete' => "function () {
 
 
-            
+
             ". filterElement('1,2,3,4,5', 'input') . "
 
-            
+
 
 	            }",
                 'order' => [[1, 'desc']],
@@ -130,7 +137,7 @@ class SubItemsDataTable extends DataTable
 
 	    }
 
-    	
+
 
     	/**
 	     * Get columns.
@@ -141,7 +148,7 @@ class SubItemsDataTable extends DataTable
 	    protected function getColumns()
 	    {
 	        return [
-	       	
+
  [
                 'name' => 'checkbox',
                 'data' => 'checkbox',
@@ -158,7 +165,7 @@ class SubItemsDataTable extends DataTable
             ],
 [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width'          => '10px',
                 'aaSorting'      => 'none'
@@ -222,5 +229,5 @@ class SubItemsDataTable extends DataTable
 	    {
 	        return 'subitems_' . time();
 	    }
-    	
+
 }
