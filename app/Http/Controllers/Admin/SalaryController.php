@@ -161,7 +161,6 @@ class SalaryController extends Controller
 	public function destroy($id){
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $salary = Salary::find($id);
             if(is_null($salary) || empty($salary)){
@@ -171,24 +170,7 @@ class SalaryController extends Controller
             $this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
             $salary->delete();
             // code
-            if (!admin()->user()->role('admins_log')){
-                $queries= DB::getQueryLog();
-                foreach ($queries as $index=>$query){
-                    $t =vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status= AddNewLog('حذف راتب',$queries,admin()->id(),'delete','salaries',$id,null);
-                if ($status){
-                    DB::commit();
-                    return redirectWithSuccess(url()->previous(),trans('admin.logged'));
-                }
-                DB::rollBack();
-                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-            }
+
             DB::commit();
             return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
         }
@@ -229,33 +211,13 @@ class SalaryController extends Controller
 
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $status =$this->createSalaryForEmployee($request->id,$request->revenue_id,$request->discount,
                 $request->paid_date,$request->note);
             if (!$status){
                 return response('لم تتم العملية حدث خطأ ما',422);
             }
-
             // code
-            if (!admin()->user()->role('salary_log')){
-                $queries= DB::getQueryLog();
-                foreach ($queries as $index=>$query){
-                    $t =vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status= AddNewLog('إضافة راتب جديد',$queries,admin()->id(),'store','salaries',null,$request->except('_token'));
-                if ($status){
-                    DB::commit();
-                    return response(trans('admin.logged'),200);
-                }
-                DB::rollBack();
-                return response('لم تتم العملية حدث خطأ ما',422);
-            }
             DB::commit();
             return response('تمت عملية إضافة الراتب للموظف بنجاح',200);
 
