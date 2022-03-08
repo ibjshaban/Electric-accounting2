@@ -90,7 +90,7 @@ class BasicParents extends Controller
         if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
             if ($request->from_date != null && $request->to_date != null) {
 
-                $basicitems = BasicParentItem::where('basic_id', $id)->whereBetween('created_at', [$request->from_date, $request->to_date])->get();
+                $basicitems = BasicParentItem::where('basic_id', $id)->whereBetween('date', [$request->from_date, $request->to_date])->get();
             } else {
                 $basicitems = BasicParentItem::where('basic_id', $id)->get();
             }
