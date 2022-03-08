@@ -121,7 +121,7 @@ class BasicParents extends Controller
             $datatable= new WithdrawalsDataTable();
             if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
                 if ($request->from_date != null && $request->to_date != null) {
-                    $payments = WithdrawalsPayments::where('parent_id', $id)->whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
                 } else {
                     $payments = WithdrawalsPayments::where('parent_id', $id)->get();
                 }
@@ -139,6 +139,23 @@ class BasicParents extends Controller
         }
         else{
             $datatable= new PaymentsDataTable();
+            if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                if ($request->from_date != null && $request->to_date != null) {
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                } else {
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->get();
+                }
+                return datatables($payments)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.withdrawalspayments.buttons.actions')
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                      <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                      <label for="selectdata{{ $id }}"></label>
+                    </div>')
+                    ->rawColumns(['checkbox', 'actions',])
+                    ->make(true);
+            }
         }
 
         return is_null($basicparents) || empty($basicparents) ?

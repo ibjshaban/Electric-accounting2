@@ -46,7 +46,7 @@ class CollectionController extends Controller
     {
         if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
             if ($request->from_date != null && $request->to_date != null) {
-                $debts = Collection::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                $debts = Collection::whereBetween('collection_date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
             } else {
                 $debts = Collection::get();
             }

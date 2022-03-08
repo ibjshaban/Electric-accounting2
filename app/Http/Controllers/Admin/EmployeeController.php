@@ -265,7 +265,7 @@ class EmployeeController extends Controller
             });
         $data3 = $salaries->merge($debts)->sortBy('payment_date')->reverse();
 
-        $headerHtml = view()->make('admin.employee.header')->render();
+        $headerHtml = view()->make('admin.employee.header',['employee_name' => Employee::where('id',$id)->first()->name,])->render();
         $pdf = PDF::setOption('enable-local-file-access', true)->setOption('header-html', $headerHtml)->loadView('admin.employee.print', ['data' => $data3]);
         return $pdf->download('hello.pdf');
     }
