@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 
 <head>
-    <title>جدول الطباعة</title>
+    <title>{{ $title }}</title>
     <meta charset="UTF-8">
     <meta name=description content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +29,7 @@
 
     <div style="text-align: center;">
         <img src="{{ asset('assets/img/motor-logo.jpeg') }}" alt="{{ __('') }}" class="mb-2">
+        <h1>{{ $title }}</h1>
         <table class="table table-bordered table-hover">
             @php
                 $id = 1
@@ -41,7 +42,6 @@
                         <td>السعر</td>
                         <td>الخصم</td>
                         <td>التاريخ</td>
-                        <td>تاريخ الانشاء</td>
                         <td>التفاصيل</td>
                     </tr>
                 @endif
@@ -51,7 +51,6 @@
                     <td>{{ $basic->price }}</td>
                     <td>{{ $basic->discount }}</td>
                     <td>{{ $basic->date }}</td>
-                    <td>{{ $basic->created_at }}</td>
                     <td>
                         @if (count($basic->item()) != 0)
                             @php
@@ -65,8 +64,8 @@
                                             <td>الرقم</td>
                                             <td>السعر</td>
                                             <td>الكمية</td>
-                                            <td>الملاحظات</td>
                                             <td>سعر الكمية</td>
+                                            <td>الملاحظات</td>
                                         <tr>
                                     @endif
 
@@ -74,8 +73,8 @@
                                         <td>{{ $i }}</td>
                                         <td>{{ $item->price }}</td>
                                         <td>{{ $item->amount }}</td>
-                                        <td>{{ $item->note }}</td>
                                         <td>{{ $item->price * $item->amount }}</td>
+                                        <td>{{ $item->note }}</td>
                                     <tr>
                                         @php
                                             $total += $item->price * $item->amount;

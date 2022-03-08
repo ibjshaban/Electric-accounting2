@@ -92,7 +92,7 @@ class SupplierController extends Controller
         $payments = Payment::where('supplier_id', $id)->orderBy('created_at','DESC')->paginate(10);
         if($request->from_date != null && $request->to_date != null || $request->reload != null){
             if($request->from_date != null && $request->to_date != null){
-                $fillings = Filling::where('supplier_id',$id)->whereBetween('created_at',[$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+                $fillings = Filling::where('supplier_id',$id)->whereBetween('filling_date',[$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
             }else{
                 $fillings = Filling::where('supplier_id',$id)->get();
             }

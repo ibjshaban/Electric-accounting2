@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Filling;
 
 use App\Http\Controllers\Validations\FillingRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
@@ -41,8 +42,30 @@ class FillingController extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(FillingDataTable $filling)
+            public function index(FillingDataTable $filling ,Request $request)
             {
+                if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                    if ($request->from_date != null && $request->to_date != null) {
+                        $filling = Filling::whereBetween('filling_date', [$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+                    } else {
+                        $filling = Filling::get();
+                    }
+                    return datatables($filling)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.filling.buttons.actions')
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                    ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+                    ->addColumn('total_price', '{{ $quantity*$price }}')
+                    ->addColumn('supplier_id', function(Filling $fill){
+                        return Supplier::where('id',$fill->supplier_id)->first()->name;
+                    })
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                          <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                          <label for="selectdata{{ $id }}"></label>
+                        </div>')
+                    ->rawColumns(['checkbox', 'actions',])
+                        ->make(true);
+                }
                return $filling->render('admin.filling.index',['title'=>trans('admin.filling')]);
             }
 

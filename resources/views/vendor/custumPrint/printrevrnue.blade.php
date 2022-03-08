@@ -3,7 +3,7 @@
 <html lang="ar" dir="rtl">
 
 <head>
-    <title>جدول الطباعة</title>
+    <title>{{ $title }}</title>
     <meta charset="UTF-8">
     <meta name=description content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +28,7 @@
 
     <div style="text-align: center;">
         <img src="{{ asset('assets/img/motor-logo.jpeg') }}" alt="{{ __('') }}">
+        <h1>{{ $title }}</h1>
         <table class="table table-bordered table-hover">
             @php
                 $id = 1;
@@ -42,9 +43,7 @@
                         <td>السعر</td>
                         <td>التاريخ</td>
                         <td>الايرادة</td>
-                        <td>تاريخ الانشاء</td>
-                        <td>اخر تحديث</td>
-                        <td>التفاصيل</td>
+                        <td>البيان/</td>
                     </tr>
                 @endif
                 <tr>
@@ -54,8 +53,6 @@
                     <td>{{ $revenue->price }}</td>
                     <td>{{ $revenue->date }}</td>
                     <td>{{ App\Models\revenue::where('id', $revenue_id)->first()->name }}</td>
-                    <td>{{ $revenue->updated_at }}</td>
-                    <td>{{ $revenue->created_at }}</td>
                     <td>
                         @if (count($revenue->item()) != 0)
                             @php
@@ -66,9 +63,7 @@
                                 @foreach ($revenue->item() as $item)
                                     @if ($loop->first)
                                         <tr>
-                                            <td>الرقم</td>
                                             <td>الصنف</td>
-                                            <td>رقم الصنف</td>
                                             <td>الكمية</td>
                                             <td>سعر الوحدة</td>
                                             <td>سعر الكمية</td>
@@ -76,9 +71,7 @@
                                     @endif
 
                                     <tr>
-                                        <td>{{ $i }}</td>
                                         <td>{{ $item->item }}</td>
-                                        <td>{{ $item->item_number }}</td>
                                         <td>{{ $item->amount }}</td>
                                         <td>{{ $item->price }}</td>
                                         <td>{{ $item->price * $item->amount }}</td>

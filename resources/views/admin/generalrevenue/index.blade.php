@@ -129,11 +129,7 @@
                             width: '10px',
                             aaSorting: 'none'
                         },
-                        {
-                            name: 'name',
-                            data: 'name',
-                            title: '{{ trans('admin.name') }}'
-                        },
+
                         {
                             name: 'price',
                             data: 'price',
@@ -143,6 +139,11 @@
                             name: 'date',
                             data: 'date',
                             title: '{{ trans('admin.date') }}'
+                        },
+                        {
+                            name: 'name',
+                            data: 'name',
+                            title: '{{ trans('admin.name') }}'
                         },
                         {
                             name: 'note',
@@ -287,11 +288,6 @@
                         aaSorting: 'none'
                     },
                     {
-                        name: 'name',
-                        data: 'name',
-                        title: '{{ trans('admin.name') }}'
-                    },
-                    {
                         name: 'price',
                         data: 'price',
                         title: '{{ trans('admin.price') }}'
@@ -300,6 +296,11 @@
                         name: 'date',
                         data: 'date',
                         title: '{{ trans('admin.date') }}'
+                    },
+                    {
+                        name: 'name',
+                        data: 'name',
+                        title: '{{ trans('admin.name') }}'
                     },
                     {
                         name: 'note',

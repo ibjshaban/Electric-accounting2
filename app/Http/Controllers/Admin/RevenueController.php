@@ -49,7 +49,7 @@ class RevenueController extends Controller
     {
         if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
             if ($request->from_date != null && $request->to_date != null) {
-                $revenues = revenue::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                $revenues = revenue::whereBetween('open_date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
             } else {
                 $revenues = revenue::get();
             }

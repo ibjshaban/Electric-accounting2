@@ -41,7 +41,7 @@ class GeneralRevenueController extends Controller
             {
                 if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
                     if ($request->from_date != null && $request->to_date != null) {
-                        $generalrevenues = GeneralRevenue::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                        $generalrevenues = GeneralRevenue::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
                     } else {
                         $generalrevenues = GeneralRevenue::get();
                     }
