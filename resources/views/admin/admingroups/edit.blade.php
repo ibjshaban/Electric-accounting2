@@ -104,7 +104,7 @@ $(document).on('click','.checkinput',function(){
 						<th>{{trans('admin.create')}}</th>
 						<th>{{trans('admin.edit')}}</th>
 						<th>{{trans('admin.delete')}}</th>
-						<th>عدم مراجعة العمليات</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -216,23 +216,7 @@ $(document).on('click','.checkinput',function(){
 							</div>
 							@endif
 						</td>
-						<td>
-							@if(!is_array($value) || is_array($value) && in_array('log',$value))
-							<div class="form-group">
-								<div class="custom-control custom-switch">
-									<input
-									type="checkbox"
-									class="custom-control-input checkinput {{ $key }}_log"
-									permission_name="{{ $key }}"
-									name="{{ $key }}_log"
-									{{ checkPermissionGroup($key.'_log',$admingroups)?'checked':'' }}
-									value="yes"
-									id="{{ $key }}_log">
-									<label class="custom-control-label" for="{{ $key }}_log"></label>
-								</div>
-							</div>
-							@endif
-						</td>
+
 					</tr>
 					@endforeach
 				</tbody>
