@@ -18,14 +18,28 @@
                         @if(!empty(request()->segment(2)))
                             <li class="breadcrumb-item"><a href="{{aurl('/')}}">{{trans('admin.dashboard')}}</a></li>
 
-                            @if (\Request::is('admin/revenuefule-revenue/*') or \Request::is('admin/expenses/*') or \Request::is('admin/revenue-expenses/*') or \Request::is('admin/revenue-otheroperation/*') or \Request::is('admin/revenue-collection/*') or \Request::is('admin/revenue-salary/*'))
+                            @if (\Request::is('admin/revenuefule-revenue/*') or
+                                \Request::is('admin/expenses/*') or
+                                \Request::is('admin/revenue-expenses/*') or
+                                \Request::is('admin/revenue-otheroperation/*') or
+                                \Request::is('admin/revenue-collection/*') or
+                                \Request::is('admin/revenue-salary/*')
+                                )
                                 <li class="breadcrumb-item active"><a
-                                        href="#">الايرادة</a>
+                                        href="{{ aurl('/revenue') }}">الايرادات</a>
                                 </li>
-                                <li class="breadcrumb-item active"><a
-                                        href="#">{{trans('admin.'.request()->segment(2))}}</a>
+                                <li class="breadcrumb-item active"> <a
+                                        href="{{url()->previous()}}">الإيرادة</a>
                                 </li>
-
+                                @elseif (\Request::is('admin/basicparents/*') or
+                                \Request::is('admin/basicparents/*')
+                                )
+                                    <li class="breadcrumb-item active"><a
+                                            href="{{ aurl('/startup') }}">المصاريف الاساسية</a>
+                                    </li>
+                                    <li class="breadcrumb-item active"> <a
+                                            href="{{url()->previous()}}">الإيرادة</a>
+                                    </li>
                             @else
                                 <li class="breadcrumb-item active"><a
                                         href="{{aurl(request()->segment(2))}}">{{trans('admin.'.request()->segment(2))}}</a>
