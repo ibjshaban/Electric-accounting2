@@ -195,4 +195,31 @@ class Stocks extends Controller
 	}
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $stocks = Stock::whereBetween('created_at',[$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $stocks = Stock::get();
+        }
+
+        $i = 1;
+        foreach($stocks as $stock){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.name') => $stock->name,
+                trans('admin.city_id') => City::where('id',$stock->city_id)->first()->name ?? '',
+                trans('admin.created_at') => Carbon::parse($stock->created_at)->format('Y-m-d'),
+            ];
+            $i++;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.stock'),
+            'totalPrice' => 0,
+            'total_name' => null,
+        ]);
+    }
 }

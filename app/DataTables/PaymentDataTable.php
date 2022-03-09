@@ -174,11 +174,11 @@ class PaymentDataTable extends DataTable
                  'data'=>'amount',
                  'title'=> 'المبلغ',
 		    ],
-				/*[
+				[
                  'name'=>'supplier_id.name',
                  'data'=>'supplier_id.name',
                  'title'=>trans('admin.supplier_id'),
-		    ],*/
+		    ],
             [
 	                'name' => 'created_at',
 	                'data' => 'created_at',

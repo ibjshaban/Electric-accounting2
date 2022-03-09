@@ -193,5 +193,36 @@ class GeneralRevenueController extends Controller
 		}
 	}
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $generalrevenues = GeneralRevenue::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $generalrevenues = GeneralRevenue::all();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($generalrevenues as $generalrevenue){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.price') => $generalrevenue->price,
+                trans('admin.date') => $generalrevenue->date,
+                trans('admin.name') => $generalrevenue->name,
+                trans('admin.note') => $generalrevenue->note,
+                trans('admin.created_at') => Carbon::parse($generalrevenue->created_at)->format('Y-m-d'),
+            ];
+            $i++;
+            $total += $generalrevenue->price;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.generalrevenue'),
+            'totalPrice' => $total,
+            'total_name' =>  trans('admin.price').'الكلي',
+        ]);
+    }
 
 }

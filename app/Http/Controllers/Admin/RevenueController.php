@@ -266,4 +266,37 @@ class RevenueController extends Controller
     }
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $revenues = revenue::whereBetween('open_date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $revenues = revenue::get();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($revenues as $revenue){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.name') => $revenue->name,
+                trans('admin.open_date') => $revenue->open_date,
+                trans('admin.total_amount') => $revenue->total_amount,
+                trans('admin.city_id') => City::where('id',$revenue->city_id)->first()->name ?? '',
+                trans('admin.close_date') => Carbon::parse($revenue->close_date)->format('Y-m-d'),
+                trans('admin.created_at') => Carbon::parse($revenue->created_at)->format('Y-m-d'),
+                trans('admin.updated_at') => Carbon::parse($revenue->updated_at)->format('Y-m-d'),
+            ];
+            $i++;
+            $total += $revenue->total_amount;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.revenue'),
+            'totalPrice' => $total,
+            'total_name' => trans('admin.total_amount'),
+        ]);
+    }
 }

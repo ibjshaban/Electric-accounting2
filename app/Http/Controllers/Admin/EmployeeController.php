@@ -14,6 +14,7 @@ use App\Models\Salary;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use League\Flysystem\Plugin\EmptyDir;
 use PDF;
 
 // Auto Controller Maker By Baboon Script
@@ -49,8 +50,10 @@ class EmployeeController extends Controller
     {
         if($request->from_date != null && $request->to_date != null || $request->reload != null){
 
+            //dd($employees);
             if($request->from_date != null && $request->to_date != null){
-                $employees = Employee::where('created_at','<=',$request->to_date)->where('created_at','>=',Carbon::parse($request->to_date)->addDay(1))->get();
+                $employees = Employee::where('created_at', '>=', $request->query('from_date'))->where('created_at', '<=', Carbon::parse($request->query('to_date'))->addDay(1))->get();
+
             }else{
                 $employees = Employee::get();
             }
@@ -64,7 +67,9 @@ class EmployeeController extends Controller
                     ->addColumn('city_name',function (Employee $employee){
                         return City::where('id',$employee->city_id)->first()->name ?? '';
                     })
-                    ->addColumn('photo_profile', '{!! view("admin.show_image",["image"=>$photo_profile])->render() !!}')
+                    ->addColumn('photo_profile', function (Employee $employee){
+                        return view("admin.show_image",["image"=>$employee->photo_profile])->render();
+                    })
                     ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
                     ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
                     ->addColumn('checkbox', '<div  class="icheck-danger">
@@ -74,6 +79,7 @@ class EmployeeController extends Controller
                     ->rawColumns(['checkbox','actions', 'photo_profile', 'name'])
                     ->make(true);
         }
+
         return $employee->render('admin.employee.index', ['title' => trans('admin.employee')]);
     }
 
@@ -288,4 +294,38 @@ class EmployeeController extends Controller
         return view('admin.employee.print', ['data' => $data3]);
     }
 
+
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $employees = Employee::where('created_at', '>=', $request->query('from_date'))->where('created_at', '<=', Carbon::parse($request->query('to_date'))->addDay(1))->get();
+        } else {
+            $employees = Employee::all();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($employees as $employee){
+            $data[] = [
+                'الرقم' => $i,
+                'البيان' => $employee->name,
+                'رقم الهوية' => $employee->id_number,
+                'الراتب' => $employee->salary,
+                'رقم الجوال' => $employee->phone,
+                'النوع' => EmployeeType::where('id',$employee->type_id)->first()->name ?? "",
+                'المدينة' => City::where('id',$employee->city_id)->first()->name ?? '',
+                'تاريخ الانشاء' => Carbon::parse($employee->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+            $total += $employee->salary;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.employee'),
+            'totalPrice' => $total,
+            'total_name' =>  'مجموع الرواتب',
+        ]);
+    }
 }

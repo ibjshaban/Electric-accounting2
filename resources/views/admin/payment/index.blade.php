@@ -196,6 +196,10 @@
                             text: '<i class="fa fa-print"></i>طباعة',
                             exportOptions: {
                                 columns: [1, 2, 3, 4, 5]
+                            },
+                            action: function() {
+                            window.location.href =
+                                '/admin/print/payments?from_date='+from_date+'&to_date='+to_date;
                             }
                         },
                         {
@@ -352,6 +356,9 @@
                         text: '<i class="fa fa-print"></i>طباعة',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5]
+                        },
+                        action: function() {
+                            window.location.href = '{{ \URL::current() }}?action=print';
                         }
                     },
                     {

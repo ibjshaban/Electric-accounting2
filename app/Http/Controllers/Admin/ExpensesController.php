@@ -42,8 +42,25 @@ class ExpensesController extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(ExpensesDataTable $expenses)
+    public function index(ExpensesDataTable $expenses,Request $request)
     {
+        if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+            if ($request->from_date != null && $request->to_date != null) {
+                $expenses = Expenses::whereBetween('date', [$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+            } else {
+                $expenses = Expenses::get();
+            }
+            return datatables($expenses)
+            ->addIndexColumn()
+
+            ->addColumn('actions', 'admin.expenses.buttons.actions')
+            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                  <label for="selectdata{{ $id }}"></label>
+                </div>')
+            ->rawColumns(['checkbox', 'actions',])
+                ->make(true);
+        }
         return $expenses->render('admin.expenses.index', ['title' => trans('admin.expenses')]);
     }
 
@@ -211,7 +228,7 @@ class ExpensesController extends Controller
             ->rawColumns(['checkbox', 'actions',])
                 ->make(true);
         }
-        return $expenses->with('id', $id)->render('admin.expenses.index', ['title' => trans('admin.expenses') . '/(' . $revenue . ')']);
+        return $expenses->with('id', $id)->render('admin.expenses.revenue-expenses.index', ['title' => trans('admin.expenses') . '/(' . $revenue . ')','id'=>$id]);
     }
 
     public function revenueCreate($id)
@@ -324,4 +341,56 @@ class ExpensesController extends Controller
     }
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $expenses = Expenses::whereBetween('date', [$request->query('from_date'),Carbon::parse($request->query('to_date'))->addDay(1)])->get();
+        } else {
+            $expenses = Expenses::all();
+        }
+
+        $i = 1;
+        foreach($expenses as $expense){
+            $data[] = [
+                'الرقم' => $i,
+                'البيان' => $expense->name,
+                'الخصم' => $expense->discount,
+                'السعر' => $expense->price,
+                'التاريخ' => $expense->date,
+                'الايرادة' => revenue::where('id',$expense->revenue_id)->first()->name,
+                'تاريخ الانشاء' => Carbon::parse($expense->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.admins'),
+        ]);
+    }
+
+    public function dtPrintRE(Request $request,$id)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $expenses = Expenses::where('revenue_id', $id)->whereBetween('date', [$request->query('from_date'),Carbon::parse($request->query('to_date'))->addDay(1)])->get();
+        } else {
+            $expenses = Expenses::where('revenue_id', $id)->all();
+        }
+
+        $total = 0;
+        foreach($expenses as $expense){
+            $total += $expense->price;
+        }
+
+        return view('vendor.custumPrint.printrevrnue',[
+            'expenses' => $expenses,
+            'totalPrice' => $total,
+            'total_name' =>  'السعر الكلي',
+            'title' => trans('admin.expenses'),
+            'revenue_id' => $id,
+            'print' => true,
+        ]);
+    }
 }

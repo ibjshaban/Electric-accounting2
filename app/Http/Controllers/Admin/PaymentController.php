@@ -270,4 +270,33 @@ class PaymentController extends Controller
 	}
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $payments = Payment::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $payments = Payment::get();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($payments as $payment){
+            $data[] = [
+                'الرقم' => $i,
+                'المبلغ' => $payment->amount,
+                trans('admin.created_at') => Carbon::parse($payment->created_at)->format('Y-m-d'),
+                trans('admin.updated_at') => Carbon::parse($payment->updated_at)->format('Y-m-d'),
+            ];
+            $i++;
+            $total += $payment->amount;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.payment'),
+            'totalPrice' => $total,
+            'total_name' => 'المبلغ',
+        ]);
+    }
 }

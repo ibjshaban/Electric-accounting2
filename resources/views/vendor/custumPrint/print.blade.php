@@ -23,7 +23,16 @@
 
 
     @php
-      $basic_id = App\Models\BasicParentItem::where('id',$data[0]['رقم'])->first()->basic_id;
+      if(count($basic) != 0){
+            $ba = $basic;
+        }else{
+            if(!$print){
+            $basic_id = App\Models\BasicParentItem::where('id',$data[0]['رقم'])->first()->basic_id;
+            $ba = App\Models\BasicParentItem::where('basic_id',$basic_id)->latest()->get();
+            }else {
+                $ba = [];
+            }
+        }
     @endphp
 
 
@@ -34,7 +43,7 @@
             @php
                 $id = 1
             @endphp
-            @foreach (App\Models\BasicParentItem::where('basic_id',$basic_id)->latest()->get() as $basic)
+            @foreach ($ba as $basic)
                 @if ($loop->first)
                     <tr>
                         <td>#</td>
@@ -94,6 +103,10 @@
         @endphp
         @endforeach
         </table>
+
+        @if($totalPrice != 0 && $total_name != null)
+        <h2>{{ $total_name . ':' . $totalPrice }} </h2>
+        @endif
     </div>
 
 

@@ -212,4 +212,36 @@ class DebtController extends Controller
 	}
 
 
+    public function dtPrint(HttpRequest $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $debts = Debt::where('created_at', '>=', $request->query('from_date'))->where('created_at', '<=', Carbon::parse($request->query('to_date'))->addDay(1))->get();
+        } else {
+            $debts = Debt::all();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($debts as $debt){
+            $data[] = [
+                'الرقم' => $i,
+                'الموظف' => Employee::where('id',$debt->employee_id)->first()->name ?? 'لا يوجد',
+                'الكمية' => $debt->amount,
+                'الباقي' => $debt->remainder,
+                'ملاحظات' => $debt->note,
+                'تاريخ الانشاء' => Carbon::parse($debt->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+            $total += $debt->amount;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.debt'),
+            'totalPrice' => $total,
+            'total_name' => 'مجموع الكمية',
+        ]);
+    }
+
 }

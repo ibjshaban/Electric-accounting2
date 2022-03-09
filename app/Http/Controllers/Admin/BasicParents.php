@@ -338,4 +338,31 @@ class BasicParents extends Controller
     }
 
     //------------------------------ ------------------------------------//
+
+
+    public function dtPrintbasicPS(Request $request,$id)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $basicitems = BasicParentItem::where('basic_id', $id)->whereBetween('date', [$request->from_date, $request->to_date])->get();
+        } else {
+            $basicitems = BasicParentItem::where('basic_id', $id)->get();
+        }
+
+        $total = 0;
+        foreach($basicitems as $basicitem){
+            $total += $basicitem->price;
+        }
+
+        return view('vendor.custumPrint.print',[
+            'basic' => $basicitems,
+            'title' => trans('admin.stock'),
+            'totalPrice' => $total,
+            'total_name' => 'السعر الكلي',
+            'print' => true,
+        ]);
+    }
+
+
+
 }
