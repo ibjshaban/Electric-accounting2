@@ -9,9 +9,21 @@ use Yajra\DataTables\Services\DataTable;
 class EmployeeDataTable extends DataTable
 {
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.employee');
+
+        $this->total_name = 'مجموع الرواتب';
+
+        $total = 0;
+        foreach(Employee::get() as $employee)
+        {
+            $total += $employee->salary;
+        }
+
+        $this->totalPrice = $total;
 
     }
 

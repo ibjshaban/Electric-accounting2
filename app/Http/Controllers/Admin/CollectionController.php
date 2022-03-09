@@ -336,4 +336,39 @@ class CollectionController extends Controller
     }
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $collections = Collection::where('created_at', '>=', $request->query('from_date'))->where('created_at', '<=', Carbon::parse($request->query('to_date'))->addDay(1))->get();
+        } else {
+            $collections = Collection::all();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($collections as $collection){
+            $data[] = [
+                'الرقم' => $i,
+                'اسم الموظف' => Employee::where('id',$collection->employee_id)->first()->name ?? 'لا يوجد',
+                'جهة التحصيل' => $collection->source,
+                'الايرادات' => revenue::where('id',$collection->revenue_id)->first()->name ?? 'لا يوجد',
+                'الكمية' => $collection->amount,
+                'تاريخ التحصيل' => $collection->collection_date,
+                'ملاحظات' => $collection->note,
+                'تاريخ الانشاء' => Carbon::parse($collection->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+            $total += $collection->amount;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.collection'),
+            'totalPrice' => $total,
+            'total_name' =>  'مجموع الكمية',
+        ]);
+    }
+
+
 }

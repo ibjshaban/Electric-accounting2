@@ -223,6 +223,26 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
 
         Route::resource('subItems', 'Admin\subItems');
         Route::post('subItems/multi_delete', 'Admin\subItems@multi_delete');
+
+        Route::get('print/admins','Admin\Admins@dtPrint');
+        Route::get('print/cities','Admin\Citys@dtPrint');
+        Route::get('print/collection','Admin\CollectionController@dtPrint');
+        Route::get('print/debt','Admin\DebtController@dtPrint');
+        Route::get('print/employees','Admin\EmployeeController@dtPrint');
+        Route::get('print/revenue-expanses/{id}','Admin\ExpensesController@dtPrintRE');
+        Route::get('print/expanses','Admin\ExpensesController@dtPrint');
+        Route::get('print/filling','Admin\FillingController@dtPrint');
+        Route::get('print/generalrevenue','Admin\GeneralRevenueController@dtPrint');
+        Route::get('print/notebooks','Admin\Notebooks@dtPrint');
+        Route::get('print/payments','Admin\PaymentController@dtPrint');
+        Route::get('print/revenue','Admin\RevenueController@dtPrint');
+        Route::get('print/stock','Admin\Stocks@dtPrint');
+        Route::get('print/showBP/{id}','Admin\BasicParents@dtPrintshowBP');
+        Route::get('print/basicPS/{id}','Admin\BasicParents@dtPrintbasicPS');
+
+
+
+
     });
 
 });

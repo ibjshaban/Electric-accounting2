@@ -10,9 +10,20 @@ class CollectionDataTable extends DataTable
 {
 
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.collection');
+        $this->total_name = 'مجموع الكمية';
+
+        $total = 0;
+        foreach(Collection::get() as $collection)
+        {
+            $total += $collection->amount;
+        }
+
+        $this->totalPrice = $total;
 
     }
 

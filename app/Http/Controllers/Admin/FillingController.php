@@ -318,5 +318,39 @@ class FillingController extends Controller
         }
 	}
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $filling = Filling::whereBetween('filling_date', [$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $fills = Filling::all();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($fills as $fill){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.quantity') => $fill->quantity,
+                trans('admin.price') => $fill->price,
+                'السعر الكلي' => $fill->quantity * $fill->price,
+                trans('admin.supplier_id') => Supplier::where('id',$fill->supplier_id)->first()->name,
+                trans('admin.filling_date') => $fill->filling_date,
+                trans('admin.note') => $fill->note,
+                'تاريخ الانشاء' => Carbon::parse($fill->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+            $total += ($fill->quantity * $fill->price);
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.filling'),
+            'totalPrice' => $total,
+            'total_name' =>  'مجموع السعر الكلي',
+        ]);
+    }
+
 
 }

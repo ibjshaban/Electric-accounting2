@@ -185,7 +185,11 @@
                             className: 'btn dark btn-outline',
                             text: '<i class="fa fa-print"></i>طباعة',
                             exportOptions: {
-                                columns: [1, 2, 3, 4]                            }
+                                columns: [1, 2, 3, 4]                            },
+                            action: function() {
+                            window.location.href =
+                                '/admin/print/stock?from_date='+from_date+'&to_date='+to_date;
+                            }
                         },
                         {
                             extend: 'excel',
@@ -328,7 +332,10 @@
                         className: 'btn dark btn-outline',
                         text: '<i class="fa fa-print"></i>طباعة',
                         exportOptions: {
-                            columns: [1, 2, 3, 4]                        }
+                            columns: [1, 2, 3, 4]                        },
+                        action: function() {
+                            window.location.href = '{{ \URL::current() }}?action=print';
+                        }
                     },
                     {
                         extend: 'excel',

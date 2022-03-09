@@ -192,5 +192,31 @@ class Citys extends Controller
 		}
 	}
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $cities = City::where('created_at', '>=', $request->query('from_date'))->where('created_at', '<=', Carbon::parse($request->query('to_date'))->addDay(1))->get();
+        } else {
+            $cities = City::all();
+        }
+
+        $i = 1;
+        foreach($cities as $city){
+            $data[] = [
+                'الرقم' => $i,
+                'البيان' => $city->name,
+                'تاريخ الانشاء' => Carbon::parse($city->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.city'),
+            'totalPrice' => 0,
+            'total_name' => null,
+        ]);
+    }
 
 }
