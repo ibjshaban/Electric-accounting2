@@ -98,24 +98,7 @@ class Admins extends Controller
             Admin::create($data);
             // code
 
-            if (!admin()->user()->role('admins_log')) {
-                $queries = DB::getQueryLog();
-                foreach ($queries as $index => $query) {
-                    $t = vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status = AddNewLog('إضافة مسؤول جديد', $queries, admin()->id(), 'store', 'admins', null, $data);
-                if ($status) {
-                    DB::commit();
-                    return redirectWithSuccess(aurl('admins'), trans('admin.logged'));
-                }
-                DB::rollBack();
-                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-            }
+
             DB::commit();
             return redirectWithSuccess(aurl('admins'), trans('admin.added'));
         } catch (\Exception $exception) {
@@ -179,7 +162,6 @@ class Admins extends Controller
 
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $admins = Admin::find($id);
             if (is_null($admins) || empty($admins)) {
@@ -196,24 +178,7 @@ class Admins extends Controller
             }
             Admin::where('id', $id)->update($data);
             // code
-            if (!admin()->user()->role('admins_log')) {
-                $queries = DB::getQueryLog();
-                foreach ($queries as $index => $query) {
-                    $t = vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status = AddNewLog('تعديل مسؤول', $queries, admin()->id(), 'update', 'admins', $id, $data);
-                if ($status) {
-                    DB::commit();
-                    return redirectWithSuccess(aurl('admins'), trans('admin.logged'));
-                }
-                DB::rollBack();
-                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-            }
+
             DB::commit();
             return redirectWithSuccess(aurl('admins'), trans('admin.updated'));
         } catch (\Exception $exception) {
@@ -233,7 +198,6 @@ class Admins extends Controller
 
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $admins = Admin::find($id);
             if (is_null($admins) || empty($admins)) {
@@ -244,24 +208,7 @@ class Admins extends Controller
             }
             $admins->delete();
             // code
-            if (!admin()->user()->role('admins_log')) {
-                $queries = DB::getQueryLog();
-                foreach ($queries as $index => $query) {
-                    $t = vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status = AddNewLog('حذف مسؤول', $queries, admin()->id(), 'delete', 'admins', $id, null);
-                if ($status) {
-                    DB::commit();
-                    return redirectWithSuccess(aurl('admins'), trans('admin.logged'));
-                }
-                DB::rollBack();
-                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-            }
+            
             DB::commit();
             return backWithSuccess(trans('admin.deleted'));
         } catch (\Exception $exception) {
