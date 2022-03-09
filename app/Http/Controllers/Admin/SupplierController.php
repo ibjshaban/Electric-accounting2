@@ -77,7 +77,8 @@ class SupplierController extends Controller
         }
         $supplier = Supplier::create($data);
         $redirect = isset($request["add_back"]) ? "/create" : "";
-        return backWithSuccess(aurl('supplier' . $redirect), trans('admin.added'));
+
+        return redirectWithSuccess(aurl('supplier' . $redirect), trans('admin.added'));
     }
 
     /**
@@ -187,7 +188,7 @@ class SupplierController extends Controller
 
     public function destroy($id)
     {
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::withTrashed()->whereId($id)->first();
 
         if (is_null($supplier) || empty($supplier)) {
             return backWithSuccess(trans('admin.undefinedRecord'), aurl("supplier"));

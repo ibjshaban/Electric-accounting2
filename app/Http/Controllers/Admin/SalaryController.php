@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\DataTables\RevenueSalaryDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\SalaryDataTable;
@@ -166,8 +167,11 @@ class SalaryController extends Controller
             if(is_null($salary) || empty($salary)){
                 return backWithSuccess(trans('admin.undefinedRecord'),url()->previous());
             }
+
             it()->delete('salary',$id);
             $this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
+            AddNewLog(ActivityLogNoteType::salaries,'حذف راتب لموظف',$salary->salary,
+                'delete',null,null,'/revenue-salary/'.$salary->revenue_id);
             $salary->delete();
             // code
 
@@ -214,9 +218,12 @@ class SalaryController extends Controller
             // code
             $status =$this->createSalaryForEmployee($request->id,$request->revenue_id,$request->discount,
                 $request->paid_date,$request->note);
-            if (!$status){
+            if (!$status[0]){
                 return response('لم تتم العملية حدث خطأ ما',422);
             }
+
+            AddNewLog(ActivityLogNoteType::salaries,'إيداع راتب جديد لموظف',$status[1],
+                'store',null,null,'/revenue-salary/'.$request->revenue_id);
             // code
             DB::commit();
             return response('تمت عملية إضافة الراتب للموظف بنجاح',200);
@@ -232,6 +239,7 @@ class SalaryController extends Controller
 	    $employee = Employee::whereId($employee_id)->first();
 	    $discount= $discount && $discount != "NaN"?  $discount : 0;
 	    $status= false;
+        $salary_amount= 0;
 	    if (isset($employee)){
  	        if ($employee->debt() > 0 && is_numeric($discount) && $discount > 0){
             if (!($discount <= $employee->salary && $discount <= $employee->debt())){
@@ -266,13 +274,13 @@ class SalaryController extends Controller
                 }
                 DB::commit();
                 $status= true;
+                $salary_amount= $salary->salary;
             }
             catch (Exception $e){
                 DB::rollBack();
-                dd($e);
             }
         }
-	    return $status;
+	    return [$status,$salary_amount];
     }
     public function BackDebtDiscountForEmployee($employee_id,$discount){
 

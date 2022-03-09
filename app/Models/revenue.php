@@ -71,7 +71,6 @@ protected $fillable = [
        $total_all = $total_fules + $total_salary + $total_expenses + $total_other_operation;
        ////
        $net_profit = $total_collection  - $total_all;
-       $net_profit= $net_profit > 0 ? $net_profit : 0;
        return $net_profit;
    }
 
