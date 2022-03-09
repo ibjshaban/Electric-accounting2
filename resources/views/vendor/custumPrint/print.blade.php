@@ -16,6 +16,7 @@
             width: 90%;
             color: black;
         }
+
     </style>
 </head>
 
@@ -23,13 +24,15 @@
 
 
     @php
-      if(count($basic) != 0){
+        if ($basic != null && count($basic) != 0) {
             $ba = $basic;
-        }else{
-            if(!$print){
-            $basic_id = App\Models\BasicParentItem::where('id',$data[0]['رقم'])->first()->basic_id;
-            $ba = App\Models\BasicParentItem::where('basic_id',$basic_id)->latest()->get();
-            }else {
+        } else {
+            if (!$print) {
+                $basic_id = App\Models\BasicParentItem::where('id', $data[0]['رقم'])->first()->basic_id;
+                $ba = App\Models\BasicParentItem::where('basic_id', $basic_id)
+                    ->latest()
+                    ->get();
+            } else {
                 $ba = [];
             }
         }
@@ -41,7 +44,8 @@
         <h1>{{ $title }}</h1>
         <table class="table table-bordered table-hover">
             @php
-                $id = 1
+                $id = 1;
+                $totalPrice = 0;
             @endphp
             @foreach ($ba as $basic)
                 @if ($loop->first)
@@ -93,19 +97,18 @@
                             </table>
                             <h5>مجموع سعر الكمية = {{ $total }} </h5>
                             <h5>الخصم = {{ $basic->discount }} </h5>
-
-
                         @endif
-        </td>
-        </tr>
-        @php
-            $id++;
-        @endphp
-        @endforeach
+                    </td>
+                </tr>
+                @php
+                    $id++;
+                    $totalPrice += $basic->price;
+                @endphp
+            @endforeach
         </table>
 
-        @if($totalPrice != 0 && $total_name != null)
-        <h2>{{ $total_name . ':' . $totalPrice }} </h2>
+        @if ($totalPrice != 0)
+            <h2>{{ 'السعر الكلي:' . $totalPrice }} </h2>
         @endif
     </div>
 

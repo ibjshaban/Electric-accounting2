@@ -13,10 +13,21 @@ class FillingDataTable extends DataTable
 {
 
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.filling');
 
+        $this->total_name = 'مجموع السعر الكلي';
+
+        $total = 0;
+        foreach(Filling::get() as $fill)
+        {
+            $total += ($fill->price * $fill->quantity);
+        }
+
+        $this->totalPrice = $total;
     }
     /**
      * dataTable to render Columns.

@@ -357,7 +357,6 @@ class BasicParents extends Controller
         return view('vendor.custumPrint.print',[
             'basic' => $basicitems,
             'title' => trans('admin.stock'),
-            'totalPrice' => $total,
             'total_name' => 'السعر الكلي',
             'print' => true,
         ]);

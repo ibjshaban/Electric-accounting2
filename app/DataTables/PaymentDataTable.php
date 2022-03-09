@@ -10,9 +10,20 @@ class PaymentDataTable extends DataTable
 {
 
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.payment');
+        $this->total_name = 'مجموع المبلغ';
+
+        $total = 0;
+        foreach(Payment::get() as $collection)
+        {
+            $total += $collection->amount;
+        }
+
+        $this->totalPrice = $total;
 
     }
      /**

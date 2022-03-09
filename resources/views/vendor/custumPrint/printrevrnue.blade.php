@@ -25,7 +25,7 @@
     @php
 
 
-        if(count($expenses) != 0){
+        if($expenses && count($expenses) != 0){
             $exp = $expenses;
         }else{
             if(!$print){
@@ -43,6 +43,7 @@
         <table class="table table-bordered table-hover">
             @php
                 $id = 1;
+                $totalPrice = 0;
             @endphp
             @foreach ($exp as $revenue)
                 @if ($loop->first)
@@ -99,11 +100,12 @@
                 </tr>
                 @php
                     $id++;
+                    $totalPrice += $revenue->price;
                 @endphp
             @endforeach
         </table>
-        @if($totalPrice != 0 && $total_name != null)
-        <h2>{{ $total_name . ':' . $totalPrice }} </h2>
+        @if($totalPrice != 0 )
+        <h2>{{ 'السعر الكلي:' . $totalPrice }} </h2>
         @endif
     </div>
 

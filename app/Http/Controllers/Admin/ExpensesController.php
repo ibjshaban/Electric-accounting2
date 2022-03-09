@@ -386,7 +386,7 @@ class ExpensesController extends Controller
 
         return view('vendor.custumPrint.printrevrnue',[
             'expenses' => $expenses,
-            'totalPrice' => $total,
+           
             'total_name' =>  'السعر الكلي',
             'title' => trans('admin.expenses'),
             'revenue_id' => $id,
