@@ -64,7 +64,6 @@ class AdminGroups extends Controller {
 					'edit' => request($roule_type[0] . '_edit') ? 'yes' : 'no',
 					'add' => request($roule_type[0] . '_add') ? 'yes' : 'no',
 					'delete' => request($roule_type[0] . '_delete') ? 'yes' : 'no',
-					'log' => request($roule_type[0] . '_log') ? 'yes' : 'no',
 				];
 			}
 		}
@@ -77,7 +76,6 @@ class AdminGroups extends Controller {
 				'add' => $val['add'],
 				'edit' => $val['edit'],
 				'delete' => $val['delete'],
-				'log' => $val['log'],
 			]);
 		}
 

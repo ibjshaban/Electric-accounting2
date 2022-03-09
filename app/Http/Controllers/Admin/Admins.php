@@ -86,7 +86,6 @@ class Admins extends Controller
 
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $data = $request->except("_token", "_method");
             if (request()->hasFile('photo_profile')) {
@@ -97,6 +96,7 @@ class Admins extends Controller
             $data['password'] = bcrypt(request('password'));
             Admin::create($data);
             // code
+
             DB::commit();
             return redirectWithSuccess(aurl('admins'), trans('admin.added'));
         } catch (\Exception $exception) {
@@ -176,6 +176,7 @@ class Admins extends Controller
             }
             Admin::where('id', $id)->update($data);
             // code
+
             DB::commit();
             return redirectWithSuccess(aurl('admins'), trans('admin.updated'));
         } catch (\Exception $exception) {
