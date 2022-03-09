@@ -97,8 +97,6 @@ class Admins extends Controller
             $data['password'] = bcrypt(request('password'));
             Admin::create($data);
             // code
-
-
             DB::commit();
             return redirectWithSuccess(aurl('admins'), trans('admin.added'));
         } catch (\Exception $exception) {
@@ -178,7 +176,6 @@ class Admins extends Controller
             }
             Admin::where('id', $id)->update($data);
             // code
-
             DB::commit();
             return redirectWithSuccess(aurl('admins'), trans('admin.updated'));
         } catch (\Exception $exception) {
@@ -208,7 +205,7 @@ class Admins extends Controller
             }
             $admins->delete();
             // code
-            
+
             DB::commit();
             return backWithSuccess(trans('admin.deleted'));
         } catch (\Exception $exception) {
