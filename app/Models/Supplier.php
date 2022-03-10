@@ -59,7 +59,7 @@ class Supplier extends Model
         $amount= $amount_p;
         $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
             ->where('is_paid','0')
-            ->orderBy('quantity')
+            ->orderBy('created_at')
             ->get()
             ->map(function ($q){ $q->filling_date= $q->filling_date; return $q;})
             ->sortBy('filling_date');
@@ -101,7 +101,7 @@ class Supplier extends Model
             $minus_price= abs($minus_price);
             $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
                 ->where('paid_amount','!=',0)
-                ->orderByDesc('quantity')
+                ->orderByDesc('created_at')
                 ->get()
                 ->map(function ($q){ $q->filling_date= $q->filling_date; return $q;})
                 ->sortByDesc('filling_date');
@@ -141,7 +141,7 @@ class Supplier extends Model
         if ($minus_price > 0){
             $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
                 ->where('is_paid','0')
-                ->orderBy('quantity')
+                ->orderBy('created_at')
                 ->get()
                 ->map(function ($q){ $q->filling_date= $q->filling_date; return $q;})
                 ->sortBy('filling_date');
@@ -178,7 +178,7 @@ class Supplier extends Model
         $amount= $amount_p;
         $fules= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $this->id)->pluck('id'))
             ->where('is_paid','0')
-            ->orderBy('quantity')
+            ->orderBy('created_at')
             ->get()
             ->map(function ($q){ $q->filling_date= $q->filling_date; return $q;})
             ->sortBy('filling_date');

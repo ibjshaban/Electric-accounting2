@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ActivityLogNoteType;
 use App\DataTables\ExpensesDataTable;
 use App\DataTables\RevenueExpensesDataTable;
 use App\Http\Controllers\Controller;
@@ -172,6 +173,8 @@ class ExpensesController extends Controller
 
         it()->delete('expenses', $id);
         foreach ($expenses->item() as $ex) { $ex->delete();}
+        AddNewLog(ActivityLogNoteType::expenses,'حذف مصاريف تشغيلية',$expenses->price,
+                'delete',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
         $expenses->delete();
         return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
     }
@@ -189,6 +192,8 @@ class ExpensesController extends Controller
 
                 it()->delete('expenses', $id);
                 foreach ($expenses->item() as $ex) { $ex->delete();}
+                AddNewLog(ActivityLogNoteType::expenses,'حذف مصاريف تشغيلية',$expenses->price,
+                    'delete',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
                 $expenses->delete();
             }
             return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
@@ -200,6 +205,8 @@ class ExpensesController extends Controller
 
             it()->delete('expenses', $data);
             foreach ($expenses->item() as $ex) { $ex->delete();}
+            AddNewLog(ActivityLogNoteType::expenses,'حذف مصاريف تشغيلية',$expenses->price,
+                'delete',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
             $expenses->delete();
             return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
         }
@@ -272,6 +279,8 @@ class ExpensesController extends Controller
             }
             $expenses->update(['price' => InsertLargeNumber(($expenses_price- $expenses->discount))]);
 
+            AddNewLog(ActivityLogNoteType::expenses,'إضافة مصاريف تشغيلية',$expenses->price,
+                'store',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -329,6 +338,8 @@ class ExpensesController extends Controller
             }
             $expenses->update(['price' => InsertLargeNumber(($expenses_price- $expenses->discount))]);
 
+            AddNewLog(ActivityLogNoteType::expenses,'تعديل مصاريف تشغيلية',$expenses->price,
+                'update',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
 
             DB::commit();
         } catch (\Exception $e) {

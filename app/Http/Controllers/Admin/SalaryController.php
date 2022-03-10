@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\DataTables\RevenueSalaryDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\SalaryDataTable;
@@ -161,34 +162,19 @@ class SalaryController extends Controller
 	public function destroy($id){
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $salary = Salary::find($id);
             if(is_null($salary) || empty($salary)){
                 return backWithSuccess(trans('admin.undefinedRecord'),url()->previous());
             }
+
             it()->delete('salary',$id);
             $this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
+            AddNewLog(ActivityLogNoteType::salaries,'حذف راتب لموظف',$salary->salary,
+                'delete',null,null,'/revenue-salary/'.$salary->revenue_id);
             $salary->delete();
             // code
-            if (!admin()->user()->role('admins_log')){
-                $queries= DB::getQueryLog();
-                foreach ($queries as $index=>$query){
-                    $t =vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status= AddNewLog('حذف راتب',$queries,admin()->id(),'delete','salaries',$id,null);
-                if ($status){
-                    DB::commit();
-                    return redirectWithSuccess(url()->previous(),trans('admin.logged'));
-                }
-                DB::rollBack();
-                return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-            }
+
             DB::commit();
             return redirectWithSuccess(url()->previous(),trans('admin.deleted'));
         }
@@ -229,33 +215,16 @@ class SalaryController extends Controller
 
         try {
             DB::beginTransaction();
-            DB::enableQueryLog();
             // code
             $status =$this->createSalaryForEmployee($request->id,$request->revenue_id,$request->discount,
                 $request->paid_date,$request->note);
-            if (!$status){
+            if (!$status[0]){
                 return response('لم تتم العملية حدث خطأ ما',422);
             }
 
+            AddNewLog(ActivityLogNoteType::salaries,'إيداع راتب جديد لموظف',$status[1],
+                'store',null,null,'/revenue-salary/'.$request->revenue_id);
             // code
-            if (!admin()->user()->role('salary_log')){
-                $queries= DB::getQueryLog();
-                foreach ($queries as $index=>$query){
-                    $t =vsprintf(str_replace('?', '%s', $query['query']), collect($query['bindings'])->map(function ($binding) {
-                        $binding = addslashes($binding);
-                        return is_numeric($binding) ? $binding : "'{$binding}'";
-                    })->toArray());
-                    $queries[$index] = $t;
-                }
-                DB::rollBack();
-                $status= AddNewLog('إضافة راتب جديد',$queries,admin()->id(),'store','salaries',null,$request->except('_token'));
-                if ($status){
-                    DB::commit();
-                    return response(trans('admin.logged'),200);
-                }
-                DB::rollBack();
-                return response('لم تتم العملية حدث خطأ ما',422);
-            }
             DB::commit();
             return response('تمت عملية إضافة الراتب للموظف بنجاح',200);
 
@@ -270,6 +239,7 @@ class SalaryController extends Controller
 	    $employee = Employee::whereId($employee_id)->first();
 	    $discount= $discount && $discount != "NaN"?  $discount : 0;
 	    $status= false;
+        $salary_amount= 0;
 	    if (isset($employee)){
  	        if ($employee->debt() > 0 && is_numeric($discount) && $discount > 0){
             if (!($discount <= $employee->salary && $discount <= $employee->debt())){
@@ -304,13 +274,13 @@ class SalaryController extends Controller
                 }
                 DB::commit();
                 $status= true;
+                $salary_amount= $salary->salary;
             }
             catch (Exception $e){
                 DB::rollBack();
-                dd($e);
             }
         }
-	    return $status;
+	    return [$status,$salary_amount];
     }
     public function BackDebtDiscountForEmployee($employee_id,$discount){
 
