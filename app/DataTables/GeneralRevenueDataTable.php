@@ -11,9 +11,20 @@ use Yajra\DataTables\Services\DataTable;
 class GeneralRevenueDataTable extends DataTable
 {
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.generalrevenue');
+        $this->total_name = 'مجموع السعر';
+
+        $total = 0;
+        foreach(GeneralRevenue::get() as $collection)
+        {
+            $total += $collection->price;
+        }
+
+        $this->totalPrice = $total;
     }
 
     /**

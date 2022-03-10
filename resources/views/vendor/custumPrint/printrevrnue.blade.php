@@ -23,7 +23,18 @@
 <body>
 
     @php
-        $revenue_id = App\Models\Expenses::where('id', $data[0]['رقم'])->first()->revenue_id;
+
+
+        if($expenses && count($expenses) != 0){
+            $exp = $expenses;
+        }else{
+            if(!$print){
+            $revenue_id = App\Models\Expenses::where('id', $data[0]['رقم'])->first()->revenue_id;
+            $exp = App\Models\Expenses::where('revenue_id', $revenue_id)->latest()->get();
+            }else {
+                $exp = [];
+            }
+        }
     @endphp
 
     <div style="text-align: center;">
@@ -32,9 +43,9 @@
         <table class="table table-bordered table-hover">
             @php
                 $id = 1;
+                $totalPrice = 0;
             @endphp
-            @foreach (App\Models\Expenses::where('revenue_id', $revenue_id)->latest()->get()
-    as $revenue)
+            @foreach ($exp as $revenue)
                 @if ($loop->first)
                     <tr>
                         <td>#</td>
@@ -83,15 +94,19 @@
                                 @endforeach
                             </table>
                             <h5>مجموع سعر الكمية = {{ $total }} </h5>
-                            <h5>الخصم = {{ $basic->discount }} </h5>
+                            <h5>الخصم = {{ $revenue->discount }} </h5>
                         @endif
                     </td>
                 </tr>
                 @php
                     $id++;
+                    $totalPrice += $revenue->price;
                 @endphp
             @endforeach
         </table>
+        @if($totalPrice != 0 )
+        <h2>{{ 'السعر الكلي:' . $totalPrice }} </h2>
+        @endif
     </div>
 
 

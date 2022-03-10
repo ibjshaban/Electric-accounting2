@@ -318,7 +318,11 @@
                                     className: 'btn dark btn-outline',
                                     text: '<i class="fa fa-print"></i>طباعة',
                                     exportOptions: {
-                                        columns: [1, 2, 3, 4, 5,6]                                    }
+                                        columns: [1, 2, 3, 4, 5,6]                                    },
+                            action: function() {
+                                    window.location.href =
+                                        '/admin/print/basicPS/'+{{ $basicparents->id }}+'?from_date='+from_date+'&to_date='+to_date;
+                                    }
                                 },
                                 {
                                     extend: 'excel',
@@ -476,7 +480,10 @@
                                 className: 'btn dark btn-outline',
                                 text: '<i class="fa fa-print"></i>طباعة',
                                 exportOptions: {
-                                    columns: [1, 2, 3, 4, 5,6]                                }
+                                    columns: [1, 2, 3, 4, 5,6]                                },
+                        action: function() {
+                            window.location.href = '{{ \URL::current() }}?action=print';
+                        }
                             },
                             {
                                 extend: 'excel',

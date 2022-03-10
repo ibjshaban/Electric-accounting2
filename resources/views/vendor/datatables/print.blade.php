@@ -17,11 +17,12 @@
             text-align: center;
             color: black;
         }
+
     </style>
 </head>
 
 <body>
-    {{--  @dd($data)  --}}
+    {{-- @dd($data) --}}
     @php
         $tableRows = count($data);
         $table = (int) ($tableRows / 24);
@@ -30,10 +31,9 @@
 
     <div style="text-align: center;">
         @for ($i = 0; $i <= $table; ++$i)
-            <img src="{{ asset('assets/img/motor-logo.jpeg') }}" alt="{{ __('') }}">
+            <img src="{{ asset('assets/img/motor-logo.jpeg') }}">
             <h1>{{ $title }}</h1>
             <table class="table table-bordered table-condensed table-striped" style="width: 100%;">
-
                 @if ($count != count($data))
                     <tr>
                         @foreach ($data[$i] as $key => $value)
@@ -66,6 +66,9 @@
                 @endfor
             </table>
         @endfor
+        @if($totalPrice != 0 && $total_name != null)
+        <h2>{{ $total_name . ':' . $totalPrice }} </h2>
+        @endif
     </div>
 </body>
 

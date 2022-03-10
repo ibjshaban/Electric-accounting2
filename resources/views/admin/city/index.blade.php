@@ -179,7 +179,11 @@
                             text: '<i class="fa fa-print"></i>طباعة',
                             exportOptions: {
                                 columns: [1, 2, 3]
-                            }
+                            },
+                            action: function() {
+                                    window.location.href =
+                                        '/admin/print/cities?from_date='+from_date+'&to_date='+to_date;
+                                    }
                         },
                         {
                             extend: 'excel',

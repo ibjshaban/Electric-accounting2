@@ -13,9 +13,20 @@ class RevenueDataTable extends DataTable
 {
 
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.revenue');
+        $this->total_name = 'مجموع '.trans('admin.total_amount');
+
+        $total = 0;
+        foreach(revenue::get() as $collection)
+        {
+            $total += $collection->total_amount;
+        }
+
+        $this->totalPrice = $total;
 
     }
     /**

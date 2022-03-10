@@ -198,4 +198,34 @@ class Notebooks extends Controller
     }
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $notebooks = Notebook::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $notebooks = Notebook::get();
+        }
+
+        $i = 1;
+        foreach($notebooks as $notebook){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.price') => $notebook->price,
+                trans('admin.date') => $notebook->date,
+                trans('admin.name') => $notebook->name,
+                trans('admin.note') => $notebook->note,
+                'تاريخ الانشاء' => Carbon::parse($notebook->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.filling'),
+            'totalPrice' => 0,
+            'total_name' => null,
+        ]);
+    }
+
 }

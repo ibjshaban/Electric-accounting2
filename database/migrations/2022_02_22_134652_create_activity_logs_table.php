@@ -15,9 +15,16 @@ class CreateActivityLogsTable extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->json('query');
-            $table->json('information');
+            $table->boolean('checked')->default(0);
+            $table->integer('note_type');
+            $table->timestamp('date_at');
+            $table->string('statement');
+            $table->double('amount');
+            $table->enum('operation_type',['store','update','delete']);
+            $table->foreignId('city_id')->nullable();
+            $table->foreignId('revenue_id')->nullable();
+            $table->foreignId("admin_id")->constrained("admins");
+            $table->string('url')->nullable();
             $table->timestamps();
         });
     }
