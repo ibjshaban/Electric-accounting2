@@ -10,10 +10,20 @@ class DebtDataTable extends DataTable
 {
 
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.debt');
+        $this->total_name = 'مجموع '.trans('admin.amount');
 
+        $total = 0;
+        foreach(Debt::get() as $collection)
+        {
+            $total += $collection->amount;
+        }
+
+        $this->totalPrice = $total;
     }
 
      /**

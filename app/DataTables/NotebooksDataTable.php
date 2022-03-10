@@ -10,10 +10,20 @@ class NotebooksDataTable extends DataTable
 {
 
     protected $title;
+    protected $total_name;
+    protected $totalPrice;
     public function __construct()
     {
         $this->title = trans('admin.notebooks');
+        $this->total_name = 'مجموع '.trans('admin.price');
 
+        $total = 0;
+        foreach(Notebook::get() as $collection)
+        {
+            $total += $collection->price;
+        }
+
+        $this->totalPrice = $total;
     }
      /**
      * dataTable to render Columns.
