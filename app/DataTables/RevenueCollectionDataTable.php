@@ -13,7 +13,7 @@ class RevenueCollectionDataTable extends DataTable
     protected $totalPrice;
     public function __construct()
     {
-        $this->title = trans('admin.admins');
+        $this->title = trans('admin.collection');
         $this->total_name = 'مجموع '. trans('admin.amount');
 
         $total = 0;
