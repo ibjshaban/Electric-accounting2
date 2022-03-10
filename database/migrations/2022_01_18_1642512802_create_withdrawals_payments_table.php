@@ -16,7 +16,7 @@ class CreateWithdrawalsPaymentsTable extends Migration
     {
         Schema::create('withdrawals_payments', function (Blueprint $table) {
             $table->bigIncrements('id');
-$table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
+            $table->foreignId("admin_id")->constrained("admins")->onUpdate("cascade")->onDelete("cascade");
             $table->string('name');
             $table->bigInteger('price');
             $table->date('date');

@@ -110,17 +110,22 @@ if (!function_exists('CheckParentTitle')) {
 }
 
 if (!function_exists('AddNewLog') ){
-    function AddNewLog($name,$queries,$admin_id,$operation,$table,$item_id,$new_date)
+    function AddNewLog($note_type,$statement,$amount,$operation_type,$city_id,$revenue_id,$url)
     {
         \App\Models\ActivityLog::create([
-            'name'=> $name,
-            'query'=> json_encode($queries),
-            'information'=> json_encode(['admin_id'=> $admin_id,'operation'=> $operation, 'table'=> $table,
-                'item_id'=> $item_id,'new_data'=> $new_date])
+            'note_type'=> $note_type,
+            'date_at'=> now(),
+            'statement'=> $statement,
+            'amount'=> $amount,
+            'operation_type'=> $operation_type,
+            'city_id'=> $city_id,
+            'revenue_id'=> $revenue_id,
+            'admin_id'=> admin()->id(),
+            'url'=> $url,
         ]);
+
         return true;
     }
 }
-
 
 ?>
