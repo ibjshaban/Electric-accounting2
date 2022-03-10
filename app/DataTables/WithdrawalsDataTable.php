@@ -18,7 +18,7 @@ class WithdrawalsDataTable extends DataTable
         $this->total_name = 'مجموع '. trans('admin.price');
 
         $total = 0;
-        foreach(WithdrawalsPayments::where('parent_id', $this->parent_id)->get() as $collection)
+        foreach(WithdrawalsPayments::where('parent_id', request()->id)->get() as $collection)
         {
             $total += $collection->price;
         }
