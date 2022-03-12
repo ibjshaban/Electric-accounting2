@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\Http\Controllers\Controller;
 use App\DataTables\DebtDataTable;
 use Carbon\Carbon;
@@ -87,6 +88,9 @@ class DebtController extends Controller
             	$data['admin_id'] = admin()->id();
             	$data['remainder'] = $request->amount;
 		  		$debt = Debt::create($data);
+                AddNewLog(ActivityLogNoteType::debt,'إضافة دين جديد',$data['amount'],
+                    'store',null,null,'/debt');
+
                 $redirect = isset($request["add_back"])?"/create":"";
                 return redirectWithSuccess(aurl('debt'.$redirect), trans('admin.added')); }
 
@@ -164,6 +168,9 @@ class DebtController extends Controller
               $data['remainder'] = $remainder;
               $data['admin_id'] = admin()->id();
               Debt::where('id',$id)->update($data);
+              AddNewLog(ActivityLogNoteType::debt,'تعديل دين',$data['amount'],
+                    'update',null,null,'/debt/'.$debt->id);
+
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
               return redirectWithSuccess(aurl('debt'.$redirect), trans('admin.updated'));
             }
@@ -182,6 +189,8 @@ class DebtController extends Controller
 
 		it()->delete('debt',$id);
 		$debt->delete();
+        AddNewLog(ActivityLogNoteType::debt,'حذف دين',$debt->amount,
+            'delete',null,null,'/debt');
 		return redirectWithSuccess(aurl("debt"),trans('admin.deleted'));
 	}
 
@@ -197,6 +206,8 @@ class DebtController extends Controller
 
 				it()->delete('debt',$id);
 				$debt->delete();
+				AddNewLog(ActivityLogNoteType::debt,'حذف دين',$debt->amount,
+            'delete',null,null,'/debt');
 			}
 			return redirectWithSuccess(aurl("debt"),trans('admin.deleted'));
 		}else {
@@ -207,6 +218,8 @@ class DebtController extends Controller
 
 			it()->delete('debt',$data);
 			$debt->delete();
+			AddNewLog(ActivityLogNoteType::debt,'حذف دين',$debt->amount,
+            'delete',null,null,'/debt');
 			return redirectWithSuccess(aurl("debt"),trans('admin.deleted'));
 		}
 	}

@@ -19,10 +19,18 @@ with font-awesome or any other icon font library -->
 </li>
 @if(admin()->user()->role('log_edit'))
     <li class="nav-item">
-        <a href="{{ aurl('log') }}" class="nav-link  {{ active_link('log','active') }}">
+        <a href="{{ aurl('expenses/section') }}" class="nav-link  {{ active_link('expenses/section','active') }}">
             <i class="nav-icon fas fa-cogs"></i>
             <p>
-                {{ trans('admin.log') }}
+                باب المصروفات
+            </p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{ aurl('revenue/section') }}" class="nav-link  {{ active_link('revenue/section','active') }}">
+            <i class="nav-icon fas fa-cogs"></i>
+            <p>
+                باب الايرادات
             </p>
         </a>
     </li>

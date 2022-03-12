@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ActivityLogNoteType;
 use App\DataTables\CollectionDataTable;
 use App\DataTables\RevenueCollectionDataTable;
 use App\Http\Controllers\Controller;
@@ -71,38 +72,6 @@ class CollectionController extends Controller
         return $collection->render('admin.collection.index', ['title' => trans('admin.collection')]);
     }
 
-
-    /**
-     * Baboon Script By [it v 1.6.36]
-     * Show the form for creating a new resource.
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-        return view('admin.collection.create', ['title' => trans('admin.create')]);
-    }
-
-    /**
-     * Baboon Script By [it v 1.6.36]
-     * Store a newly created resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response Or Redirect
-     */
-    public function store(CollectionRequest $request)
-    {
-        $data = $request->except("_token", "_method");
-        if ($data['collect_type'] == '0') {
-            $data['source'] = null;
-        } else {
-            $data['employee_id'] = null;
-        }
-        unset($data['collect_type']);
-        $collection = Collection::create($data);
-        $redirect = isset($request["add_back"]) ? "/create" : "";
-        return redirectWithSuccess(aurl('collection' . $redirect), trans('admin.added'));
-    }
-
     /**
      * Display the specified resource.
      * Baboon Script By [it v 1.6.36]
@@ -121,40 +90,7 @@ class CollectionController extends Controller
     }
 
 
-    /**
-     * Baboon Script By [it v 1.6.36]
-     * edit the form for creating a new resource.
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $collection = Collection::find($id);
-        return is_null($collection) || empty($collection) ?
-            backWithError(trans("admin.undefinedRecord"), aurl("collection")) :
-            view('admin.collection.edit', [
-                'title' => trans('admin.edit'),
-                'collection' => $collection
-            ]);
-    }
 
-    public function update(CollectionRequest $request, $id)
-    {
-        // Check Record Exists
-        $collection = Collection::find($id);
-        if (is_null($collection) || empty($collection)) {
-            return backWithError(trans("admin.undefinedRecord"), aurl("collection"));
-        }
-        $data = $this->updateFillableColumns();
-        if ($data['collect_type'] == '0') {
-            $data['source'] = null;
-        } else {
-            $data['employee_id'] = null;
-        }
-        unset($data['collect_type']);
-        Collection::where('id', $id)->update($data);
-        $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
-        return redirectWithSuccess(aurl('collection' . $redirect), trans('admin.updated'));
-    }
 
     /**
      * Baboon Script By [it v 1.6.36]
@@ -187,12 +123,29 @@ class CollectionController extends Controller
         }
 
         it()->delete('collection', $id);
+
+        $statement= '';
+        $type=0;
+        if ($collection->employee_id != '') {
+            $statement= 'حذف في تحصيلات الموظفين';
+            $type= ActivityLogNoteType::collection;
+        } else {
+            $statement= 'حذف في التحصيلات الأخرى';
+            $type= ActivityLogNoteType::other_collection;
+        }
+
+        $revenue= revenue::whereId($collection->revenue_id)->first();
+        $city_id= $revenue ? $revenue->city_id : null;
         $collection->delete();
+
+        AddNewLog($type,$statement,$collection->amount,
+            'delete',$city_id,$revenue->id,'/revenue-collection/'.$revenue->id);
+
         return redirectWithSuccess(aurl("revenue-collection/" . $collection->revenue_id), trans('admin.deleted'));
     }
 
 
-    public function multi_delete()
+    /*public function multi_delete()
     {
         $data = request('selected_data');
         if (is_array($data)) {
@@ -203,7 +156,24 @@ class CollectionController extends Controller
                 }
 
                 it()->delete('collection', $id);
+
+                $statement= '';
+                $type=0;
+                if ($collection->employee_id != '') {
+                    $statement= 'حذف في تحصيلات الموظفين';
+                    $type= ActivityLogNoteType::collection;
+                } else {
+                    $statement= 'حذف في التحصيلات الأخرى';
+                    $type= ActivityLogNoteType::other_collection;
+                }
+
+                $revenue= revenue::whereId($collection->revenue_id)->first();
+                $city_id= $revenue ? $revenue->city_id : null;
                 $collection->delete();
+
+                AddNewLog($type,$statement,$collection->amount,
+                    'delete',$city_id,$revenue->id,'/revenue-collection/'.$revenue->id);
+
             }
             return redirectWithSuccess(aurl("revenue-collection/" . $collection->revenue_id), trans('admin.deleted'));
         } else {
@@ -213,10 +183,27 @@ class CollectionController extends Controller
             }
 
             it()->delete('collection', $data);
+
+            $statement= '';
+            $type=0;
+            if ($collection->employee_id != '') {
+                $statement= 'حذف في تحصيلات الموظفين';
+                $type= ActivityLogNoteType::collection;
+            } else {
+                $statement= 'حذف في التحصيلات الأخرى';
+                $type= ActivityLogNoteType::other_collection;
+            }
+
+            $revenue= revenue::whereId($collection->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             $collection->delete();
+
+            AddNewLog($type,$statement,$collection->amount,
+                'delete',$city_id,$revenue->id,'/revenue-collection/'.$revenue->id);
+
             return redirectWithSuccess(aurl("revenue-collection/" . $collection->revenue_id), trans('admin.deleted'));
         }
-    }
+    }*/
 
     //***********
     //Show expenses for one revenue
@@ -265,14 +252,30 @@ class CollectionController extends Controller
                         return redirectWithError(aurl('revenue-collection/' . $id . '/create'), 'لا يمكن ادخال القيمتان (الموظف و المحصل) معاً');
                     }
 
-                    Collection::create([
-                        'employee_id' => $data['employee_id'][$i],
-                        'source' => $data['source'][$i],
-                        'amount' => InsertLargeNumber($data['amount'][$i], 2),
-                        'collection_date' => $data['collection_date'][$i],
-                        'note' => $data['note'][$i],
-                        'revenue_id' => $data['revenue_id'],
-                    ]);
+                    $statement= '';
+                    $type=0;
+                    if ($data['employee_id'][$i] != '') {
+                        $statement= 'إضافة في تحصيلات الموظفين';
+                        $type= ActivityLogNoteType::collection;
+                    } else {
+                        $statement= 'إضافة في التحصيلات الأخرى';
+                        $type= ActivityLogNoteType::other_collection;
+                    }
+
+                    $collection = new Collection();
+                    $collection->employee_id = $data['employee_id'][$i];
+                    $collection->source = $data['source'][$i];
+                    $collection->amount = InsertLargeNumber($data['amount'][$i], 2);
+                    $collection->collection_date = $data['collection_date'][$i];
+                    $collection->note = $data['note'][$i];
+                    $collection->revenue_id = $data['revenue_id'];
+                    $collection->save();
+                    $revenue= revenue::whereId($collection->revenue_id)->first();
+                    $city_id= $revenue ? $revenue->city_id : null;
+
+                    AddNewLog($type,$statement,$collection->amount,
+                        'store',$city_id,$collection->revenue_id,'/revenue-collection/'.$collection->revenue_id);
+
                 }
                 $redirect = isset($request["add_back"]) ? "/create" : "";
                 return redirectWithSuccess(aurl('revenue-collection/' . $id . $redirect), trans('admin.added'));
@@ -312,18 +315,25 @@ class CollectionController extends Controller
         } elseif ($data['employee_id'] != '' && $data['source'] != '') {
             return redirectWithError(aurl('revenue-collection/' . $id . '/edit'), 'لا يمكن ادخال القيمتان (الموظف و المحصل) معاً');
         }
-        Collection::where('id', $id)->update($data);
-        /*for ($i = 1; $i < count($data['amount'] ?? []); $i++) {
+        $collection= Collection::where('id', $id)->first();
+        $collection->update($data);
 
-            Collection::where('id',55)->update([
-                'employee_id' => $data['employee_id'][$i],
-                'source' => $data['source'][$i],
-                'amount' => InsertLargeNumber($data['amount'][$i], 2),
-                'collection_date' => $data['collection_date'][$i],
-                'note' => $data['note'][$i],
-            ]);
-            //DB::table('collections')->update([$data]);
-        }*/
+        $statement= '';
+        $type=0;
+        if ($collection->employee_id != '') {
+            $statement= 'تعديل في تحصيلات الموظفين';
+            $type= ActivityLogNoteType::collection;
+        } else {
+            $statement= 'تعديل في التحصيلات الأخرى';
+            $type= ActivityLogNoteType::other_collection;
+        }
+
+        $revenue= revenue::whereId($collection->revenue_id)->first();
+        $city_id= $revenue ? $revenue->city_id : null;
+
+        AddNewLog($type,$statement,$collection->amount,
+            'update',$city_id,$collection->revenue_id,'/revenue-collection/'.$collection->revenue_id);
+
         $redirect = isset($request["save_back"]) ? "/" . $collection->revenue_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-collection/' . $collection->revenue_id . $redirect), trans('admin.updated'));
     }

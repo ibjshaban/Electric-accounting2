@@ -39,10 +39,12 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::post('admingroups/multi_delete', 'Admin\AdminGroups@multi_delete');
         Route::resource('admins', 'Admin\Admins');
         Route::post('admins/multi_delete', 'Admin\Admins@multi_delete');
-        Route::get('/log', 'Admin\Settings@log')->name('log');
-        Route::get('/log/{id}/details', 'Admin\Settings@logDetails')->name('log_details');
-        Route::get('/log/{id}/accept', 'Admin\Settings@log_accept')->name('log_accept');
-        Route::get('/log/{id}/cancel', 'Admin\Settings@log_cancel')->name('log_cancel');
+
+        Route::get('/expenses/section', 'Admin\Settings@expenses_section')->name('expenses/section');
+        Route::get('/revenue/section', 'Admin\Settings@revenue_section')->name('revenue_section');
+        Route::post('log/status', 'Admin\Settings@change_log_status')->name('change_log_status');
+
+
         Route::resource('city', 'Admin\Citys');
         Route::post('city/multi_delete', 'Admin\Citys@multi_delete');
 
@@ -94,7 +96,7 @@ Route::group(['prefix' => app('admin'), 'middleware' => 'Lang'], function () {
         Route::put('revenue-otheroperation/edit/{id}', 'Admin\OtherOperationController@otherOperationUpdate');
 //************
 
-        Route::resource('collection', 'Admin\CollectionController');
+        Route::resource('collection', 'Admin\CollectionController')->except('store','update','edit','create');
         Route::post('collection/multi_delete', 'Admin\CollectionController@multi_delete');
         Route::post('collection/status', 'Admin\CollectionController@change_status')->name('change_collection_status');
 

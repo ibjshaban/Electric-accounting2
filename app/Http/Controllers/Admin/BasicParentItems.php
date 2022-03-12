@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ActivityLogNoteType;
 use App\DataTables\BasicParentItemsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\BasicParentItemsRequest;
@@ -88,34 +89,34 @@ class BasicParentItems extends Controller
             }
             $parentItem->update(['price' => InsertLargeNumber(($parentItem_price- $parentItem->discount))]);
 
+            $statement= '';
+            $type= 0;
+            if ($id == 1){
+                $type= ActivityLogNoteType::startup;
+                $statement= "إضافة على مصاريف تشغيلية";
+            }
+            elseif ($id == 2){
+                $type= ActivityLogNoteType::heavy_expenses;
+                $statement= "إضافة على مصاريف ثقيلة";
+            }
+            elseif ($id == 3){
+                $type= ActivityLogNoteType::rentals;
+                $statement= "إضافة على دفتر الأجارات";
+            }
+            elseif ($id == 4){
+                $type= ActivityLogNoteType::other_notebook;
+                $statement= "إضافة على دفاتر أخرى";
+            }
+            AddNewLog($type,$statement,$parentItem->price,
+                'store',null,null,'basicparents/' . $id);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             return backWithError($e);
 
         }
-/*        for ($i = 0; $i < count($data['name'] ?? []); $i++) {
-            if ($parent->item != '2') {
-                BasicParentItem::create([
-                    'name' => $data['name'][$i],
-                    'price' => InsertLargeNumber($data['price'][$i], 2),
-                    'discount' => InsertLargeNumber($data['discount'][$i], 2),
-                    'amount' => $data['amount'][$i],
-                    'date' => $data['date'][$i],
-                    'note' => $data['note'][$i],
-                    'basic_id' => $id,
-                ]);
-            } else {
-                BasicParentItem::create([
-                    'name' => $data['name'][$i],
-                    'price' => InsertLargeNumber($data['price'][$i], 2),
-                    'date' => $data['date'][$i],
-                    'note' => $data['note'][$i],
-                    'basic_id' => $id,
-                ]);
-            }
 
-        }*/
         $redirect = isset($request["add_back"]) ? "/create" : "";
         return redirectWithSuccess(aurl('basicparents/' . $id . '' . $redirect), trans('admin.added'));
     }
@@ -180,6 +181,27 @@ class BasicParentItems extends Controller
             }
             $parentItem->update(['price' => InsertLargeNumber(($parentItem_price- $parentItem->discount))]);
 
+            $statement= '';
+            $type= 0;
+            if ($parentItem->basic_id == 1){
+                $type= ActivityLogNoteType::startup;
+                $statement= "تعديل على مصاريف تشغيلية";
+            }
+            elseif ($parentItem->basic_id == 2){
+                $type= ActivityLogNoteType::heavy_expenses;
+                $statement= "تعديل على مصاريف ثقيلة";
+            }
+            elseif ($parentItem->basic_id == 3){
+                $type= ActivityLogNoteType::rentals;
+                $statement= "تعديل على دفتر الأجارات";
+            }
+            elseif ($parentItem->basic_id == 4){
+                $type= ActivityLogNoteType::other_notebook;
+                $statement= "تعديل على دفاتر أخرى";
+            }
+            AddNewLog($type,$statement,$parentItem->price,
+                'update',null,null,'basicparents/' . $parentItem->basic_id);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -216,14 +238,37 @@ class BasicParentItems extends Controller
     public function destroy($id)
     {
         $basicparentitems = BasicParentItem::find($id);
-        $basicparents_id = BasicParent::where('id', $basicparentitems->basic_id)->first()->id;
+        $basicparents_id = $basicparentitems->basic_id;
 
         if (is_null($basicparentitems) || empty($basicparentitems)) {
             return backWithSuccess(trans('admin.undefinedRecord'), aurl("basicparents/" . $basicparents_id));
         }
 
         it()->delete('basicparentitem', $id);
+        $price= $basicparentitems->price;
         $basicparentitems->delete();
+
+        $statement= '';
+        $type= 0;
+        if ($basicparents_id == 1){
+            $type= ActivityLogNoteType::startup;
+            $statement= "حذف في مصاريف تشغيلية";
+        }
+        elseif ($basicparents_id == 2){
+            $type= ActivityLogNoteType::heavy_expenses;
+            $statement= "حذف في مصاريف ثقيلة";
+        }
+        elseif ($basicparents_id == 3){
+            $type= ActivityLogNoteType::rentals;
+            $statement= "حذف في دفتر  أجارات";
+        }
+        elseif ($basicparents_id == 4){
+            $type= ActivityLogNoteType::other_notebook;
+            $statement= "حذف في دفاتر أخرى";
+        }
+        AddNewLog($type,$statement,$price,
+            'delete',null,null,'basicparents/' . $basicparents_id);
+
         return redirectWithSuccess(aurl("basicparents/" . $basicparents_id), trans('admin.deleted'));
     }
 
@@ -234,24 +279,70 @@ class BasicParentItems extends Controller
         if (is_array($data)) {
             foreach ($data as $id) {
                 $basicparentitems = BasicParentItem::find($id);
-                $basicparents_id = BasicParent::where('id', $basicparentitems->basic_id)->first()->id;
+                $basicparents_id = $basicparentitems->basic_id;
                 if (is_null($basicparentitems) || empty($basicparentitems)) {
                     return backWithError(trans('admin.undefinedRecord'), aurl("basicparents/" . $basicparents_id));
                 }
 
                 it()->delete('basicparentitem', $id);
-                $basicparentitems->delete();
+                $price= $basicparentitems->price;
+        $basicparentitems->delete();
+
+        $statement= '';
+        $type= 0;
+        if ($basicparentitems->basic_id == 1){
+            $type= ActivityLogNoteType::startup;
+            $statement= "حذف في مصاريف تشغيلية";
+        }
+        elseif ($basicparentitems->basic_id == 2){
+            $type= ActivityLogNoteType::heavy_expenses;
+            $statement= "حذف في مصاريف ثقيلة";
+        }
+        elseif ($basicparentitems->basic_id == 3){
+            $type= ActivityLogNoteType::rentals;
+            $statement= "حذف في دفتر  أجارات";
+        }
+        elseif ($basicparentitems->basic_id == 4){
+            $type= ActivityLogNoteType::other_notebook;
+            $statement= "حذف في دفاتر أخرى";
+        }
+        AddNewLog($type,$statement,$price,
+            'delete',null,null,'basicparents/' . $basicparents_id);
+
             }
             return redirectWithSuccess(aurl("basicparents/" . $basicparents_id), trans('admin.deleted'));
         } else {
             $basicparentitems = BasicParentItem::find($data);
-            $basicparents_id = BasicParent::where('id', $basicparentitems->basic_id)->first(['id'])->id;
+            $basicparents_id = $basicparentitems->basic_id;
             if (is_null($basicparentitems) || empty($basicparentitems)) {
                 return backWithError(trans('admin.undefinedRecord'), aurl("basicparents/" . $basicparents_id));
             }
 
             it()->delete('basicparentitem', $data);
-            $basicparentitems->delete();
+            $price= $basicparentitems->price;
+        $basicparentitems->delete();
+
+        $statement= '';
+        $type= 0;
+        if ($basicparentitems->basic_id == 1){
+            $type= ActivityLogNoteType::startup;
+            $statement= "حذف في مصاريف تشغيلية";
+        }
+        elseif ($basicparentitems->basic_id == 2){
+            $type= ActivityLogNoteType::heavy_expenses;
+            $statement= "حذف في مصاريف ثقيلة";
+        }
+        elseif ($basicparentitems->basic_id == 3){
+            $type= ActivityLogNoteType::rentals;
+            $statement= "حذف في دفتر  أجارات";
+        }
+        elseif ($basicparentitems->basic_id == 4){
+            $type= ActivityLogNoteType::other_notebook;
+            $statement= "حذف في دفاتر أخرى";
+        }
+        AddNewLog($type,$statement,$price,
+            'delete',null,null,'basicparents/' . $basicparents_id);
+
             return redirectWithSuccess(aurl("basicparents/" . $basicparents_id), trans('admin.deleted'));
         }
     }

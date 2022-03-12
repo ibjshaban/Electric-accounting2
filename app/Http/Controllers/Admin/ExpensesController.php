@@ -173,8 +173,10 @@ class ExpensesController extends Controller
 
         it()->delete('expenses', $id);
         foreach ($expenses->item() as $ex) { $ex->delete();}
+        $revenue= revenue::whereId($expenses->revenue_id)->first();
+        $city_id= $revenue ? $revenue->city_id : null;
         AddNewLog(ActivityLogNoteType::expenses,'حذف مصاريف تشغيلية',$expenses->price,
-                'delete',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
+                'delete',$city_id,$expenses->revenue_id,'/revenue-expenses/'.$expenses->revenue_id);
         $expenses->delete();
         return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
     }
@@ -192,8 +194,10 @@ class ExpensesController extends Controller
 
                 it()->delete('expenses', $id);
                 foreach ($expenses->item() as $ex) { $ex->delete();}
+                $revenue= revenue::whereId($expenses->revenue_id)->first();
+                $city_id= $revenue ? $revenue->city_id : null;
                 AddNewLog(ActivityLogNoteType::expenses,'حذف مصاريف تشغيلية',$expenses->price,
-                    'delete',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
+                    'delete',$city_id,$expenses->revenue_id,'/revenue-expenses/'.$expenses->revenue_id);
                 $expenses->delete();
             }
             return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
@@ -205,8 +209,10 @@ class ExpensesController extends Controller
 
             it()->delete('expenses', $data);
             foreach ($expenses->item() as $ex) { $ex->delete();}
+            $revenue= revenue::whereId($expenses->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             AddNewLog(ActivityLogNoteType::expenses,'حذف مصاريف تشغيلية',$expenses->price,
-                'delete',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
+                'delete',$city_id,$expenses->revenue_id,'/revenue-expenses/'.$expenses->revenue_id);
             $expenses->delete();
             return redirectWithSuccess(aurl("revenue-expenses/" . $expenses->revenue_id), trans('admin.deleted'));
         }
@@ -278,9 +284,10 @@ class ExpensesController extends Controller
                 $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
             $expenses->update(['price' => InsertLargeNumber(($expenses_price- $expenses->discount))]);
-
+            $revenue= revenue::whereId($expenses->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             AddNewLog(ActivityLogNoteType::expenses,'إضافة مصاريف تشغيلية',$expenses->price,
-                'store',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
+                'store',$city_id,$expenses->revenue_id,'/revenue-expenses/'.$expenses->revenue_id);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -337,9 +344,10 @@ class ExpensesController extends Controller
                 $expenses_price += ($data['price'][$i] * $data['amount'][$i]);
             }
             $expenses->update(['price' => InsertLargeNumber(($expenses_price- $expenses->discount))]);
-
+            $revenue= revenue::whereId($expenses->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             AddNewLog(ActivityLogNoteType::expenses,'تعديل مصاريف تشغيلية',$expenses->price,
-                'update',null,$expenses->revenue_id,'/revenue-salary/'.$expenses->revenue_id);
+                'update',$city_id,$expenses->revenue_id,'/revenue-expenses/'.$expenses->revenue_id);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -397,7 +405,7 @@ class ExpensesController extends Controller
 
         return view('vendor.custumPrint.printrevrnue',[
             'expenses' => $expenses,
-           
+
             'total_name' =>  'السعر الكلي',
             'title' => trans('admin.expenses'),
             'revenue_id' => $id,
