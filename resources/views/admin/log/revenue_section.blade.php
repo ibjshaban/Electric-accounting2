@@ -9,6 +9,66 @@
             </div>
         </div>
         <div class="card-footer">
+            <div class="col-md-12 mb-2 row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>المنفذ</label>
+                        <select id="admin_search" class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1">
+                            @foreach(\App\Models\Admin::all() as $admin)
+                                <option {{request()->input('admin') == null ? 'selected' : ''}} data-id="{{null}}" value="{{null}}" >الكل</option>
+                                <option {{request()->input('admin') == $admin->id ? 'selected' : ''}} data-id="{{$admin->id}}" value="{{$admin->id}}" >{{$admin->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>الايقونة</label>
+                        <select id="note_search" class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1">
+                            @foreach(\App\Models\Admin::all() as $admin)
+                                <option {{request()->input('note') == null ? 'selected' : ''}} data-id="{{null}}" value="{{null}}" >الكل</option>
+                                <option {{request()->input('note') == 12 ? 'selected' : ''}} data-id="12" value="12" >تحصيلات الموظفين</option>
+                                <option {{request()->input('note') == 13 ? 'selected' : ''}} data-id="13" value="13" >تحصيلات جهات أخرى</option>
+                                <option {{request()->input('note') == 14 ? 'selected' : ''}} data-id="14" value="14" >الايرادات العامة</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>نوع العملية</label>
+                        <select id="operation_search" class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1">
+                            <option {{request()->input('operation') == null ? 'selected' : ''}} data-id="{{null}}" value="{{null}}" >الكل</option>
+                            <option {{request()->input('operation') == 'store' ? 'selected' : ''}} data-id="store" value="store" >إضافة</option>
+                            <option {{request()->input('operation') == 'update' ? 'selected' : ''}} data-id="update" value="update" >تعديل</option>
+                            <option {{request()->input('operation') == 'delete' ? 'selected' : ''}} data-id="delete" value="delete" >حذف</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>حالة العملية</label>
+                        <select id="status_search" class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1">
+                            <option {{request()->input('status') == null ? 'selected' : ''}} data-id="{{null}}" value="{{null}}" >الكل</option>
+                            <option {{request()->input('status') == '1' ? 'selected' : ''}} data-id="1" value="1" >المراجع</option>
+                            <option {{request()->input('status') == '0' ? 'selected' : ''}} data-id="0" value="0" >الغير مراجع</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group" style="display: none ">
+                        <select class="form-control select2 select2-hidden-accessible disabled"  style="display: none !important; ;width: 100%;" data-select2-id="1">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-3 text-right">
+                    <button class="btn btn-secondary mx-1" onclick="resett()">إلغاء</button>
+                    <button class="btn btn-success" onclick="search()">بحث</button>
+                </div>
+            </div>
             <div class="text-right">
                 <div>
                     مجموع الغير مراجع: <span id="unchecked_price">{{$all_uncheck}}</span>
@@ -67,7 +127,9 @@
                     </div>
                 </div>
                 <div class="text-left">
-                    {!! $logs->links() !!}
+                    @if(array_key_exists('last_page',$logs->toArray()))
+                        {!! $logs->links() !!}
+                    @endif
                 </div>
             </div>
         </div>
@@ -100,6 +162,43 @@
                     toastr.error('حدث خطأ في تغيير الحالة')
                 })
         }
+        function search(){
+            var admin_search= $('#admin_search').val();
+            var note_search= $('#note_search').val();
+            var operation_search= $('#operation_search').val();
+            var status_search= $('#status_search').val();
+            var $parameter= '?';
+            if (admin_search){
+                $parameter+= "admin="+admin_search
+            }
+            if (note_search){
+                if ($parameter.search("admin") != -1){
+                    $parameter+= "&note="+note_search
+                }
+                else {
+                    $parameter+= "note="+note_search
+                }
+            }
+            if (operation_search){
+                if ($parameter.search("admin") != -1 || $parameter.search("note") != -1){
+                    $parameter+= "&operation="+operation_search
+                }
+                else {
+                    $parameter+= "operation="+operation_search
+                }
+            }
+            if (status_search){
+                if ($parameter.search("admin") != -1 || $parameter.search("note") != -1 || $parameter.search("operation") != -1){
+                    $parameter+= "&status="+status_search
+                }
+                else {
+                    $parameter+= "status="+status_search
+                }
+            }
+
+            window.location.href = window.location.href.split('?')[0]+$parameter;
+        }
+        function resett(){window.location.href= window.location.href.split('?')[0]}
     </script>
 
 @endpush

@@ -79,8 +79,34 @@ class Settings extends Controller {
 
 	    $logs= ActivityLog::whereNotIn('note_type',[ActivityLogNoteType::collection,
             ActivityLogNoteType::other_collection,ActivityLogNoteType::generalrevenue])
-            ->orderByDesc('created_at')->paginate(30);
-	    $sum_all_price= $logs->sum('amount');
+            ->orderByDesc('created_at');
+	    $is_search= false;
+	    if (request()->input('admin')){
+	        $is_search= true;
+	        $logs->where('admin_id',\request()->input('admin'));
+        }
+	    if (request()->input('note')){
+	        $is_search= true;
+	        $logs->where('note_type',\request()->input('note'));
+        }
+	    if (request()->input('operation')){
+	        $is_search= true;
+	        $logs->where('operation_type',\request()->input('operation'));
+        }
+	    if (request()->input('status') == 0 || request()->input('status') == 1){
+	        $is_search= true;
+	        $logs->where('checked',(\request()->input('status') == 0 ? 0 : 1));
+        }
+	    if ($is_search){
+	        $logs= $logs->get();
+        }
+	    else{
+            $logs=$logs->paginate(30);
+        }
+
+	    $sum_all_price= ActivityLog::whereNotIn('note_type',[ActivityLogNoteType::collection,
+            ActivityLogNoteType::other_collection,ActivityLogNoteType::generalrevenue])
+            ->sum('amount');
 	    $sum_uncheck_price= $logs->where('checked','0')->sum('amount');
 
         return view('admin.log.expenses_section', ['title' => 'باب المصروفات','logs'=> $logs,
@@ -91,8 +117,34 @@ class Settings extends Controller {
 
         $logs= ActivityLog::whereIn('note_type',[ActivityLogNoteType::collection,
             ActivityLogNoteType::other_collection,ActivityLogNoteType::generalrevenue])
-            ->orderByDesc('created_at')->paginate(30);
-        $sum_all_price= $logs->sum('amount');
+            ->orderByDesc('created_at');
+
+        $is_search= false;
+        if (request()->input('admin')){
+            $is_search= true;
+            $logs->where('admin_id',\request()->input('admin'));
+        }
+        if (request()->input('note')){
+            $is_search= true;
+            $logs->where('note_type',\request()->input('note'));
+        }
+        if (request()->input('operation')){
+            $is_search= true;
+            $logs->where('operation_type',\request()->input('operation'));
+        }
+        if (request()->input('status') == 0 || request()->input('status') == 1){
+            $is_search= true;
+            $logs->where('checked',(\request()->input('status') == 0 ? 0 : 1));
+        }
+        if ($is_search){
+            $logs= $logs->get();
+        }
+        else{
+            $logs=$logs->paginate(30);
+        }
+
+        $sum_all_price=  ActivityLog::whereIn('note_type',[ActivityLogNoteType::collection,
+            ActivityLogNoteType::other_collection,ActivityLogNoteType::generalrevenue])->sum('amount');
         $sum_uncheck_price= $logs->where('checked','0')->sum('amount');
 
         return view('admin.log.revenue_section', ['title' => 'باب الايرادات','logs'=> $logs,
