@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\DataTables\BasicParentsDataTable;
 use App\DataTables\PaymentsDataTable;
 use App\Http\Controllers\Controller;
@@ -89,6 +90,10 @@ class WithdrawalsPaymentsController extends Controller
                 $data['parent_id']= $request->route('parent_id');
 		  		$withdrawalspayments = WithdrawalsPayments::create($data);
 		  		$url= 'withdrawals/'.$request->parent_id;
+
+                AddNewLog(ActivityLogNoteType::withdrawals,'إضافة على مسحوبات شخصية',$data['price'],
+                    'store',null,null,$url.'/show');
+
                 $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url.'/show';
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
@@ -99,6 +104,11 @@ class WithdrawalsPaymentsController extends Controller
                 $data['parent_id']= $request->route('parent_id');
 		  		$withdrawalspayments = WithdrawalsPayments::create($data);
 		  		$url= 'payments/'.$request->parent_id;
+
+                AddNewLog(ActivityLogNoteType::payments,'إضافة على دفعات التجار',$data['price'],
+                    'store',null,null,$url.'/show');
+
+
                 $redirect = isset($request["add_back"])? '/basicparents/'.$url.'/create': $url.'/show';
                 return redirectWithSuccess(aurl($redirect), trans('admin.added')); }
 
@@ -185,7 +195,12 @@ class WithdrawalsPaymentsController extends Controller
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
               $withdrawalspayments->update($data);
-              $redirect = isset($request["save_back"])?"/basicparents/withdrawals/".$id."/edit": 'withdrawals/'.$withdrawalspayments->parent_id.'/show';
+
+              AddNewLog(ActivityLogNoteType::withdrawals,'تعديل على مسحوبات شخصية',$data['price'],
+                    'update',null,null,'withdrawals/'.$withdrawalspayments->parent_id.'/show');
+
+
+                $redirect = isset($request["save_back"])?"/basicparents/withdrawals/".$id."/edit": 'withdrawals/'.$withdrawalspayments->parent_id.'/show';
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }
             public function update_payments(WithdrawalsPaymentsRequest $request,$id)
@@ -199,6 +214,10 @@ class WithdrawalsPaymentsController extends Controller
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
               $withdrawalspayments->update($data);
+
+                AddNewLog(ActivityLogNoteType::payments,'تعديل على دفعات تجار',$data['price'],
+                    'update',null,null,'payments/'.$withdrawalspayments->parent_id.'/show');
+
               $redirect = isset($request["save_back"])?"/basicparents/payments/".$id."/edit": 'payments/'.$withdrawalspayments->parent_id.'/show';
               return redirectWithSuccess(aurl($redirect), trans('admin.updated'));
             }
@@ -217,7 +236,12 @@ class WithdrawalsPaymentsController extends Controller
                 }
                 $parent_id= $withdrawalspayments->parent_id;
                 it()->delete('withdrawalspayments',$id);
+                $price= $withdrawalspayments->price;
                 $withdrawalspayments->delete();
+
+                AddNewLog(ActivityLogNoteType::withdrawals,'حذف في مسحوبات شخصية',$price,
+                    'delete',null,null,'withdrawals/'.$parent_id.'/show');
+
                 return redirectWithSuccess(aurl("withdrawals/".$parent_id."/show"),trans('admin.deleted'));
             }
             public function destroy_payments($id){
@@ -227,7 +251,12 @@ class WithdrawalsPaymentsController extends Controller
                 }
                 $parent_id= $withdrawalspayments->parent_id;
                 it()->delete('withdrawalspayments',$id);
+                $price= $withdrawalspayments->price;
                 $withdrawalspayments->delete();
+
+                AddNewLog(ActivityLogNoteType::payments,'حذف في دفعات التجار',$price,
+                    'delete',null,null,'payments/'.$parent_id.'/show');
+
                 return redirectWithSuccess(aurl("payments/".$parent_id."/show"),trans('admin.deleted'));
             }
 
@@ -242,7 +271,12 @@ class WithdrawalsPaymentsController extends Controller
 
                         it()->delete('withdrawalspayments',$id);
                         $parent_id= $withdrawalspayments->parent_id;
+                        $price= $withdrawalspayments->price;
                         $withdrawalspayments->delete();
+
+                        AddNewLog(ActivityLogNoteType::withdrawals,'حذف في مسحوبات شخصية',$price,
+                            'delete',null,null,'withdrawals/'.$parent_id.'/show');
+
                     }
                     return redirectWithSuccess(aurl("/withdrawals/".$parent_id."/show"),trans('admin.deleted'));
                 }else {
@@ -253,7 +287,12 @@ class WithdrawalsPaymentsController extends Controller
 
                     it()->delete('withdrawalspayments',$data);
                     $parent_id= $withdrawalspayments->parent_id;
+                    $price= $withdrawalspayments->price;
                     $withdrawalspayments->delete();
+
+                    AddNewLog(ActivityLogNoteType::withdrawals,'حذف في مسحوبات شخصية',$price,
+                        'delete',null,null,'withdrawals/'.$parent_id.'/show');
+
                     return redirectWithSuccess(aurl("/withdrawals/".$parent_id."/show"),trans('admin.deleted'));
                 }
             }
@@ -268,7 +307,12 @@ class WithdrawalsPaymentsController extends Controller
 
                         it()->delete('withdrawalspayments',$id);
                         $parent_id= $withdrawalspayments->parent_id;
+                        $price= $withdrawalspayments->price;
                         $withdrawalspayments->delete();
+
+                        AddNewLog(ActivityLogNoteType::payments,'حذف في دفعات التجار',$price,
+                            'delete',null,null,'payments/'.$parent_id.'/show');
+
                     }
                     return redirectWithSuccess(aurl("/payments/".$parent_id."/show"),trans('admin.deleted'));
                 }else {
@@ -279,7 +323,12 @@ class WithdrawalsPaymentsController extends Controller
 
                     it()->delete('withdrawalspayments',$data);
                     $parent_id= $withdrawalspayments->parent_id;
+                    $price= $withdrawalspayments->price;
                     $withdrawalspayments->delete();
+
+                    AddNewLog(ActivityLogNoteType::payments,'حذف في دفعات التجار',$price,
+                        'delete',null,null,'payments/'.$parent_id.'/show');
+
                     return redirectWithSuccess(aurl("/payments/".$parent_id."/show"),trans('admin.deleted'));
                 }
             }

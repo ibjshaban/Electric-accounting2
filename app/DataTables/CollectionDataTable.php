@@ -99,16 +99,7 @@ class CollectionDataTable extends DataTable
 					'extend' => 'reload',
 					'className' => 'btn btn-outline',
 					'text' => '<i class="fa fa-sync-alt"></i> '.trans('admin.reload')
-					],	/*[
-						'text' => '<i class="fa fa-trash"></i> '.trans('admin.delete'),
-						'className'    => 'btn btn-outline deleteBtn',
-                    ],*/ 	[
-                        'text' => '<i class="fa fa-plus"></i> '.trans('admin.add'),
-                        'className'    => 'btn btn-primary',
-                        'action'    => 'function(){
-                        	window.location.href =  "'.\URL::current().'/create";
-                        }',
-                    ],
+					],
                 ],
                 'initComplete' => "function () {
 

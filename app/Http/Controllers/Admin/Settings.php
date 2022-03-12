@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function GuzzleHttp\Promise\all;
 
 class Settings extends Controller {
 
@@ -73,43 +75,35 @@ class Settings extends Controller {
 
 	}
 
-	public function log(){
-	    $logs= ActivityLog::paginate();
-        return view('admin.log', ['title' => trans('admin.log'),'logs'=> $logs]);
+	public function expenses_section(){
+
+	    $logs= ActivityLog::whereNotIn('note_type',[ActivityLogNoteType::collection,
+            ActivityLogNoteType::other_collection,ActivityLogNoteType::generalrevenue])
+            ->orderByDesc('created_at')->paginate(30);
+	    $sum_all_price= $logs->sum('amount');
+	    $sum_uncheck_price= $logs->where('checked','0')->sum('amount');
+
+        return view('admin.log.expenses_section', ['title' => 'باب المصروفات','logs'=> $logs,
+            'all_price'=>$sum_all_price,'all_uncheck'=> $sum_uncheck_price]);
     }
 
-    public function logDetails($id){
-	    $log= ActivityLog::whereId($id)->first();
-	    $info= json_decode($log->information);
-        return view('admin.log_details', ['title' => trans('admin.log_details'),'log'=> $log,'info'=> $info]);
+	public function revenue_section(){
+
+        $logs= ActivityLog::whereIn('note_type',[ActivityLogNoteType::collection,
+            ActivityLogNoteType::other_collection,ActivityLogNoteType::generalrevenue])
+            ->orderByDesc('created_at')->paginate(30);
+        $sum_all_price= $logs->sum('amount');
+        $sum_uncheck_price= $logs->where('checked','0')->sum('amount');
+
+        return view('admin.log.revenue_section', ['title' => 'باب الايرادات','logs'=> $logs,
+            'all_price'=>$sum_all_price,'all_uncheck'=> $sum_uncheck_price]);
     }
-    public function log_accept($id){
 
-        try {
-            DB::beginTransaction();
-            $log= ActivityLog::whereId($id)->first();
-            if ($log){
-                $queries = json_decode($log->query);
-                foreach ($queries as $index=>$query){
-                    DB::statement($query);
-                }
-            }
-            $log->delete();
-            DB::commit();
-            return redirectWithSuccess(aurl('log'), "تم تنفيذ العملية بنجاح");
-
-        }
-        catch (\Exception $exception){
-            DB::rollBack();
-            return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
-        }
-	}
-
-    public function log_cancel($id){
-
-	    $log= ActivityLog::whereId($id)->first();
-	    if ($log) $log->delete();
-        return redirectWithError(aurl('log'), "تم إلغاء العملية بنجاح");
+    public function change_log_status (Request $request)
+    {
+        $status = $request->status == 'false' ? 0 : 1;
+        ActivityLog::whereId($request->id)->first()->update(['checked' => $status]);
+        return response()->json(null, 200);
     }
 
 }

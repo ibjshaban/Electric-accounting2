@@ -170,8 +170,10 @@ class SalaryController extends Controller
 
             it()->delete('salary',$id);
             $this->BackDebtDiscountForEmployee($salary->employee_id, $salary->discount);
+            $revenue= revenue::whereId($salary->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             AddNewLog(ActivityLogNoteType::salaries,'حذف راتب لموظف',$salary->salary,
-                'delete',null,null,'/revenue-salary/'.$salary->revenue_id);
+                'delete',$city_id,null,'/revenue-salary/'.$salary->revenue_id);
             $salary->delete();
             // code
 
@@ -221,9 +223,10 @@ class SalaryController extends Controller
             if (!$status[0]){
                 return response('لم تتم العملية حدث خطأ ما',422);
             }
-
+            $revenue= revenue::whereId($request->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             AddNewLog(ActivityLogNoteType::salaries,'إيداع راتب جديد لموظف',$status[1],
-                'store',null,null,'/revenue-salary/'.$request->revenue_id);
+                'store',$city_id,$request->revenue_id,'/revenue-salary/'.$request->revenue_id);
             // code
             DB::commit();
             return response('تمت عملية إضافة الراتب للموظف بنجاح',200);

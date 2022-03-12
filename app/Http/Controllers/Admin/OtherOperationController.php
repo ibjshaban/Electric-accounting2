@@ -152,9 +152,12 @@ class OtherOperationController extends Controller
         }
 
         it()->delete('otheroperation', $id);
+        $revenue= revenue::whereId($otheroperation->revenue_id)->first();
+        $city_id= $revenue ? $revenue->city_id : null;
         $otheroperation->delete();
         AddNewLog(ActivityLogNoteType::other_operation,'حذف مصاريف أخرى لايرادة',$otheroperation->price,
-            'delete',null,$otheroperation->revenue_id,'/revenue-otheroperation/'.$otheroperation->revenue_id);
+            'delete',$city_id,$otheroperation->revenue_id,'/revenue-otheroperation/'.$otheroperation->revenue_id);
+
         return redirectWithSuccess(aurl("revenue-otheroperation/".$otheroperation->revenue_id), trans('admin.deleted'));
     }
 
@@ -170,10 +173,12 @@ class OtherOperationController extends Controller
                 }
 
                 it()->delete('otheroperation', $id);
+                $revenue= revenue::whereId($otheroperation->revenue_id)->first();
+                $city_id= $revenue ? $revenue->city_id : null;
                 $otheroperation->delete();
 
                 AddNewLog(ActivityLogNoteType::other_operation,'حذف مصاريف أخرى لايرادة',$otheroperation->price,
-                    'delete',null,$otheroperation->revenue_id,'/revenue-otheroperation/'.$otheroperation->revenue_id);
+                    'delete',$city_id,$otheroperation->revenue_id,'/revenue-otheroperation/'.$otheroperation->revenue_id);
             }
             return redirectWithSuccess(aurl("revenue-otheroperation/".$otheroperation->revenue_id), trans('admin.deleted'));
         } else {
@@ -183,10 +188,12 @@ class OtherOperationController extends Controller
             }
 
             it()->delete('otheroperation', $data);
+            $revenue= revenue::whereId($otheroperation->revenue_id)->first();
+            $city_id= $revenue ? $revenue->city_id : null;
             $otheroperation->delete();
 
             AddNewLog(ActivityLogNoteType::other_operation,'حذف مصاريف أخرى لايرادة',$otheroperation->price,
-                'delete',null,$otheroperation->revenue_id,'/revenue-otheroperation/'.$otheroperation->revenue_id);
+                'delete',$city_id,$otheroperation->revenue_id,'/revenue-otheroperation/'.$otheroperation->revenue_id);
 
             return redirectWithSuccess(aurl("revenue-otheroperation/".$otheroperation->revenue_id), trans('admin.deleted'));
         }
@@ -212,8 +219,11 @@ class OtherOperationController extends Controller
         $data['admin_id'] = admin()->id();
         $data['revenue_id'] = $id;
         $otheroperation = OtherOperation::create($data);
+        $revenue= revenue::whereId($otheroperation->revenue_id)->first();
+        $city_id= $revenue ? $revenue->city_id : null;
         AddNewLog(ActivityLogNoteType::other_operation,'إضافة مصاريف أخرى لايرادة',$data['price'],
-            'store',null,$data['revenue_id'],'/revenue-otheroperation/'.$data['revenue_id']);
+            'store',$city_id,$data['revenue_id'],'/revenue-otheroperation/'.$data['revenue_id']);
+
         $redirect = isset($request["add_back"]) ? "/create" : "";
         return redirectWithSuccess(aurl('revenue-otheroperation/'.$id. $redirect), trans('admin.added'));
     }
@@ -237,9 +247,10 @@ class OtherOperationController extends Controller
         $data['admin_id'] = admin()->id();
         //$data['revenue_id'] = $revenu_id;
         OtherOperation::where('id', $id)->update($data);
-
+        $revenue= revenue::whereId($data['revenue_id'])->first();
+        $city_id= $revenue ? $revenue->city_id : null;
         AddNewLog(ActivityLogNoteType::other_operation,'تعديل مصاريف أخرى لايرادة',$data['price'],
-            'update',null,$data['revenue_id'],'/revenue-otheroperation/'.$data['revenue_id']);
+            'update',$city_id,$data['revenue_id'],'/revenue-otheroperation/'.$data['revenue_id']);
 
         $redirect = isset($request["save_back"]) ? "/" . $revenu_id . "/edit" : "";
         return redirectWithSuccess(aurl('revenue-otheroperation/'.$revenu_id. $redirect), trans('admin.updated'));

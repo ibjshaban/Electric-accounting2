@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\Http\Controllers\Controller;
 use App\DataTables\GeneralRevenueDataTable;
 use Carbon\Carbon;
@@ -82,6 +83,9 @@ class GeneralRevenueController extends Controller
                 $data = $request->except("_token", "_method");
             	$data['admin_id'] = admin()->id();
 		  		$generalrevenue = GeneralRevenue::create($data);
+                AddNewLog(ActivityLogNoteType::generalrevenue,'إضافة في الايرادات العامة',$generalrevenue->price,
+                    'store',null,null,'generalrevenue');
+
                 $redirect = isset($request["add_back"])?"/create":"";
                 return redirectWithSuccess(aurl('generalrevenue'.$redirect), trans('admin.added')); }
 
@@ -145,7 +149,11 @@ class GeneralRevenueController extends Controller
               }
               $data = $this->updateFillableColumns();
               $data['admin_id'] = admin()->id();
-              GeneralRevenue::where('id',$id)->update($data);
+              $generalrevenue=GeneralRevenue::where('id',$id)->first();
+              $generalrevenue->update($data);
+              AddNewLog(ActivityLogNoteType::generalrevenue,'تعديل في الايرادات العامة',$generalrevenue->price,
+                    'update',null,null,'generalrevenue');
+
               $redirect = isset($request["save_back"])?"/".$id."/edit":"";
               return redirectWithSuccess(aurl('generalrevenue'.$redirect), trans('admin.updated'));
             }
@@ -163,7 +171,11 @@ class GeneralRevenueController extends Controller
 		}
 
 		it()->delete('generalrevenue',$id);
-		$generalrevenue->delete();
+        $price= $generalrevenue->price;
+        $generalrevenue->delete();
+        AddNewLog(ActivityLogNoteType::generalrevenue,'حذف في الايرادات العامة',$price,
+            'delete',null,null,'generalrevenue');
+
 		return redirectWithSuccess(aurl("generalrevenue"),trans('admin.deleted'));
 	}
 
@@ -178,7 +190,11 @@ class GeneralRevenueController extends Controller
 				}
 
 				it()->delete('generalrevenue',$id);
-				$generalrevenue->delete();
+                $price= $generalrevenue->price;
+                $generalrevenue->delete();
+                AddNewLog(ActivityLogNoteType::generalrevenue,'حذف في الايرادات العامة',$price,
+                    'delete',null,null,'generalrevenue');
+
 			}
 			return redirectWithSuccess(aurl("generalrevenue"),trans('admin.deleted'));
 		}else {
@@ -188,7 +204,11 @@ class GeneralRevenueController extends Controller
 			}
 
 			it()->delete('generalrevenue',$data);
-			$generalrevenue->delete();
+            $price= $generalrevenue->price;
+            $generalrevenue->delete();
+            AddNewLog(ActivityLogNoteType::generalrevenue,'حذف في الايرادات العامة',$price,
+                'delete',null,null,'generalrevenue');
+
 			return redirectWithSuccess(aurl("generalrevenue"),trans('admin.deleted'));
 		}
 	}
