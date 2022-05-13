@@ -97,6 +97,16 @@ class Settings extends Controller {
 	        $is_search= true;
 	        $logs->where('checked',(\request()->input('status') == 0 ? 0 : 1));
         }
+
+        if (request()->input('from_date') && request()->input('from_date') != ''){
+            $is_search= true;
+            $logs->whereDate('created_at','>=',\request()->input('from_date'));
+        }
+        if (request()->input('to_date') && request()->input('to_date') != ''){
+            $is_search= true;
+            $logs->whereDate('created_at','<=',\request()->input('to_date'));
+        }
+
 	    if ($is_search){
 	        $logs= $logs->get();
         }
@@ -135,6 +145,14 @@ class Settings extends Controller {
         if (request()->input('status') == 0 || request()->input('status') == 1){
             $is_search= true;
             $logs->where('checked',(\request()->input('status') == 0 ? 0 : 1));
+        }
+        if (request()->input('from_date') && request()->input('from_date') != ''){
+            $is_search= true;
+            $logs->whereDate('created_at','>=',\request()->input('from_date'));
+        }
+        if (request()->input('to_date') && request()->input('to_date') != ''){
+            $is_search= true;
+            $logs->whereDate('created_at','<=',\request()->input('to_date'));
         }
         if ($is_search){
             $logs= $logs->get();
