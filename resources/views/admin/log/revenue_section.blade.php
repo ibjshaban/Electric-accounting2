@@ -55,6 +55,20 @@
                         </select>
                     </div>
                 </div>
+                <form class="col-md-6 row" id="filter_search" action="javascript:void();">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="from_date">من تاريخ</label>
+                            <input type="date" class="form-control input-daterange" value="{{request()->input('from_date')}}" id="from_date" name="from_date">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="to_date">الى تاريخ</label>
+                            <input type="date" class="form-control input-daterange" value="{{request()->input('to_date')}}" id="to_date" name="to_date">
+                        </div>
+                    </div>
+                </form>
                 <div class="col-md-3">
                     <div class="form-group" style="display: none ">
                         <select class="form-control select2 select2-hidden-accessible disabled"  style="display: none !important; ;width: 100%;" data-select2-id="1">
@@ -167,6 +181,8 @@
             var note_search= $('#note_search').val();
             var operation_search= $('#operation_search').val();
             var status_search= $('#status_search').val();
+            var from_date = $('#from_date').val();
+            var to_date = $('#to_date').val();
             var $parameter= '?';
             if (admin_search){
                 $parameter+= "admin="+admin_search
@@ -193,6 +209,22 @@
                 }
                 else {
                     $parameter+= "status="+status_search
+                }
+            }
+            if (from_date && from_date != ''){
+                if ($parameter.search("admin") != -1 || $parameter.search("note") != -1 || $parameter.search("operation") != -1 || $parameter.search("status") != -1){
+                    $parameter+= "&from_date="+from_date
+                }
+                else {
+                    $parameter+= "from_date="+from_date
+                }
+            }
+            if (to_date && to_date != ''){
+                if ($parameter.search("admin") != -1 || $parameter.search("note") != -1 || $parameter.search("operation") != -1 || $parameter.search("status") != -1 || $parameter.search("from_date") != -1){
+                    $parameter+= "&to_date="+to_date
+                }
+                else {
+                    $parameter+= "to_date="+to_date
                 }
             }
 
