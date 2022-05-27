@@ -108,14 +108,9 @@ class RevenueController extends Controller
     public function show($id)
     {
         $revenue = revenue::find($id);
-        $title = $revenue->name;
+        $title = $revenue->name.' // '.(City::where('id',$revenue->city_id)->first()->name ?? '');
 
-        ////
-       /* $total_collections = DB::select('SELECT SUM(amount) AS amount FROM collections WHERE revenue_id = ' . $revenue->id . ' AND employee_id IN
-                                               (SELECT id FROM employees WHERE type_id = 1)');
-        $total_collection = $total_collections[0]->amount;*/
         $total_collection= Collection::where(['revenue_id'=>$revenue->id])->whereNotNull('employee_id')->sum('amount');
-        //////
         $total_other_collection = Collection::where(['revenue_id' => $revenue->id])->whereNull('employee_id')->sum('amount');
 
         //$total_collection= Collection::where(['revenue_id'=>$revenue->id])->sum('amount');

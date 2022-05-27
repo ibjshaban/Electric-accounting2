@@ -80,6 +80,10 @@
 				<b>{{trans('admin.price')}} :</b>
 				{!! ShekelFormat($expenses->price) !!}
 			</div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<b>{{trans('admin.discount')}} :</b>
+				{!! ShekelFormat($expenses->discount) !!}
+			</div>
 
 			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 				<b>{{trans('admin.date')}} :</b>

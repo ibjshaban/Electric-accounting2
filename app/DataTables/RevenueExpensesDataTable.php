@@ -101,7 +101,7 @@ class RevenueExpensesDataTable extends DataTable
 
 
 
-            " . filterElement('1,2,3,4', 'input') . "
+            " . filterElement('1,2,3,4,5,6', 'input') . "
 
                         //revenue_idname,price,date,revenue_id5
 

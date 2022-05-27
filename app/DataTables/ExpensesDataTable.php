@@ -100,10 +100,10 @@ class ExpensesDataTable extends DataTable
 
 
 
-            ". filterElement('1,2,3,4', 'input') . "
+            ". filterElement('1,2,3,4,5', 'input') . "
 
                         //revenue_idname,price,date,revenue_id5
-            ". filterElement('5', 'select', \App\Models\revenue::pluck("name","name")) . "
+            ". filterElement('6', 'select', \App\Models\revenue::pluck("name","name")) . "
 
 
 	            }",

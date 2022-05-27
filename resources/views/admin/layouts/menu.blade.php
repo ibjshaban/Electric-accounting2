@@ -530,7 +530,7 @@ with font-awesome or any other icon font library -->
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ aurl('notebooks/1/create') }}" class="nav-link">
+                <a href="{{ aurl('notebooks/create') }}" class="nav-link">
                     <i class="fas fa-plus nav-icon"></i>
                     <p>{{trans('admin.create')}} </p>
                 </a>

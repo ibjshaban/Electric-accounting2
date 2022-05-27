@@ -12,9 +12,7 @@ protected $fillable = [
 		'id',
 		'admin_id',
         'employee_id',
-
         'revenue_id',
-
         'amount',
         'collection_date',
         'source',
