@@ -6,7 +6,6 @@
 </aside>
 <!-- Main Sidebar Menu Container -->
 
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -17,15 +16,25 @@
                     <ol class="breadcrumb {{ app('l') == 'ar'?'float-sm-right':'float-sm-left' }}">
                         @if(!empty(request()->segment(2)))
                             <li class="breadcrumb-item"><a href="{{aurl('/')}}">{{trans('admin.dashboard')}}</a></li>
-
-                            @if (\Request::is('admin/revenuefule-revenue/*') or \Request::is('admin/expenses/*') or \Request::is('admin/revenue-expenses/*') or \Request::is('admin/revenue-otheroperation/*') or \Request::is('admin/revenue-collection/*') or \Request::is('admin/revenue-salary/*'))
+                            @if(\Request::is('admin/expenses/section'))
+                                <li class="breadcrumb-item active"><a
+                                        href="{{aurl('/expenses/section')}}">باب المصروفات</a>
+                                </li>
+                            @elseif (\Request::is('admin/revenuefule-revenue/*') or \Request::is('admin/expenses/*') or \Request::is('admin/revenue-expenses/*') or \Request::is('admin/revenue-otheroperation/*') or \Request::is('admin/revenue-collection/*') or \Request::is('admin/revenue-salary/*'))
                                 <li class="breadcrumb-item active"><a
                                         href="#">الايرادة</a>
                                 </li>
                                 <li class="breadcrumb-item active"><a
                                         href="#">{{trans('admin.'.request()->segment(2))}}</a>
                                 </li>
-
+                            @elseif(\Request::is('admin/basicparents/*'))
+                                <li class="breadcrumb-item active"><a
+                                        href="#">{{trans('admin.'.request()->segment(2))}}</a>
+                                </li>
+                            @elseif(\Request::is('admin/financial-movements/*'))
+                                <li class="breadcrumb-item active"><a
+                                        href="{{url(request()->path())}}">{{trans('admin.'.request()->segment(2))}}</a>
+                                </li>
                             @else
                                 <li class="breadcrumb-item active"><a
                                         href="{{aurl(request()->segment(2))}}">{{trans('admin.'.request()->segment(2))}}</a>

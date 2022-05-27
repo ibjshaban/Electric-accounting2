@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // Copyright Reserved  [it v 1.6.36]
 class revenue extends Model {
 
-	//use SoftDeletes;
-	protected $dates = ['deleted_at'];
+
+protected $dates = ['deleted_at'];
 
 protected $table    = 'revenues';
 protected $fillable = [

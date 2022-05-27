@@ -111,7 +111,8 @@ class BasicParents extends Controller
             /*view('admin.basicparents.show', [
                 'title' => trans('admin.show'),
                 'basicparents' => $basicparents
-            ]) */ $basicparentitemsTable->with(['basic_id'=>$id, 'basicparents'=>$basicparents])->render('admin.basicparents.showbasicparent', ['title' => trans('admin.show'), 'basicparents' => $basicparents]);
+            ]) */
+            $basicparentitemsTable->with(['basic_id'=>$id, 'basicparents'=>$basicparents])->render('admin.basicparents.showbasicparent', ['title' => trans('admin.show'), 'basicparents' => $basicparents]);
     }
     public function show_withdrawalspayments($id ,Request $request)
     {

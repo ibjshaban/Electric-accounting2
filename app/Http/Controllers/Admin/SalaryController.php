@@ -4,6 +4,7 @@ use App\ActivityLogNoteType;
 use App\DataTables\RevenueSalaryDataTable;
 use App\Http\Controllers\Controller;
 use App\DataTables\SalaryDataTable;
+use App\Models\City;
 use App\Models\Debt;
 use App\Models\Employee;
 use App\Models\revenue;
@@ -50,8 +51,10 @@ class SalaryController extends Controller
             }
             public function revenueSalary (RevenueSalaryDataTable $salary, $id)
             {
-                $revenue = revenue::find($id)->name;
-               return $salary->with('id', $id)->render('admin.salary.index',['title'=>trans('admin.salary'). '/(' . $revenue . ')']);
+                $revenue = revenue::find($id);
+                $city= City::whereId($revenue->city_id)->first();
+                $city_name= $city? $city->name : '';
+               return $salary->with('id', $id)->render('admin.salary.index',['title'=>trans('admin.salary'). '/(' . $revenue->name . ')/'.$city_name]);
             }
 
 

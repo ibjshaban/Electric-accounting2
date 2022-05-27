@@ -1,6 +1,7 @@
 <?php
 namespace App\DataTables;
 use App\Models\Collection;
+use App\Models\revenue;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Services\DataTable;
 // Auto DataTable By Baboon Script
@@ -15,7 +16,6 @@ class RevenueCollectionDataTable extends DataTable
     {
         $this->title = trans('admin.collection');
         $this->total_name = 'مجموع '. trans('admin.amount');
-
         $total = 0;
         foreach(Collection::where('revenue_id', request()->id)->get() as $collection)
         {
@@ -54,7 +54,10 @@ class RevenueCollectionDataTable extends DataTable
      */
 	public function query()
     {
-        return Collection::query()->with(['employee_id','revenue_id',])->where('revenue_id', $this->id)->select("collections.*");
+        return Collection::query()
+            ->with(['employee_id','revenue_id',])
+            ->where('revenue_id', $this->id)
+            ->select("collections.*");
 
     }
 
@@ -114,7 +117,9 @@ class RevenueCollectionDataTable extends DataTable
             ". filterElement('1,3,5,6,7', 'input') . "
 
                         //employee_idemployee_id,revenue_id,amount,collection_date,source,note2
-            ". filterElement('2', 'select', \App\Models\Employee::pluck("name","name")) . "
+            ". filterElement('2', 'select', \App\Models\Employee::where('city_id',revenue::where('id',$this->id)->first()->city_id)
+                        ->where('type_id',1)
+                        ->pluck("name","name")) . "
             //revenue_idemployee_id,revenue_id,amount,collection_date,source,note3
 
 
@@ -167,7 +172,7 @@ class RevenueCollectionDataTable extends DataTable
                 'name' => 'checkbox',
                 'data' => 'checkbox',
                 'title' => '<div  class="icheck-danger">
-                  <input type="checkbox" class="select-all" id="select-all"  onclick="select_all()" >
+                  <input type="checkbox" class="select-all" id="select-all"  onclick="select_all()">
                   <label for="select-all"></label>
                 </div>',
                 'orderable'      => false,
