@@ -290,26 +290,26 @@ class SalaryController extends Controller
     }
     public function BackDebtDiscountForEmployee($employee_id,$discount){
 
-	    $employee = Employee::whereId($employee_id)->first();
-        $debts= Debt::where('employee_id', $employee_id)->orderByDesc('created_at')->get();
+	    //$employee = Employee::whereId($employee_id)->first();
+        if ($discount > 0){
+            $debts= Debt::where('employee_id', $employee_id)->get();
+            foreach ($debts as $item){
+                if ($item->remainder == $item->amount){
+                    continue;
+                }
 
-        foreach ($debts as $item){
-            if ($item->remainder == $item->amount){
+                $debt_discount= $item->amount - $item->remainder;
+                if ($debt_discount >= $discount){
 
-                continue;
-            }
-
-            $debt_discount= $item->amount - $item->remainder;
-            if ($debt_discount >= $discount){
-                $item->update(['remainder'=> ($debt_discount)]);
-                break;
-            }
-            else{
-
-                $discount= $discount - $debt_discount;
-                $item->update(['remainder'=> ($debt_discount+$item->remainder)]);
-                if ($discount == 0){
+                    $item->update(['remainder'=> ($item->remainder + $discount)]);
                     break;
+                }
+                else{
+                    $discount= $discount - $debt_discount;
+                    $item->update(['remainder'=> ($debt_discount+$item->remainder)]);
+                    if ($discount == 0){
+                        break;
+                    }
                 }
             }
         }
