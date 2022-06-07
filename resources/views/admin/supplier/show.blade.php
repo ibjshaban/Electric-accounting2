@@ -99,6 +99,7 @@
                 <div class="col-12"><hr></div>
                 <div class="col-12">
                     <b>جدول التعبئات :</b>
+                    <p>  مجموع كميات السولار : {{ShekelFormat($filling_quantity)}} </p>
                     <p>  مجموع مبالغ السولار : {{ShekelFormat($filling_amount)}} </p>
                     <p>  مجموع المبالغ المدفوعة : {{ShekelFormat($filling_paid_amount)}} </p>
 

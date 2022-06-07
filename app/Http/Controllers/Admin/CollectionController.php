@@ -7,6 +7,7 @@ use App\DataTables\CollectionDataTable;
 use App\DataTables\RevenueCollectionDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\CollectionRequest;
+use App\Models\City;
 use App\Models\Collection;
 use App\Models\Employee;
 use App\Models\revenue;
@@ -211,7 +212,8 @@ class CollectionController extends Controller
     {
         $revenue = revenue::find($id);
         $revenue_name = $revenue->name;
-        return $collection->with('id', $id)->render('admin.collection.index', ['title' => trans('admin.collection') . '/(' . $revenue_name . ')']);
+        $city_name= City::whereId($revenue->city_id)->first()->name;
+        return $collection->with('id', $id)->render('admin.collection.index', ['title' => trans('admin.collection') . '/(' . $revenue_name . ')'. '/(' . $city_name . ')']);
     }
 
     public function revenueCollectionCreate($id)

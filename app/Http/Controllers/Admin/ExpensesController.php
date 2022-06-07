@@ -7,6 +7,7 @@ use App\DataTables\ExpensesDataTable;
 use App\DataTables\RevenueExpensesDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\ExpensesRequest;
+use App\Models\City;
 use App\Models\Expenses;
 use App\Models\ExpensesItem;
 use App\Models\revenue;
@@ -221,7 +222,9 @@ class ExpensesController extends Controller
     //Show expenses for one revenue
     public function revenueExpenses(RevenueExpensesDataTable $expenses,Request $request, $id)
     {
-        $revenue = revenue::find($id)->name;
+        $revenue = revenue::find($id);
+        $revenue_name= $revenue->name;
+        $city_name= City::whereId($revenue->city_id)->first()->name;
         if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
             if ($request->from_date != null && $request->to_date != null) {
                 $expenses = Expenses::where('revenue_id', $id)->whereBetween('date', [$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
@@ -241,7 +244,7 @@ class ExpensesController extends Controller
             ->rawColumns(['checkbox', 'actions',])
                 ->make(true);
         }
-        return $expenses->with('id', $id)->render('admin.expenses.revenue-expenses.index', ['title' => trans('admin.expenses') . '/(' . $revenue . ')','id'=>$id]);
+        return $expenses->with('id', $id)->render('admin.expenses.revenue-expenses.index', ['title' => trans('admin.expenses') . '/ (' . $revenue_name . ')'. '/ (' . $city_name . ')','id'=>$id]);
     }
 
     public function revenueCreate($id)
