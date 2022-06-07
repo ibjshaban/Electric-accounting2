@@ -1,5 +1,6 @@
 <?php
 namespace Database\Seeders;
+use App\Models\EmployeeType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder {
@@ -9,6 +10,8 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
+
+        EmployeeType::create(['name'=> 'محصل',]);
 
 		\App\Models\Admin::create([
 			'name' => 'admin',
@@ -56,5 +59,7 @@ class DatabaseSeeder extends Seeder {
 			}
 
 		}
+
+
 	}
 }

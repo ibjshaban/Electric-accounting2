@@ -7,6 +7,7 @@ use App\DataTables\OtherOperationDataTable;
 use App\DataTables\RevenueOtherOperationDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\OtherOperationRequest;
+use App\Models\City;
 use App\Models\OtherOperation;
 use App\Models\revenue;
 use Illuminate\Http\Request;
@@ -202,15 +203,19 @@ class OtherOperationController extends Controller
 
     public function revenueOtherOperation(RevenueOtherOperationDataTable $otheroperation, $id)
     {
-        $revenue = revenue::find($id)->name;
-        return $otheroperation->with('id', $id)->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation') . '/(' . $revenue . ')']);
+        $revenue = revenue::find($id);
+        $revenue_name= $revenue->name;
+        $city_name= City::whereId($revenue->city_id)->first()->name;
+        return $otheroperation->with('id', $id)->render('admin.otheroperation.index', ['title' => trans('admin.otheroperation') . '/ (' . $revenue_name . ')'. '/ (' . $city_name . ')']);
     }
 
     public function otherOperationCreate($id)
     {
-        $revenue = revenue::find($id)->name;
+        $revenue = revenue::find($id);
+        $revenue_name= $revenue->name;
+        $city_name= City::whereId($revenue->city_id)->first()->name;
         $otheroperation = revenue::find($id);
-        return view('admin.otheroperation.revenue-otheroperation.create', ['title' => trans('admin.create') . '/(' . $revenue . ')','otheroperation' => $otheroperation]);
+        return view('admin.otheroperation.revenue-otheroperation.create', ['title' => trans('admin.create') . '/ (' . $revenue_name . ')'. '/ (' . $city_name . ')','otheroperation' => $otheroperation]);
     }
 
     //Create expenses by one otherOperation

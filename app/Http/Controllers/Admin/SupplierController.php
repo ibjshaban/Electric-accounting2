@@ -114,6 +114,8 @@ class SupplierController extends Controller
             ->sum('paid_amount');
         $filling_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $id)->pluck('id'))
         ->sum(DB::raw('quantity * price'));
+        $filling_quantity= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $id)->pluck('id'))
+            ->sum(DB::raw('quantity'));
         $payments_amount = Payment::where('supplier_id', $id)->sum('amount');
         return is_null($supplier) || empty($supplier) ?
             backWithError(trans("admin.undefinedRecord"), aurl("supplier")) :
@@ -124,6 +126,7 @@ class SupplierController extends Controller
                 'filling_paid_amount'=> $filling_paid_amount,
                 'filling_amount'=> $filling_amount,
                 'payments_amount'=> $payments_amount,
+                'filling_quantity'=> $filling_quantity,
             ]);
     }
 

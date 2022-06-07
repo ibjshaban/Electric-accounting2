@@ -91,19 +91,20 @@ class BasicParentItems extends Controller
 
             $statement= '';
             $type= 0;
-            if ($id == 1){
+            $item= BasicParent::whereId($id)->first()->item;
+            if ($item == 0){
                 $type= ActivityLogNoteType::startup;
                 $statement= "إضافة على مصاريف تشغيلية";
             }
-            elseif ($id == 2){
+            elseif ($item == 1){
                 $type= ActivityLogNoteType::heavy_expenses;
                 $statement= "إضافة على مصاريف ثقيلة";
             }
-            elseif ($id == 3){
+            elseif ($item == 2){
                 $type= ActivityLogNoteType::rentals;
                 $statement= "إضافة على دفتر الأجارات";
             }
-            elseif ($id == 4){
+            elseif ($item == 3){
                 $type= ActivityLogNoteType::other_notebook;
                 $statement= "إضافة على دفاتر أخرى";
             }
@@ -183,19 +184,20 @@ class BasicParentItems extends Controller
 
             $statement= '';
             $type= 0;
-            if ($parentItem->basic_id == 1){
+            $item= BasicParent::whereId($parentItem->basic_id)->first()->item;
+            if ($item == 0){
                 $type= ActivityLogNoteType::startup;
                 $statement= "تعديل على مصاريف تشغيلية";
             }
-            elseif ($parentItem->basic_id == 2){
+            elseif ($item == 1){
                 $type= ActivityLogNoteType::heavy_expenses;
                 $statement= "تعديل على مصاريف ثقيلة";
             }
-            elseif ($parentItem->basic_id == 3){
+            elseif ($item == 2){
                 $type= ActivityLogNoteType::rentals;
                 $statement= "تعديل على دفتر الأجارات";
             }
-            elseif ($parentItem->basic_id == 4){
+            elseif ($item == 3){
                 $type= ActivityLogNoteType::other_notebook;
                 $statement= "تعديل على دفاتر أخرى";
             }
@@ -208,8 +210,9 @@ class BasicParentItems extends Controller
             return backWithError($e);
 
         }
-        $redirect = isset($request["save_back"]) ? "/" . $id . "/edit" : "";
-        return redirectWithSuccess(aurl('basicparents/' . $parentItem->basic_id . $redirect), trans('admin.updated'));
+        $redirect = isset($request["save_back"]) ? 'basicparentitems/' . $id . "/edit" : 'basicparents/' . $parentItem->basic_id;
+
+        return redirectWithSuccess(aurl( $redirect), trans('admin.updated'));
     }
 
     /**
@@ -250,19 +253,20 @@ class BasicParentItems extends Controller
 
         $statement= '';
         $type= 0;
-        if ($basicparents_id == 1){
+        $item= BasicParent::whereId($basicparents_id)->first()->item;
+        if ($item == 0){
             $type= ActivityLogNoteType::startup;
             $statement= "حذف في مصاريف تشغيلية";
         }
-        elseif ($basicparents_id == 2){
+        elseif ($item == 1){
             $type= ActivityLogNoteType::heavy_expenses;
             $statement= "حذف في مصاريف ثقيلة";
         }
-        elseif ($basicparents_id == 3){
+        elseif ($item == 2){
             $type= ActivityLogNoteType::rentals;
             $statement= "حذف في دفتر  أجارات";
         }
-        elseif ($basicparents_id == 4){
+        elseif ($item == 3){
             $type= ActivityLogNoteType::other_notebook;
             $statement= "حذف في دفاتر أخرى";
         }
@@ -290,19 +294,20 @@ class BasicParentItems extends Controller
 
         $statement= '';
         $type= 0;
-        if ($basicparentitems->basic_id == 1){
+        $item= BasicParent::whereId($basicparentitems->basic_id)->first()->item;
+        if ($item == 0){
             $type= ActivityLogNoteType::startup;
             $statement= "حذف في مصاريف تشغيلية";
         }
-        elseif ($basicparentitems->basic_id == 2){
+        elseif ($item == 1){
             $type= ActivityLogNoteType::heavy_expenses;
             $statement= "حذف في مصاريف ثقيلة";
         }
-        elseif ($basicparentitems->basic_id == 3){
+        elseif ($item == 2){
             $type= ActivityLogNoteType::rentals;
             $statement= "حذف في دفتر  أجارات";
         }
-        elseif ($basicparentitems->basic_id == 4){
+        elseif ($item == 3){
             $type= ActivityLogNoteType::other_notebook;
             $statement= "حذف في دفاتر أخرى";
         }
@@ -324,19 +329,20 @@ class BasicParentItems extends Controller
 
         $statement= '';
         $type= 0;
-        if ($basicparentitems->basic_id == 1){
+        $item= BasicParent::whereId($basicparentitems->basic_id)->first()->item;
+        if ($item == 0){
             $type= ActivityLogNoteType::startup;
             $statement= "حذف في مصاريف تشغيلية";
         }
-        elseif ($basicparentitems->basic_id == 2){
+        elseif ($item == 1){
             $type= ActivityLogNoteType::heavy_expenses;
             $statement= "حذف في مصاريف ثقيلة";
         }
-        elseif ($basicparentitems->basic_id == 3){
+        elseif ($item == 2){
             $type= ActivityLogNoteType::rentals;
             $statement= "حذف في دفتر  أجارات";
         }
-        elseif ($basicparentitems->basic_id == 4){
+        elseif ($item == 3){
             $type= ActivityLogNoteType::other_notebook;
             $statement= "حذف في دفاتر أخرى";
         }

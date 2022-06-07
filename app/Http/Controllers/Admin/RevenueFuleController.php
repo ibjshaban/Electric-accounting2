@@ -6,6 +6,7 @@ use App\DataTables\RevenueFuleDataTable;
 use App\DataTables\RevenueFuleRevenueDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\RevenueFuleRequest;
+use App\Models\City;
 use App\Models\Filling;
 use App\Models\revenue;
 use App\Models\RevenueFule;
@@ -187,10 +188,12 @@ class RevenueFuleController extends Controller
     ///////*** Show per one revenue
     public function revenueFuleRevenue(RevenueFuleRevenueDataTable $revenuefule, $id)
     {
-        $revenue = revenue::find($id)->name;
+        $revenue = revenue::find($id);
+        $revenue_name= $revenue->name;
+        $city_name= City::whereId($revenue->city_id)->first()->name;
         return $revenuefule->with('id', $id)
             ->render('admin.revenuefule.index',
-                ['title' => trans('admin.revenuefule'). '/(' . $revenue . ')','id'=> $id]);
+                ['title' => trans('admin.revenuefule'). '/ (' . $revenue_name . ')'. '/ (' . $city_name . ')','id'=> $id]);
     }
     public function revenueFuleRevenuePartition($id)
     {
