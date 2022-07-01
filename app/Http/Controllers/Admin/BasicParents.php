@@ -11,6 +11,8 @@ use App\Http\Controllers\Validations\BasicParentsRequest;
 use App\Models\BasicParent;
 use App\Models\BasicParentItem;
 use App\Models\WithdrawalsPayments;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Expr\Cast\Object_;
 
@@ -81,9 +83,27 @@ class BasicParents extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, BasicParentItemsDataTable $basicparentitemsTable)
+    public function show($id, BasicParentItemsDataTable $basicparentitemsTable,Request $request)
     {
         $basicparents = BasicParent::find($id);
+
+        if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+            if ($request->from_date != null && $request->to_date != null) {
+
+                $basicitems = BasicParentItem::where('basic_id', $id)->whereBetween('date', [$request->from_date, $request->to_date])->get();
+            } else {
+                $basicitems = BasicParentItem::where('basic_id', $id)->get();
+            }
+            return datatables($basicitems)
+            ->addIndexColumn()
+            ->addColumn('actions', 'admin.basicparentitems.buttons.actions')
+            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                  <label for="selectdata{{ $id }}"></label>
+                </div>')
+            ->rawColumns(['checkbox', 'actions',])
+                ->make(true);
+        }
 
         $basicparentitems = BasicParentItem::where('basic_id', $id)->get();
         return is_null($basicparents) || empty($basicparents) ?
@@ -91,17 +111,51 @@ class BasicParents extends Controller
             /*view('admin.basicparents.show', [
                 'title' => trans('admin.show'),
                 'basicparents' => $basicparents
-            ]) */ $basicparentitemsTable->with(['basic_id'=>$id, 'basicparents'=>$basicparents])->render('admin.basicparents.show', ['title' => trans('admin.show'), 'basicparents' => $basicparents]);
+            ]) */ $basicparentitemsTable->with(['basic_id'=>$id, 'basicparents'=>$basicparents])->render('admin.basicparents.showbasicparent', ['title' => trans('admin.show'), 'basicparents' => $basicparents]);
     }
-    public function show_withdrawalspayments($id)
+    public function show_withdrawalspayments($id ,Request $request)
     {
         $basicparents = BasicParent::find($id);
         $datatable= collect();
         if (\Request::is('admin/withdrawals/*')){
             $datatable= new WithdrawalsDataTable();
+            if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                if ($request->from_date != null && $request->to_date != null) {
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                } else {
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->get();
+                }
+                return datatables($payments)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.withdrawalspayments.buttons.actions')
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                      <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                      <label for="selectdata{{ $id }}"></label>
+                    </div>')
+                    ->rawColumns(['checkbox', 'actions',])
+                    ->make(true);
+            }
         }
         else{
             $datatable= new PaymentsDataTable();
+            if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                if ($request->from_date != null && $request->to_date != null) {
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                } else {
+                    $payments = WithdrawalsPayments::where('parent_id', $id)->get();
+                }
+                return datatables($payments)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.withdrawalspayments.buttons.actions')
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                      <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                      <label for="selectdata{{ $id }}"></label>
+                    </div>')
+                    ->rawColumns(['checkbox', 'actions',])
+                    ->make(true);
+            }
         }
 
         return is_null($basicparents) || empty($basicparents) ?
@@ -284,4 +338,30 @@ class BasicParents extends Controller
     }
 
     //------------------------------ ------------------------------------//
+
+
+    public function dtPrintbasicPS(Request $request,$id)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $basicitems = BasicParentItem::where('basic_id', $id)->whereBetween('date', [$request->from_date, $request->to_date])->get();
+        } else {
+            $basicitems = BasicParentItem::where('basic_id', $id)->get();
+        }
+
+        $total = 0;
+        foreach($basicitems as $basicitem){
+            $total += $basicitem->price;
+        }
+
+        return view('vendor.custumPrint.print',[
+            'basic' => $basicitems,
+            'title' => trans('admin.stock'),
+            'total_name' => 'السعر الكلي',
+            'print' => true,
+        ]);
+    }
+
+
+
 }

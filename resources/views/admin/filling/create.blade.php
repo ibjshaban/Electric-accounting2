@@ -103,9 +103,11 @@
                     <div class="form-group">
                         <select name="revenue[]"  class="form-control" required>
                             <option class="revenue_first_item" disabled>الإيرادة</option>
+                            @if($stocks->first())
                             @foreach(\App\Models\revenue::where('city_id',$stocks->first()->city_id)->where('status',1)->orderByDesc('created_at')->get() as $revenue)
                                 <option class="revenue_item" value="{{$revenue->id}}" {{$loop->first? 'selected' :''}} >{{$revenue->name}}</option>
                             @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -213,9 +215,11 @@
                 '<div class="form-group"> ' +
                 '<select name="revenue[]" class="form-control" required> ' +
                 '<option class="revenue_first_item" disabled>الإيرادة</option>'+
+                @if($stocks->first())
                 @foreach(\App\Models\revenue::where('city_id',$stocks->first()->city_id)->where('status',1)->orderByDesc('created_at')->get() as $revenue)
                 '<option class="revenue_item" value="{{$revenue->id}}" {{$loop->first? 'selected' :''}} >{{$revenue->name}}</option>'+
                 @endforeach
+                    @endif
                 '</select> ' +
                 '</div> </div> ' +
                 '<div class="col"> ' +

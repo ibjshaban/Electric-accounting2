@@ -9,6 +9,7 @@
 			<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
 		</div>
 	</div>
+	<!-- /.card-header -->
 
     <div class="card-body">
         <div class="row">
@@ -47,7 +48,6 @@
         </div>
 
     </div>
-	<!-- /.card-header -->
 	<div class="card-body">
 		<div class="row">
 			<div class="table-responsive">
@@ -97,7 +97,7 @@
                     dom: 'Blfrtip',
                     lengthMenu : [[10, 25, 50, 100, -1], [10, 25, 50, 100, '{{ trans('admin.all_records') }}']],
                     ajax: {
-                        url: '/admin/expenses',
+                        url: '{{ $id }}',
                         data: {
                             from_date: from_date,
                             to_date: to_date
@@ -211,7 +211,7 @@
                                     exportOptions: {columns: [1, 2, 3, 4, 5,6,7,8]},
                                     action: function() {
                                     window.location.href =
-                                        '/admin/print/expanses?from_date='+from_date+'&to_date='+to_date;
+                                        '/admin/print/revenue-expanses/'+{{ $id }}+'?from_date='+from_date+'&to_date='+to_date;
                                     }                                },
                                 {
                                     extend : 'excel',
@@ -258,7 +258,7 @@
                 dom: 'Blfrtip',
                 lengthMenu : [[10, 25, 50, 100, -1], [10, 25, 50, 100, '{{ trans('admin.all_records') }}']],
                 ajax: {
-                    url: '/admin/expenses',
+                    url: '{{ $id }}',
                     data: {
                         reload: 'ture',
                     },

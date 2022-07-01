@@ -12,7 +12,12 @@ use Yajra\DataTables\Services\DataTable;
 class RevenueFuleRevenueDataTable extends DataTable
 {
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.admins');
 
+    }
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.36]
@@ -21,7 +26,7 @@ class RevenueFuleRevenueDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
-
+        ->addIndexColumn()
             ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
             ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
             ->addColumn('total_price', '{{ $quantity*$price }}')

@@ -12,7 +12,14 @@ use Yajra\DataTables\Services\DataTable;
 class BasicParentItemsDataTable extends DataTable
 {
 
+    protected $printPreview = 'vendor.custumPrint.print';
 
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.show');
+
+    }
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.37]
@@ -180,11 +187,11 @@ class BasicParentItemsDataTable extends DataTable
                     'data' => 'discount',
                     'title' => trans('admin.discount'),
                 ],
-                /*[
+                [
                     'name' => 'amount',
                     'data' => 'amount',
                     'title' => trans('admin.amount'),
-                ],*/
+                ],
                 [
                     'name' => 'date',
                     'data' => 'date',

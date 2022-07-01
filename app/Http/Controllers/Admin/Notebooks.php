@@ -6,6 +6,8 @@ use App\DataTables\NotebooksDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\NotebooksRequest;
 use App\Models\Notebook;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.37]
@@ -36,8 +38,25 @@ class Notebooks extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(NotebooksDataTable $notebooks)
+    public function index(NotebooksDataTable $notebooks,Request $request)
     {
+        if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+            if ($request->from_date != null && $request->to_date != null) {
+                $notebooks = Notebook::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+            } else {
+                $notebooks = Notebook::get();
+            }
+            return datatables($notebooks)
+                ->addIndexColumn()
+                ->addColumn('actions', 'admin.notebooks.buttons.actions')
+
+                ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                  <label for="selectdata{{ $id }}"></label>
+                </div>')
+                ->rawColumns(['checkbox', 'actions',])
+                ->make(true);
+        }
         return $notebooks->render('admin.notebooks.index', ['title' => trans('admin.notebooks')]);
     }
 
@@ -178,5 +197,35 @@ class Notebooks extends Controller
         }
     }
 
+
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $notebooks = Notebook::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $notebooks = Notebook::get();
+        }
+
+        $i = 1;
+        foreach($notebooks as $notebook){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.price') => $notebook->price,
+                trans('admin.date') => $notebook->date,
+                trans('admin.name') => $notebook->name,
+                trans('admin.note') => $notebook->note,
+                'تاريخ الانشاء' => Carbon::parse($notebook->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.filling'),
+            'totalPrice' => 0,
+            'total_name' => null,
+        ]);
+    }
 
 }

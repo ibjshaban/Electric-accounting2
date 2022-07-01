@@ -9,6 +9,22 @@ use Yajra\DataTables\Services\DataTable;
 class DebtDataTable extends DataTable
 {
 
+    protected $title;
+    protected $total_name;
+    protected $totalPrice;
+    public function __construct()
+    {
+        $this->title = trans('admin.debt');
+        $this->total_name = 'مجموع '.trans('admin.amount');
+
+        $total = 0;
+        foreach(Debt::get() as $collection)
+        {
+            $total += $collection->amount;
+        }
+
+        $this->totalPrice = $total;
+    }
 
      /**
      * dataTable to render Columns.
@@ -18,6 +34,7 @@ class DebtDataTable extends DataTable
     public function dataTable(DataTables $dataTables, $query)
     {
         return datatables($query)
+        ->addIndexColumn()
             ->addColumn('actions', 'admin.debt.buttons.actions')
 
    		->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')   		->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')            ->addColumn('checkbox', '<div  class="icheck-danger">
@@ -161,7 +178,7 @@ class DebtDataTable extends DataTable
             ],
 [
                 'name' => 'id',
-                'data' => 'id',
+                'data' => 'DT_Row_Index',
                 'title' => trans('admin.record_id'),
                 'width'          => '10px',
                 'aaSorting'      => 'none'

@@ -10,6 +10,8 @@ use App\Models\Filling;
 use App\Models\Payment;
 use App\Models\RevenueFule;
 use App\Models\Supplier;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
@@ -75,7 +77,8 @@ class SupplierController extends Controller
         }
         $supplier = Supplier::create($data);
         $redirect = isset($request["add_back"]) ? "/create" : "";
-        return backWithSuccess(aurl('supplier' . $redirect), trans('admin.added'));
+
+        return redirectWithSuccess(aurl('supplier' . $redirect), trans('admin.added'));
     }
 
     /**
@@ -84,10 +87,29 @@ class SupplierController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(FillingSingleSupplierDataTable $filling,$id)
+    public function show(FillingSingleSupplierDataTable $filling,Request $request,$id)
     {
         $supplier = Supplier::withTrashed()->find($id);
         $payments = Payment::where('supplier_id', $id)->orderBy('created_at','DESC')->paginate(10);
+        if($request->from_date != null && $request->to_date != null || $request->reload != null){
+            if($request->from_date != null && $request->to_date != null){
+                $fillings = Filling::where('supplier_id',$id)->whereBetween('filling_date',[$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+            }else{
+                $fillings = Filling::where('supplier_id',$id)->get();
+            }
+            return datatables($fillings)
+                    ->addIndexColumn()
+                    ->addColumn('actions', 'admin.filling.buttons.actions')
+                    ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                    ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+                    ->addColumn('total_price', '{{ $quantity*$price }}')
+                    ->addColumn('checkbox', '<div  class="icheck-danger">
+                        <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                        <label for="selectdata{{ $id }}"></label>
+                        </div>')
+                    ->rawColumns(['checkbox', 'actions',])
+                    ->make(true);
+        }
         $filling_paid_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $id)->pluck('id'))
             ->sum('paid_amount');
         $filling_amount= RevenueFule::whereIn('filling_id', Filling::where('supplier_id', $id)->pluck('id'))
@@ -166,7 +188,7 @@ class SupplierController extends Controller
 
     public function destroy($id)
     {
-        $supplier = Supplier::find($id);
+        $supplier = Supplier::withTrashed()->whereId($id)->first();
 
         if (is_null($supplier) || empty($supplier)) {
             return backWithSuccess(trans('admin.undefinedRecord'), aurl("supplier"));

@@ -11,8 +11,13 @@ use Yajra\DataTables\Services\DataTable;
 // Copyright Reserved [it v 1.6.36]
 class RevenueExpensesDataTable extends DataTable
 {
+    protected $printPreview = 'vendor.custumPrint.printrevrnue';
+    protected $title;
+    public function __construct()
+    {
+        $this->title = trans('admin.expenses');
 
-
+    }
     /**
      * dataTable to render Columns.
      * Auto Ajax Method By Baboon Script [it v 1.6.36]

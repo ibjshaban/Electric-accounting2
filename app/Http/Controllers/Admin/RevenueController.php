@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\RevenueDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Validations\RevenueRequest;
+use App\Models\City;
 use App\Models\Collection;
 use App\Models\Expenses;
 use App\Models\OtherOperation;
 use App\Models\revenue;
 use App\Models\RevenueFule;
 use App\Models\Salary;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -43,8 +45,30 @@ class RevenueController extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(RevenueDataTable $revenue)
+    public function index(RevenueDataTable $revenue, Request $request)
     {
+        if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+            if ($request->from_date != null && $request->to_date != null) {
+                $revenues = revenue::whereBetween('open_date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+            } else {
+                $revenues = revenue::get();
+            }
+            return datatables($revenues)
+                ->addIndexColumn()
+                ->addColumn('actions', 'admin.revenue.buttons.actions')
+                ->addColumn('city_name',function(revenue $revenue){
+                    return City::where('id',$revenue->city_id)->first()->name ?? '';
+                })
+                ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+                ->addColumn('checkbox', '<div  class="icheck-danger">
+                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                  <label for="selectdata{{ $id }}"></label>
+                </div>')
+                ->editColumn('close_date', 'admin.revenue.buttons.style')
+                ->rawColumns(['checkbox', 'actions', 'close_date'])
+                ->make(true);
+        }
         return $revenue->render('admin.revenue.index', ['title' => trans('admin.revenue')]);
     }
 
@@ -242,4 +266,37 @@ class RevenueController extends Controller
     }
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $revenues = revenue::whereBetween('open_date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $revenues = revenue::get();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($revenues as $revenue){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.name') => $revenue->name,
+                trans('admin.open_date') => $revenue->open_date,
+                trans('admin.total_amount') => $revenue->total_amount,
+                trans('admin.city_id') => City::where('id',$revenue->city_id)->first()->name ?? '',
+                trans('admin.close_date') => Carbon::parse($revenue->close_date)->format('Y-m-d'),
+                trans('admin.created_at') => Carbon::parse($revenue->created_at)->format('Y-m-d'),
+                trans('admin.updated_at') => Carbon::parse($revenue->updated_at)->format('Y-m-d'),
+            ];
+            $i++;
+            $total += $revenue->total_amount;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.revenue'),
+            'totalPrice' => $total,
+            'total_name' => trans('admin.total_amount'),
+        ]);
+    }
 }

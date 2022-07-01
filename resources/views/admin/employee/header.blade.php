@@ -32,5 +32,6 @@
 
 </header>
 <img src="{{ public_path('assets/img/motor-logo.jpeg') }}">
+<h1> الحركات المالية للموظف:{{ $employee_name }}</h1>
 </body>
 </html>

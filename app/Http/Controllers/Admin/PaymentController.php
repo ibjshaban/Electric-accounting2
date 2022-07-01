@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
+use App\ActivityLogNoteType;
 use App\Http\Controllers\Controller;
 use App\DataTables\PaymentDataTable;
 use App\Models\Filling;
@@ -9,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Payment;
 
 use App\Http\Controllers\Validations\PaymentRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Auto Controller Maker By Baboon Script
@@ -40,8 +42,27 @@ class PaymentController extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(PaymentDataTable $payment)
+            public function index(PaymentDataTable $payment , Request $request)
             {
+                if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                    if ($request->from_date != null && $request->to_date != null) {
+                        $payments = Payment::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                    } else {
+                        $payments = Payment::get();
+                    }
+                    return datatables($payments)
+                        ->addIndexColumn()
+                        ->addColumn('actions', 'admin.payment.buttons.actions')
+                        ->addColumn('supplier_id',function(Payment $payment){
+                            return Supplier::where('id',$payment->supplier_id)->first()->name ?? '';
+                        })
+                        ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                                    <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                                    <label for="selectdata{{ $id }}"></label>
+                                    </div>')
+                        ->rawColumns(['checkbox', 'actions',])
+                        ->make(true);
+                }
                return $payment->render('admin.payment.index',['title'=>trans('admin.payment')]);
             }
 
@@ -73,6 +94,7 @@ class PaymentController extends Controller
                     $supplier= Supplier::withTrashed()->whereId($data['supplier_id'])->first();
                     $payment = Payment::create($data);
                     $supplier->AddPayments($data['amount']);
+                    AddNewLog(ActivityLogNoteType::supplier_payments,'إضافة دفعة سولار جديدة',$data['amount'],'store',null,null,'supplier/'.$payment->supplier_id);
                     DB::commit();
                     $redirect = isset($request["add_back"])?"/payment/create": 'supplier/'.$payment->supplier_id;
                     return redirectWithSuccess(aurl($redirect), trans('admin.added'));
@@ -80,7 +102,7 @@ class PaymentController extends Controller
                 }
                 catch (\Exception $e){
                     DB::rollBack();
-
+                    dd($e);
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
                 }
             }
@@ -136,7 +158,7 @@ class PaymentController extends Controller
 				return $fillableCols;
 			}
 
-            public function update(PaymentRequest $request,$id)
+           /* public function update(PaymentRequest $request,$id)
             {
               // Check Record Exists
               $payment =  Payment::find($id);
@@ -159,7 +181,6 @@ class PaymentController extends Controller
                         }
 
                         Payment::where('id',$id)->update($data);
-
                     }
                     $redirect = isset($request["save_back"])?"/".$id."/edit":"";
                     DB::commit();
@@ -170,7 +191,7 @@ class PaymentController extends Controller
                     DB::rollBack();
                     return redirect()->back()->withErrors('لم تتم العملية حدث خطأ ما')->withInput();
                 }
-            }
+            }*/
 
             /**
              * Baboon Script By [it v 1.6.36]
@@ -188,6 +209,7 @@ class PaymentController extends Controller
         try {
 		    DB::beginTransaction();
             Supplier::withTrashed()->whereId($payment->supplier_id)->first()->DeletePaymentsFromFule($payment->amount);
+            AddNewLog(ActivityLogNoteType::supplier_payments,'حذف دفعة سولار لمورد',$payment->amount,'delete',null,null,'supplier/'.$payment->supplier_id);
             $payment->delete();
             DB::commit();
             return backWithSuccess(trans('admin.deleted'));
@@ -250,4 +272,33 @@ class PaymentController extends Controller
 	}
 
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $payments = Payment::whereBetween('created_at', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $payments = Payment::get();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($payments as $payment){
+            $data[] = [
+                'الرقم' => $i,
+                'المبلغ' => $payment->amount,
+                trans('admin.created_at') => Carbon::parse($payment->created_at)->format('Y-m-d'),
+                trans('admin.updated_at') => Carbon::parse($payment->updated_at)->format('Y-m-d'),
+            ];
+            $i++;
+            $total += $payment->amount;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.payment'),
+            'totalPrice' => $total,
+            'total_name' => 'المبلغ',
+        ]);
+    }
 }

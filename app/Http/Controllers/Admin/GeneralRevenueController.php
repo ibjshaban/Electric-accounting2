@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\GeneralRevenue;
 
 use App\Http\Controllers\Validations\GeneralRevenueRequest;
+use Illuminate\Http\Request;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -35,8 +37,25 @@ class GeneralRevenueController extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(GeneralRevenueDataTable $generalrevenue)
+            public function index(GeneralRevenueDataTable $generalrevenue,Request $request)
             {
+                if ($request->from_date != null && $request->to_date != null || $request->reload != null) {
+                    if ($request->from_date != null && $request->to_date != null) {
+                        $generalrevenues = GeneralRevenue::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+                    } else {
+                        $generalrevenues = GeneralRevenue::get();
+                    }
+                    return datatables($generalrevenues)
+                        ->addIndexColumn()
+                        ->addColumn('actions', 'admin.generalrevenue.buttons.actions')
+
+                        ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')->addColumn('checkbox', '<div  class="icheck-danger">
+                                  <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                                  <label for="selectdata{{ $id }}"></label>
+                                </div>')
+                        ->rawColumns(['checkbox', 'actions',])
+                        ->make(true);
+                }
                return $generalrevenue->render('admin.generalrevenue.index',['title'=>trans('admin.generalrevenue')]);
             }
 
@@ -174,5 +193,36 @@ class GeneralRevenueController extends Controller
 		}
 	}
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $generalrevenues = GeneralRevenue::whereBetween('date', [$request->from_date, Carbon::parse($request->to_date)->addDay(1)])->get();
+        } else {
+            $generalrevenues = GeneralRevenue::all();
+        }
+
+        $i = 1;
+        $total = 0;
+        foreach($generalrevenues as $generalrevenue){
+            $data[] = [
+                'الرقم' => $i,
+                trans('admin.price') => $generalrevenue->price,
+                trans('admin.date') => $generalrevenue->date,
+                trans('admin.name') => $generalrevenue->name,
+                trans('admin.note') => $generalrevenue->note,
+                trans('admin.created_at') => Carbon::parse($generalrevenue->created_at)->format('Y-m-d'),
+            ];
+            $i++;
+            $total += $generalrevenue->price;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.generalrevenue'),
+            'totalPrice' => $total,
+            'total_name' =>  trans('admin.price').'الكلي',
+        ]);
+    }
 
 }

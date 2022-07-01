@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\City;
 
 use App\Http\Controllers\Validations\CityRequest;
+use Illuminate\Http\Request;
+
 // Auto Controller Maker By Baboon Script
 // Baboon Maker has been Created And Developed By  [it v 1.6.36]
 // Copyright Reserved  [it v 1.6.36]
@@ -35,8 +37,26 @@ class Citys extends Controller
              * Display a listing of the resource.
              * @return \Illuminate\Http\Response
              */
-            public function index(CityDataTable $city)
+            public function index(CityDataTable $city,Request $request)
             {
+                if($request->from_date != null && $request->to_date != null || $request->reload != null){
+                    if($request->from_date != null && $request->to_date != null){
+                        $cities = City::whereBetween('created_at',[$request->from_date,Carbon::parse($request->to_date)->addDay(1)])->get();
+                    }else{
+                        $cities = City::get();
+                    }
+                    return datatables($cities)
+                            ->addIndexColumn()
+                            ->addColumn('actions', 'admin.city.buttons.actions')
+                            ->addColumn('created_at', '{{ date("Y-m-d H:i:s",strtotime($created_at)) }}')
+                            ->addColumn('updated_at', '{{ date("Y-m-d H:i:s",strtotime($updated_at)) }}')
+                            ->addColumn('checkbox', '<div  class="icheck-danger">
+                                <input type="checkbox" class="selected_data" name="selected_data[]" id="selectdata{{ $id }}" value="{{ $id }}" >
+                                <label for="selectdata{{ $id }}"></label>
+                                </div>')
+                            ->rawColumns(['checkbox', 'actions',])
+                            ->make(true);
+                }
                return $city->render('admin.city.index',['title'=>trans('admin.city')]);
             }
 
@@ -172,5 +192,31 @@ class Citys extends Controller
 		}
 	}
 
+    public function dtPrint(Request $request)
+    {
+        $data = [];
+        if ($request->query('reload') == null) {
+            $cities = City::where('created_at', '>=', $request->query('from_date'))->where('created_at', '<=', Carbon::parse($request->query('to_date'))->addDay(1))->get();
+        } else {
+            $cities = City::all();
+        }
+
+        $i = 1;
+        foreach($cities as $city){
+            $data[] = [
+                'الرقم' => $i,
+                'البيان' => $city->name,
+                'تاريخ الانشاء' => Carbon::parse($city->created_at)->format('Y-m-d'),
+               ];
+            $i++;
+        }
+
+        return view('vendor.datatables.print',[
+            'data' => $data,
+            'title' => trans('admin.city'),
+            'totalPrice' => 0,
+            'total_name' => null,
+        ]);
+    }
 
 }
