@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 
 <head>
-    <title>{{ $title }}</title>
+    <title>{{ isset($title) ? $title : "مولدات زنزن و الشاعر" }}</title>
     <meta charset="UTF-8">
     <meta name=description content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,7 @@
     <div style="text-align: center;">
         @for ($i = 0; $i <= $table; ++$i)
             <img src="{{ asset('assets/img/motor-logo.jpeg') }}">
-            <h1>{{ $title }}</h1>
+            <h1>{{ isset($title)  ? $title : "" }}</h1>
             <table class="table table-bordered table-condensed table-striped" style="width: 100%;">
                 @if ($count != count($data))
                     <tr>
@@ -66,7 +66,7 @@
                 @endfor
             </table>
         @endfor
-        @if($totalPrice != 0 && $total_name != null)
+        @if((isset($totalPrice)? $totalPrice : 0) != 0 && $total_name != null)
         <h2>{{ $total_name . ':' . $totalPrice }} </h2>
         @endif
     </div>
