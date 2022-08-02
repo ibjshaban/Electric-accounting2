@@ -273,7 +273,7 @@ class EmployeeController extends Controller
 
         $headerHtml = view()->make('admin.employee.header',['employee_name' => Employee::where('id',$id)->first()->name,])->render();
         $pdf = PDF::setOption('enable-local-file-access', true)->setOption('header-html', $headerHtml)->loadView('admin.employee.print', ['data' => $data3]);
-        return $pdf->download('hello.pdf');
+        return $pdf->download('financial-movements.pdf');
     }
 
     public function printView(){

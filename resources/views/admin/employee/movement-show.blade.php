@@ -37,7 +37,7 @@
                 </div>
                 {{--@if($salaries->isEmpty())--}}
                     <a class="btn btn-secondary buttons-pdf btn-outline col-md-2" style="color: #FFFFFF;"
-                       href="{{ aurl('generate-pdf/'.count($salaries) > 0 ? $salaries[0]->employee_id : 0) }}" type="button"><span><i
+                       href="{{ aurl('generate-pdf/'. (count($salaries) > 0 ? $salaries[0]->employee_id : 0)) }}" type="button"><span><i
                                 class="fa fa-file-pdf"> </i> تصدير الى PDF</span>
                     </a>
                 {{--@endif--}}
