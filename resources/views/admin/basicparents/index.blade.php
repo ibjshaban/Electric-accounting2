@@ -30,8 +30,10 @@
                 @foreach($basicparents as $basicparent)
                     <div class="btn-group col-md-2">
                         <button type="button" class="btn btn-{{  ($basicparent->deleted_at !='') ? 'danger': 'info' }}">
-                            <i
-                                class="fa fa-user pr-4"></i>{{ $basicparent->name }}</button>
+                            <i class="fa fa-user pr-4"></i>
+                            {{ $basicparent->name }}
+                            <div>{{ShekelFormat(\App\Models\BasicParentItem::where('basic_id',\App\Models\BasicParent::where('item',$basicparent->item)->where('id',$basicparent->id )->first()->id)->sum('price'))}}</div>
+                        </button>
                         <button type="button"
                                 class="btn btn-{{  ($basicparent->deleted_at !='') ? 'danger': 'info' }} dropdown-toggle dropdown-icon"
                                 data-toggle="dropdown" aria-expanded="false">

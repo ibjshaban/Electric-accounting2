@@ -365,7 +365,7 @@ class CollectionController extends Controller
                 'اسم الموظف' => Employee::where('id',$collection->employee_id)->first()->name ?? 'لا يوجد',
                 'جهة التحصيل' => $collection->source,
                 'الايرادات' => revenue::where('id',$collection->revenue_id)->first()->name ?? 'لا يوجد',
-                'الكمية' => $collection->amount,
+                'المبلغ' => $collection->amount,
                 'تاريخ التحصيل' => $collection->collection_date,
                 'ملاحظات' => $collection->note,
                 'تاريخ الانشاء' => Carbon::parse($collection->created_at)->format('Y-m-d'),

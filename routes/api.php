@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
  */
 // your api is integerated but if you want reintegrate no problem
 // to configure jwt-auth visit this link https://jwt-auth.readthedocs.io/en/docs/
-
+/*
 Route::group(['middleware' => ['ApiLang', 'cors'], 'prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
 	Route::get('/', function () {
@@ -32,8 +32,6 @@ Route::group(['middleware' => ['ApiLang', 'cors'], 'prefix' => 'v1', 'namespace'
 		Route::post('me', 'Auth\AuthAndLogin@me')->name('api.me');
 		Route::post('change/password', 'Auth\AuthAndLogin@change_password')->name('api.change_password');
 		//Auth-Api-Start//
-		Route::apiResource("city","CityControllerApi", ["as" => "api.city"]);
-			Route::post("city/multi_delete","CityControllerApi@multi_delete");
 			Route::apiResource("stock","StockControllerApi", ["as" => "api.stock"]);
 			Route::post("stock/multi_delete","StockControllerApi@multi_delete");
 			Route::apiResource("supplier","SupplierControllerApi", ["as" => "api.supplier"]);
@@ -71,4 +69,4 @@ Route::group(['middleware' => ['ApiLang', 'cors'], 'prefix' => 'v1', 'namespace'
 			//Auth-Api-End//
 	});
 	// Insert your Api Here End //
-});
+});*/
