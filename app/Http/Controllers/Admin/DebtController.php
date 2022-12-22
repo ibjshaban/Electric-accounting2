@@ -240,7 +240,7 @@ class DebtController extends Controller
             $data[] = [
                 'الرقم' => $i,
                 'الموظف' => Employee::where('id',$debt->employee_id)->first()->name ?? 'لا يوجد',
-                'الكمية' => $debt->amount,
+                'المبلغ' => $debt->amount,
                 'الباقي' => $debt->remainder,
                 'ملاحظات' => $debt->note,
                 'تاريخ الانشاء' => Carbon::parse($debt->created_at)->format('Y-m-d'),
